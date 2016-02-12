@@ -84,30 +84,6 @@ var _Abc2 = _interopRequireDefault(_Abc);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var App = _react2.default.createClass({
-  displayName: 'App',
-
-  render: function render() {
-    var style = { margin: 12 };
-    var al = function al() {
-      alert("pushed!");
-    };
-    return _react2.default.createElement(
-      'div',
-      null,
-      _react2.default.createElement(_materialUi.AppBar, {
-        title: 'Pokke',
-        iconClassNameRight: 'muidocs-icon-navigation-expand-more'
-      })
-    );
-  }
-});
-// import CardExampleWithAvatar from 'mycomponents/CardExampleWithAvatar';
-// import CardExampleWithoutAvatar from './mycomponents/CardExampleWithoutAvatar.jsx';
-
-
-_reactDom2.default.render(_react2.default.createElement(App, null), document.getElementById('title'));
-
 var ItemBox = _react2.default.createClass({
   displayName: 'ItemBox',
 
@@ -138,6 +114,9 @@ var ItemBox = _react2.default.createClass({
     );
   }
 });
+// import CardExampleWithAvatar from 'mycomponents/CardExampleWithAvatar';
+// import CardExampleWithoutAvatar from './mycomponents/CardExampleWithoutAvatar.jsx';
+
 
 var ItemList = _react2.default.createClass({
   displayName: 'ItemList',
@@ -175,7 +154,27 @@ var ItemList = _react2.default.createClass({
   }
 });
 
-_reactDom2.default.render(_react2.default.createElement(ItemBox, null), document.getElementById('itembox'));
+var App = _react2.default.createClass({
+  displayName: 'App',
+
+  render: function render() {
+    return _react2.default.createElement(
+      'div',
+      null,
+      _react2.default.createElement(_materialUi.AppBar, {
+        title: 'Pokke',
+        iconClassNameRight: 'muidocs-icon-navigation-expand-more'
+      }),
+      _react2.default.createElement(
+        _materialUi.Paper,
+        { zDepth: 1 },
+        _react2.default.createElement(ItemBox, null)
+      )
+    );
+  }
+});
+
+_reactDom2.default.render(_react2.default.createElement(App, null), document.getElementById('app'));
 
 },{"./Abc.jsx":1,"jquery":48,"lodash":69,"material-ui":120,"react":375,"react-dom":240}],3:[function(require,module,exports){
 /*!

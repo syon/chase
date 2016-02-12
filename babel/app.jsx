@@ -5,29 +5,12 @@ import _ from 'lodash';
 import {
   AppBar,
   Card, CardActions, CardHeader, CardText,
-  FlatButton, RaisedButton
+  FlatButton, RaisedButton,
+  Paper
 } from 'material-ui';
 // import CardExampleWithAvatar from 'mycomponents/CardExampleWithAvatar';
 // import CardExampleWithoutAvatar from './mycomponents/CardExampleWithoutAvatar.jsx';
 import Abc from './Abc.jsx';
-
-let App = React.createClass({
-  render: () => {
-    return (
-      <div>
-        <AppBar
-          title="Pokke"
-          iconClassNameRight="muidocs-icon-navigation-expand-more"
-        />
-      </div>
-    );
-  }
-});
-
-ReactDOM.render(
-  <App />,
-  document.getElementById('title')
-);
 
 let ItemBox = React.createClass({
   loadFromServer: function() {
@@ -88,7 +71,23 @@ let ItemList = React.createClass({
   }
 });
 
+let App = React.createClass({
+  render: () => {
+    return (
+      <div>
+        <AppBar
+          title="Pokke"
+          iconClassNameRight="muidocs-icon-navigation-expand-more"
+        />
+        <Paper zDepth={1}>
+          <ItemBox />
+        </Paper>
+      </div>
+    );
+  }
+});
+
 ReactDOM.render(
-  <ItemBox />,
-  document.getElementById('itembox')
+  <App />,
+  document.getElementById('app')
 );
