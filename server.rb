@@ -18,6 +18,9 @@ get '/reset' do
 end
 
 get "/" do
+  puts "===========================access_token"
+  puts session[:access_token]
+  puts "==========================="
   if session[:access_token]
     erb :index
   else
@@ -51,19 +54,27 @@ end
 
 get '/add' do
   client = Pocket.client(:access_token => session[:access_token])
-  info = client.add :url => 'http://getpocket.com'
+  info = client.add(:url => 'http://getpocket.com')
   "<pre>#{info}</pre>"
 end
 
 get "/retrieve" do
-  client = Pocket.client(
-    :access_token => session[:access_token],
-    :sort => "newest"
+  client = Pocket.client(:access_token => session[:access_token])
+  info = client.retrieve(
+    :detailType => :complete,
+    :sort => "newest",
+    :count => 20
   )
-  info = client.retrieve(:detailType => :complete, :count => 20)
   list = []
   info['list'].each do |i|
     list << i[1]
   end
   json list
+end
+
+post '/archive' do
+  client = Pocket.client(:access_token => session[:access_token])
+  actions = [{action: 'archive', item_id: params['item_id']}]
+  res = client.modify(actions)
+  json res
 end

@@ -2,6 +2,7 @@ import React from 'react';
 import $ from 'jquery';
 import _ from 'lodash';
 import {Card, CardActions, CardHeader, CardText, FlatButton} from 'material-ui';
+import ArchiveButton from './ArchiveButton.jsx';
 
 const ItemBox = React.createClass({
   loadFromServer() {
@@ -10,7 +11,7 @@ const ItemBox = React.createClass({
       dataType: 'json',
       cache: false,
       success: (list) => {
-        console.dir(list);
+        console.log("/retrieve", list);
         this.setState({data: {list: list}});
       },
       error: (xhr, status, err) => {
@@ -61,8 +62,11 @@ const ItemList = React.createClass({
           <div className="item-body">
             <div className="item-title">{d.resolved_title}</div>
             <a href={d.resolved_url} target="_blank">{d.resolved_url}</a>
-            <span className="item-updat">{upd_at}</span>
+            <div>
+              <span className="item-updat">{upd_at}</span>
+            </div>
           </div>
+          <ArchiveButton label="Archive" item_id={d.item_id} />
         </div>
       );
     });

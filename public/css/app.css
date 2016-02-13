@@ -5,14 +5,14 @@ body {
 
 .item {
   display: flex;
-  height: 80px;
+  align-items: center;
   border: 1px solid #ddd;
   border-bottom: 0;
 }
 
 .item img {
-  width: 80px;
-  height: 80px;
+  width: 100px;
+  height: 100px;
 }
 
 .item .item-body {
@@ -24,17 +24,19 @@ body {
 .item .item-title {
   font-size: 16px;
   font-weight: bold;
-  text-overflow: ellipsis;
-  white-space: nowrap;
   overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .item a {
   font-size: 12px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .item .item-updat {
-  margin-left: 2em;
   font-size: 12px;
   color: #999;
 }
