@@ -18,18 +18,11 @@ get '/reset' do
 end
 
 get "/" do
-  puts "GET /"
-  puts "session: #{session}"
-
   if session[:access_token]
-    '
-<a href="/add?url=http://getpocket.com">Add Pocket Homepage</a>
-<a href="/retrieve">Retrieve single item</a>
-    '
+    erb :index
   else
-    '<a href="/oauth/connect">Connect with Pocket</a>'
+    erb :login
   end
-  erb :index
 end
 
 get "/oauth/connect" do

@@ -1,0 +1,5 @@
+<% if session[:access_token] %>
+  <a href="/">Show entries</a>
+<% else %>
+  <a href="/oauth/connect">Connect with Pocket</a>
+<% end %>
