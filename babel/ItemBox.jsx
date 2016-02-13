@@ -9,8 +9,9 @@ const ItemBox = React.createClass({
       url: "/retrieve",
       dataType: 'json',
       cache: false,
-      success: (data) => {
-        this.setState({data: data});
+      success: (list) => {
+        console.dir(list);
+        this.setState({data: {list: list}});
       },
       error: (xhr, status, err) => {
         console.error("/retrieve", status, err.toString());
@@ -41,19 +42,26 @@ const ItemBox = React.createClass({
 const ItemList = React.createClass({
   render() {
     let list = _.toArray(this.props.data.list);
-    let nodes = list.map(function(d) {
+    let nodes = [];
+    _.each(list, (d) => {
       let img;
       if (d.image) {
         img = <img src={d.image.src}/>;
       } else {
         img = <img src="http://lorempixel.com/300/300/nature/"/>;
       }
-      return (
+      let upd_at = (() => {
+        let dt = new Date(d.time_updated * 1000);
+        let ymd = [dt.getFullYear(), dt.getMonth() + 1, dt.getDate()];
+        return ymd.join('/') + ' ' + dt.toLocaleTimeString();
+      })();
+      nodes.push(
         <div key={d.item_id} className="item">
           {img}
           <div className="item-body">
             <div className="item-title">{d.resolved_title}</div>
             <a href={d.resolved_url} target="_blank">{d.resolved_url}</a>
+            <span className="item-updat">{upd_at}</span>
           </div>
         </div>
       );

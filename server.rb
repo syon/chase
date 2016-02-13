@@ -56,8 +56,14 @@ get '/add' do
 end
 
 get "/retrieve" do
-  client = Pocket.client(:access_token => session[:access_token])
+  client = Pocket.client(
+    :access_token => session[:access_token],
+    :sort => "newest"
+  )
   info = client.retrieve(:detailType => :complete, :count => 20)
-  ap info
-  json info
+  list = []
+  info['list'].each do |i|
+    list << i[1]
+  end
+  json list
 end

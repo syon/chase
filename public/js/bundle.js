@@ -164,8 +164,9 @@ var ItemBox = _react2.default.createClass({
       url: "/retrieve",
       dataType: 'json',
       cache: false,
-      success: function success(data) {
-        _this.setState({ data: data });
+      success: function success(list) {
+        console.dir(list);
+        _this.setState({ data: { list: list } });
       },
       error: function error(xhr, status, err) {
         console.error("/retrieve", status, err.toString());
@@ -197,14 +198,20 @@ var ItemList = _react2.default.createClass({
   displayName: 'ItemList',
   render: function render() {
     var list = _lodash2.default.toArray(this.props.data.list);
-    var nodes = list.map(function (d) {
+    var nodes = [];
+    _lodash2.default.each(list, function (d) {
       var img = undefined;
       if (d.image) {
         img = _react2.default.createElement('img', { src: d.image.src });
       } else {
         img = _react2.default.createElement('img', { src: 'http://lorempixel.com/300/300/nature/' });
       }
-      return _react2.default.createElement(
+      var upd_at = function () {
+        var dt = new Date(d.time_updated * 1000);
+        var ymd = [dt.getFullYear(), dt.getMonth() + 1, dt.getDate()];
+        return ymd.join('/') + ' ' + dt.toLocaleTimeString();
+      }();
+      nodes.push(_react2.default.createElement(
         'div',
         { key: d.item_id, className: 'item' },
         img,
@@ -220,9 +227,14 @@ var ItemList = _react2.default.createClass({
             'a',
             { href: d.resolved_url, target: '_blank' },
             d.resolved_url
+          ),
+          _react2.default.createElement(
+            'span',
+            { className: 'item-updat' },
+            upd_at
           )
         )
-      );
+      ));
     });
     return _react2.default.createElement(
       'div',

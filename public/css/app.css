@@ -32,3 +32,9 @@ body {
 .item a {
   font-size: 12px;
 }
+
+.item .item-updat {
+  margin-left: 2em;
+  font-size: 12px;
+  color: #999;
+}
