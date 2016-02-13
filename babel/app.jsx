@@ -143,7 +143,7 @@ const App = React.createClass({
         <AppBar
           title="Pokke"
           style={styles.appBar}
-          iconClassNameRight="muidocs-icon-navigation-expand-more"
+          iconElementRight={<FlatButton label="Connect" href="/oauth/connect" linkButton={true} />}
         />
         <LeftNav
           style={styles.leftNav}

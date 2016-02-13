@@ -221,7 +221,7 @@ var App = _react2.default.createClass({
       _react2.default.createElement(_materialUi.AppBar, {
         title: 'Pokke',
         style: styles.appBar,
-        iconClassNameRight: 'muidocs-icon-navigation-expand-more'
+        iconElementRight: _react2.default.createElement(_materialUi.FlatButton, { label: 'Connect', href: '/oauth/connect', linkButton: true })
       }),
       _react2.default.createElement(
         _materialUi.LeftNav,
