@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import _ from 'lodash';
 import {
@@ -102,7 +101,4 @@ const App = React.createClass({
   }
 });
 
-ReactDOM.render(
-  <App />,
-  document.getElementById('app')
-);
+export default App;
