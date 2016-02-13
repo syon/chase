@@ -78,6 +78,10 @@ var _lodash2 = _interopRequireDefault(_lodash);
 
 var _materialUi = require('material-ui');
 
+var _styles = require('material-ui/lib/styles');
+
+var _mixins = require('material-ui/lib/mixins');
+
 var _Abc = require('./Abc.jsx');
 
 var _Abc2 = _interopRequireDefault(_Abc);
@@ -114,6 +118,7 @@ var ItemBox = _react2.default.createClass({
     );
   }
 });
+
 // import CardExampleWithAvatar from 'mycomponents/CardExampleWithAvatar';
 // import CardExampleWithoutAvatar from './mycomponents/CardExampleWithoutAvatar.jsx';
 
@@ -157,17 +162,93 @@ var ItemList = _react2.default.createClass({
 var App = _react2.default.createClass({
   displayName: 'App',
 
+
+  mixins: [_mixins.StylePropable, _mixins.StyleResizable],
+
+  getInitialState: function getInitialState() {
+    return {
+      muiTheme: (0, _styles.getMuiTheme)(),
+      leftNavOpen: false
+    };
+  },
+  componentWillMount: function componentWillMount() {
+    this.setState({
+      muiTheme: this.state.muiTheme
+    });
+  },
+  getStyles: function getStyles() {
+    var styles = {
+      appBar: {
+        position: 'fixed',
+        // Needed to overlap the examples
+        zIndex: this.state.muiTheme.zIndex.appBar + 1,
+        top: 0
+      },
+      root: {
+        paddingTop: _styles.Spacing.desktopKeylineIncrement,
+        minHeight: 400
+      },
+      leftNavLogo: {
+        height: 64,
+        marginBottom: 8
+      }
+    };
+    return styles;
+  },
   render: function render() {
+    var leftNavOpen = this.state.leftNavOpen;
+
+
+    var styles = this.getStyles();
+
+    var docked = false;
+    var showMenuIconButton = true;
+
+    if (this.isDeviceSize(_mixins.StyleResizable.statics.Sizes.LARGE)) {
+      docked = true;
+      leftNavOpen = true;
+      showMenuIconButton = false;
+
+      styles.leftNav = {
+        zIndex: styles.appBar.zIndex - 1
+      };
+      styles.root.paddingLeft = 256;
+    }
+
     return _react2.default.createElement(
       'div',
       null,
       _react2.default.createElement(_materialUi.AppBar, {
         title: 'Pokke',
+        style: styles.appBar,
         iconClassNameRight: 'muidocs-icon-navigation-expand-more'
       }),
       _react2.default.createElement(
+        _materialUi.LeftNav,
+        {
+          style: styles.leftNav,
+          docked: docked,
+          open: leftNavOpen
+        },
+        _react2.default.createElement(
+          _materialUi.MenuItem,
+          { style: styles.leftNavLogo },
+          '--'
+        ),
+        _react2.default.createElement(
+          _materialUi.MenuItem,
+          null,
+          'Menu Item'
+        ),
+        _react2.default.createElement(
+          _materialUi.MenuItem,
+          null,
+          'Menu Item 2'
+        )
+      ),
+      _react2.default.createElement(
         _materialUi.Paper,
-        { zDepth: 1 },
+        { zDepth: 1, style: this.prepareStyles(styles.root) },
         _react2.default.createElement(ItemBox, null)
       )
     );
@@ -176,7 +257,7 @@ var App = _react2.default.createClass({
 
 _reactDom2.default.render(_react2.default.createElement(App, null), document.getElementById('app'));
 
-},{"./Abc.jsx":1,"jquery":48,"lodash":69,"material-ui":120,"react":375,"react-dom":240}],3:[function(require,module,exports){
+},{"./Abc.jsx":1,"jquery":48,"lodash":69,"material-ui":120,"material-ui/lib/mixins":137,"material-ui/lib/styles":164,"react":375,"react-dom":240}],3:[function(require,module,exports){
 /*!
   * Bowser - a browser detector
   * https://github.com/ded/bowser
