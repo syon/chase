@@ -58,5 +58,6 @@ end
 get "/retrieve" do
   client = Pocket.client(:access_token => session[:access_token])
   info = client.retrieve(:detailType => :complete, :count => 20)
+  ap info
   json info
 end

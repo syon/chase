@@ -56,7 +56,8 @@ var App = _react2.default.createClass({
       },
       root: {
         paddingTop: _styles.Spacing.desktopKeylineIncrement,
-        minHeight: 400
+        minHeight: 400,
+        backgroundColor: "#fafafa"
       },
       leftNavLogo: {
         height: 64,
@@ -178,9 +179,15 @@ var ItemBox = _react2.default.createClass({
     this.loadFromServer();
   },
   render: function render() {
+    var styles = {
+      itemBox: {
+        maxWidth: 800,
+        margin: "15px auto"
+      }
+    };
     return _react2.default.createElement(
       'div',
-      { className: 'itemBox' },
+      { className: 'itemBox', style: styles.itemBox },
       _react2.default.createElement(ItemList, { data: this.state.data })
     );
   }
@@ -191,25 +198,29 @@ var ItemList = _react2.default.createClass({
   render: function render() {
     var list = _lodash2.default.toArray(this.props.data.list);
     var nodes = list.map(function (d) {
+      var img = undefined;
+      if (d.image) {
+        img = _react2.default.createElement('img', { src: d.image.src });
+      } else {
+        img = _react2.default.createElement('img', { src: 'http://lorempixel.com/300/300/nature/' });
+      }
       return _react2.default.createElement(
-        _materialUi.Card,
-        { key: d.item_id },
-        _react2.default.createElement(_materialUi.CardHeader, {
-          title: d.resolved_title,
-          subtitle: d.resolved_url,
-          actAsExpander: true,
-          showExpandableButton: true
-        }),
+        'div',
+        { key: d.item_id, className: 'item' },
+        img,
         _react2.default.createElement(
-          _materialUi.CardText,
-          { expandable: true },
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
-        ),
-        _react2.default.createElement(
-          _materialUi.CardActions,
-          { expandable: true },
-          _react2.default.createElement(_materialUi.FlatButton, { label: 'Action1' }),
-          _react2.default.createElement(_materialUi.FlatButton, { label: 'Action2' })
+          'div',
+          { className: 'item-body' },
+          _react2.default.createElement(
+            'div',
+            { className: 'item-title' },
+            d.resolved_title
+          ),
+          _react2.default.createElement(
+            'a',
+            { href: d.resolved_url, target: '_blank' },
+            d.resolved_url
+          )
         )
       );
     });

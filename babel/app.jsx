@@ -47,6 +47,7 @@ const App = React.createClass({
       root: {
         paddingTop: Spacing.desktopKeylineIncrement,
         minHeight: 400,
+        backgroundColor: "#fafafa"
       },
       leftNavLogo: {
         height: 64,

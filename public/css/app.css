@@ -2,3 +2,33 @@ body {
   margin: 0;
   background-color: #fafafa;
 }
+
+.item {
+  display: flex;
+  height: 80px;
+  border: 1px solid #ddd;
+  border-bottom: 0;
+}
+
+.item img {
+  width: 80px;
+  height: 80px;
+}
+
+.item .item-body {
+  flex: 1;
+  padding: 15px;
+  overflow: hidden;
+}
+
+.item .item-title {
+  font-size: 16px;
+  font-weight: bold;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.item a {
+  font-size: 12px;
+}

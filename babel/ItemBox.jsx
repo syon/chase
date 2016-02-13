@@ -24,8 +24,14 @@ const ItemBox = React.createClass({
     this.loadFromServer();
   },
   render() {
+    let styles = {
+      itemBox: {
+        maxWidth: 800,
+        margin: "15px auto"
+      }
+    }
     return (
-      <div className="itemBox">
+      <div className="itemBox" style={styles.itemBox}>
         <ItemList data={this.state.data} />
       </div>
     );
@@ -36,22 +42,20 @@ const ItemList = React.createClass({
   render() {
     let list = _.toArray(this.props.data.list);
     let nodes = list.map(function(d) {
+      let img;
+      if (d.image) {
+        img = <img src={d.image.src}/>;
+      } else {
+        img = <img src="http://lorempixel.com/300/300/nature/"/>;
+      }
       return (
-        <Card key={d.item_id}>
-          <CardHeader
-            title={d.resolved_title}
-            subtitle={d.resolved_url}
-            actAsExpander={true}
-            showExpandableButton={true}
-          />
-          <CardText expandable={true}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          </CardText>
-          <CardActions expandable={true}>
-            <FlatButton label="Action1"/>
-            <FlatButton label="Action2"/>
-          </CardActions>
-        </Card>
+        <div key={d.item_id} className="item">
+          {img}
+          <div className="item-body">
+            <div className="item-title">{d.resolved_title}</div>
+            <a href={d.resolved_url} target="_blank">{d.resolved_url}</a>
+          </div>
+        </div>
       );
     });
     return (
