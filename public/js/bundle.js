@@ -9,65 +9,6 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _card = require('material-ui/lib/card/card');
-
-var _card2 = _interopRequireDefault(_card);
-
-var _cardActions = require('material-ui/lib/card/card-actions');
-
-var _cardActions2 = _interopRequireDefault(_cardActions);
-
-var _cardHeader = require('material-ui/lib/card/card-header');
-
-var _cardHeader2 = _interopRequireDefault(_cardHeader);
-
-var _flatButton = require('material-ui/lib/flat-button');
-
-var _flatButton2 = _interopRequireDefault(_flatButton);
-
-var _cardText = require('material-ui/lib/card/card-text');
-
-var _cardText2 = _interopRequireDefault(_cardText);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var Abc = function Abc() {
-  return _react2.default.createElement(
-    _card2.default,
-    { actAsExpander: true },
-    _react2.default.createElement(_cardHeader2.default, {
-      title: 'Abc.jsx',
-      subtitle: 'Subtitle',
-      actAsExpander: true,
-      showExpandableButton: true
-    }),
-    _react2.default.createElement(
-      _cardText2.default,
-      { expandable: true },
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi. Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque. Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.'
-    ),
-    _react2.default.createElement(
-      _cardActions2.default,
-      { expandable: true },
-      _react2.default.createElement(_flatButton2.default, { label: 'Action1' }),
-      _react2.default.createElement(_flatButton2.default, { label: 'Action2' })
-    )
-  );
-};
-
-exports.default = Abc;
-
-},{"material-ui/lib/card/card":92,"material-ui/lib/card/card-actions":86,"material-ui/lib/card/card-header":88,"material-ui/lib/card/card-text":90,"material-ui/lib/flat-button":113,"react":375}],2:[function(require,module,exports){
-'use strict';
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = require('react-dom');
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
-
 var _jquery = require('jquery');
 
 var _jquery2 = _interopRequireDefault(_jquery);
@@ -78,30 +19,23 @@ var _lodash2 = _interopRequireDefault(_lodash);
 
 var _materialUi = require('material-ui');
 
-var _styles = require('material-ui/lib/styles');
-
-var _mixins = require('material-ui/lib/mixins');
-
-var _Abc = require('./Abc.jsx');
-
-var _Abc2 = _interopRequireDefault(_Abc);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var ItemBox = _react2.default.createClass({
   displayName: 'ItemBox',
-
   loadFromServer: function loadFromServer() {
+    var _this = this;
+
     _jquery2.default.ajax({
       url: "/retrieve",
       dataType: 'json',
       cache: false,
-      success: function (data) {
-        this.setState({ data: data });
-      }.bind(this),
-      error: function (xhr, status, err) {
+      success: function success(data) {
+        _this.setState({ data: data });
+      },
+      error: function error(xhr, status, err) {
         console.error("/retrieve", status, err.toString());
-      }.bind(this)
+      }
     });
   },
   getInitialState: function getInitialState() {
@@ -119,13 +53,8 @@ var ItemBox = _react2.default.createClass({
   }
 });
 
-// import CardExampleWithAvatar from 'mycomponents/CardExampleWithAvatar';
-// import CardExampleWithoutAvatar from './mycomponents/CardExampleWithoutAvatar.jsx';
-
-
 var ItemList = _react2.default.createClass({
   displayName: 'ItemList',
-
   render: function render() {
     var list = _lodash2.default.toArray(this.props.data.list);
     var nodes = list.map(function (d) {
@@ -158,6 +87,39 @@ var ItemList = _react2.default.createClass({
     );
   }
 });
+
+exports.default = ItemBox;
+
+},{"jquery":48,"lodash":69,"material-ui":120,"react":375}],2:[function(require,module,exports){
+'use strict';
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = require('react-dom');
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+var _materialUi = require('material-ui');
+
+var _styles = require('material-ui/lib/styles');
+
+var _mixins = require('material-ui/lib/mixins');
+
+var _ItemBox = require('./ItemBox.jsx');
+
+var _ItemBox2 = _interopRequireDefault(_ItemBox);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var App = _react2.default.createClass({
   displayName: 'App',
@@ -249,15 +211,19 @@ var App = _react2.default.createClass({
       _react2.default.createElement(
         _materialUi.Paper,
         { zDepth: 1, style: this.prepareStyles(styles.root) },
-        _react2.default.createElement(ItemBox, null)
+        _react2.default.createElement(_ItemBox2.default, null)
       )
     );
   }
 });
 
+// import CardExampleWithAvatar from 'mycomponents/CardExampleWithAvatar';
+// import CardExampleWithoutAvatar from './mycomponents/CardExampleWithoutAvatar.jsx';
+
+
 _reactDom2.default.render(_react2.default.createElement(App, null), document.getElementById('app'));
 
-},{"./Abc.jsx":1,"jquery":48,"lodash":69,"material-ui":120,"material-ui/lib/mixins":137,"material-ui/lib/styles":164,"react":375,"react-dom":240}],3:[function(require,module,exports){
+},{"./ItemBox.jsx":1,"jquery":48,"lodash":69,"material-ui":120,"material-ui/lib/mixins":137,"material-ui/lib/styles":164,"react":375,"react-dom":240}],3:[function(require,module,exports){
 /*!
   * Bowser - a browser detector
   * https://github.com/ded/bowser
