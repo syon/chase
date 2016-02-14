@@ -38,16 +38,9 @@ end
 
 get "/oauth/callback" do
   puts "OAUTH CALLBACK"
-  puts "request.url: #{request.url}"
-  puts "request.body: #{request.body.read}"
   result = Pocket.get_result(session[:code], :redirect_uri => CALLBACK_URL)
+  ap result
   session[:access_token] = result['access_token']
-  puts result['access_token']
-  puts result['username']
-  # Alternative method to get the access token directly
-  #session[:access_token] = Pocket.get_access_token(session[:code])
-  puts session[:access_token]
-  puts "session: #{session}"
   redirect "/"
 end
 
@@ -76,4 +69,18 @@ post '/archive' do
   actions = [{action: 'archive', item_id: params['item_id']}]
   res = client.modify(actions)
   json res
+end
+
+get "/info" do
+  puts Time.now
+  client = Pocket.client(:access_token => session[:access_token])
+  unread  = client.retrieve(:state => :unread,  :detailType => :simple)
+  archive = client.retrieve(:state => :archive, :detailType => :simple)
+  all = client.retrieve(:state => :all, :detailType => :simple)
+  result = {
+    count_unread: unread['list'].size,
+    count_archive: archive['list'].size
+  }
+  puts Time.now
+  json result
 end

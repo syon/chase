@@ -14,6 +14,7 @@ import {StylePropable, StyleResizable} from 'material-ui/lib/mixins';
 
 // import CardExampleWithAvatar from 'mycomponents/CardExampleWithAvatar';
 // import CardExampleWithoutAvatar from './mycomponents/CardExampleWithoutAvatar.jsx';
+import CountGraph from './CountGraph.jsx';
 import ItemBox from './ItemBox.jsx';
 
 const App = React.createClass({
@@ -95,6 +96,7 @@ const App = React.createClass({
           <MenuItem>Menu Item 2</MenuItem>
         </LeftNav>
         <Paper zDepth={1} style={this.prepareStyles(styles.root)}>
+          <CountGraph />
           <ItemBox />
         </Paper>
       </div>
