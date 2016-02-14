@@ -1,5 +1,8 @@
-Pokke
+Chase
 =====
+
+Chase is client web-app for Pocket.
+
 
 ## Develop
 
@@ -9,4 +12,11 @@ $ node build
 
 ```sh
 $ bundle exec ruby server.rb
+```
+
+
+## Deploy
+
+```sh
+$ git push heroku master
 ```
