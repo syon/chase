@@ -8,7 +8,7 @@ Dotenv.load
 
 enable :sessions
 
-CALLBACK_URL = "http://localhost:4567/oauth/callback"
+CALLBACK_URL = "http://#{ENV['host']}/oauth/callback"
 
 Pocket.configure do |config|
   config.consumer_key = ENV['consumer_key']
