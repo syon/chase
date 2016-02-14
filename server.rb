@@ -23,8 +23,12 @@ get "/" do
   if session[:access_token]
     erb :index
   else
-    erb :login
+    redirect "/login"
   end
+end
+
+get "/login" do
+  erb :login
 end
 
 get "/oauth/connect" do

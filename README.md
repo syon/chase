@@ -3,6 +3,8 @@ Chase
 
 Chase is client web-app for Pocket.
 
+- http://syon-chase.herokuapp.com
+
 
 ## Develop
 
