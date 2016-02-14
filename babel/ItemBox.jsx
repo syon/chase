@@ -51,6 +51,9 @@ const ItemList = React.createClass({
       } else {
         img = <img src="http://lorempixel.com/300/300/nature/"/>;
       }
+      let fqdn = (() => {
+        return (d.resolved_url+"/").match(/\/\/(.*?)\//)[1];
+      })();
       let upd_at = (() => {
         let dt = new Date(d.time_updated * 1000);
         let ymd = [dt.getFullYear(), dt.getMonth() + 1, dt.getDate()];
@@ -60,10 +63,12 @@ const ItemList = React.createClass({
         <Paper key={d.item_id} zDepth={1} rounded={false} className="item">
           {img}
           <div className="item-body">
-            <div className="item-title">{d.resolved_title}</div>
-            <a href={d.resolved_url} target="_blank">{d.resolved_url}</a>
-            <div>
-              <span className="item-updat">{upd_at}</span>
+            <div className="item-title">
+              <a href={d.resolved_url} target="_blank">{d.resolved_title}</a>
+            </div>
+            <div className="item-meta">
+              <span>{upd_at}</span>
+              <span>{fqdn}</span>
             </div>
           </div>
           <ArchiveButton label="Archive" item_id={d.item_id} />

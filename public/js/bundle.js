@@ -323,6 +323,9 @@ var ItemList = _react2.default.createClass({
       } else {
         img = _react2.default.createElement('img', { src: 'http://lorempixel.com/300/300/nature/' });
       }
+      var fqdn = function () {
+        return (d.resolved_url + "/").match(/\/\/(.*?)\//)[1];
+      }();
       var upd_at = function () {
         var dt = new Date(d.time_updated * 1000);
         var ymd = [dt.getFullYear(), dt.getMonth() + 1, dt.getDate()];
@@ -338,20 +341,24 @@ var ItemList = _react2.default.createClass({
           _react2.default.createElement(
             'div',
             { className: 'item-title' },
-            d.resolved_title
-          ),
-          _react2.default.createElement(
-            'a',
-            { href: d.resolved_url, target: '_blank' },
-            d.resolved_url
+            _react2.default.createElement(
+              'a',
+              { href: d.resolved_url, target: '_blank' },
+              d.resolved_title
+            )
           ),
           _react2.default.createElement(
             'div',
-            null,
+            { className: 'item-meta' },
             _react2.default.createElement(
               'span',
-              { className: 'item-updat' },
+              null,
               upd_at
+            ),
+            _react2.default.createElement(
+              'span',
+              null,
+              fqdn
             )
           )
         ),
