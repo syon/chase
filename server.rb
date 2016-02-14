@@ -59,7 +59,7 @@ get "/retrieve" do
   info = client.retrieve(
     :detailType => :complete,
     :sort => "newest",
-    :count => 20
+    :count => 100
   )
   list = []
   info['list'].each do |i|
