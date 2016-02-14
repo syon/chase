@@ -26,8 +26,7 @@ const App = React.createClass({
 
   getInitialState() {
     return {
-      muiTheme: getMuiTheme(),
-      leftNavOpen: false,
+      muiTheme: getMuiTheme()
     };
   },
 
@@ -40,61 +39,28 @@ const App = React.createClass({
   getStyles() {
     const styles = {
       appBar: {
-        position: 'fixed',
         // Needed to overlap the examples
         zIndex: this.state.muiTheme.zIndex.appBar + 1,
         top: 0,
       },
       root: {
-        paddingTop: Spacing.desktopKeylineIncrement,
         minHeight: 400,
-        backgroundColor: "#fafafa"
+        backgroundColor: "#f5f5f5"
       },
-      leftNavLogo: {
-        height: 64,
-        marginBottom: 8,
-      }
     };
     return styles;
   },
 
   render() {
-    let {
-      leftNavOpen,
-    } = this.state;
-
     const styles = this.getStyles();
-
-    let docked = false;
-    let showMenuIconButton = true;
-
-    if (this.isDeviceSize(StyleResizable.statics.Sizes.LARGE)) {
-      docked = true;
-      leftNavOpen = true;
-      showMenuIconButton = false;
-
-      styles.leftNav = {
-        zIndex: styles.appBar.zIndex - 1,
-      };
-      styles.root.paddingLeft = 256;
-    }
 
     return (
       <div>
         <AppBar
-          title="Pokke"
+          title="Chase"
           style={styles.appBar}
-          iconElementRight={<FlatButton label="Connect" href="/oauth/connect" linkButton={true} />}
+          showMenuIconButton={false}
         />
-        <LeftNav
-          style={styles.leftNav}
-          docked={docked}
-          open={leftNavOpen}
-        >
-          <MenuItem style={styles.leftNavLogo}>--</MenuItem>
-          <MenuItem>Menu Item</MenuItem>
-          <MenuItem>Menu Item 2</MenuItem>
-        </LeftNav>
         <Paper zDepth={1} style={this.prepareStyles(styles.root)}>
           <CountGraph />
           <ItemBox />

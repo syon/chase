@@ -1,7 +1,7 @@
 import React from 'react';
 import $ from 'jquery';
 import _ from 'lodash';
-import {Card, CardActions, CardHeader, CardText, FlatButton} from 'material-ui';
+import {Paper, FlatButton} from 'material-ui';
 import ArchiveButton from './ArchiveButton.jsx';
 
 const ItemBox = React.createClass({
@@ -57,7 +57,7 @@ const ItemList = React.createClass({
         return ymd.join('/') + ' ' + dt.toLocaleTimeString();
       })();
       nodes.push(
-        <div key={d.item_id} className="item">
+        <Paper key={d.item_id} zDepth={1} rounded={false} className="item">
           {img}
           <div className="item-body">
             <div className="item-title">{d.resolved_title}</div>
@@ -67,7 +67,7 @@ const ItemList = React.createClass({
             </div>
           </div>
           <ArchiveButton label="Archive" item_id={d.item_id} />
-        </div>
+        </Paper>
       );
     });
     return (

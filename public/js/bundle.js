@@ -45,8 +45,7 @@ var App = _react2.default.createClass({
 
   getInitialState: function getInitialState() {
     return {
-      muiTheme: (0, _styles.getMuiTheme)(),
-      leftNavOpen: false
+      muiTheme: (0, _styles.getMuiTheme)()
     };
   },
   componentWillMount: function componentWillMount() {
@@ -57,74 +56,28 @@ var App = _react2.default.createClass({
   getStyles: function getStyles() {
     var styles = {
       appBar: {
-        position: 'fixed',
         // Needed to overlap the examples
         zIndex: this.state.muiTheme.zIndex.appBar + 1,
         top: 0
       },
       root: {
-        paddingTop: _styles.Spacing.desktopKeylineIncrement,
         minHeight: 400,
-        backgroundColor: "#fafafa"
-      },
-      leftNavLogo: {
-        height: 64,
-        marginBottom: 8
+        backgroundColor: "#f5f5f5"
       }
     };
     return styles;
   },
   render: function render() {
-    var leftNavOpen = this.state.leftNavOpen;
-
-
     var styles = this.getStyles();
-
-    var docked = false;
-    var showMenuIconButton = true;
-
-    if (this.isDeviceSize(_mixins.StyleResizable.statics.Sizes.LARGE)) {
-      docked = true;
-      leftNavOpen = true;
-      showMenuIconButton = false;
-
-      styles.leftNav = {
-        zIndex: styles.appBar.zIndex - 1
-      };
-      styles.root.paddingLeft = 256;
-    }
 
     return _react2.default.createElement(
       'div',
       null,
       _react2.default.createElement(_materialUi.AppBar, {
-        title: 'Pokke',
+        title: 'Chase',
         style: styles.appBar,
-        iconElementRight: _react2.default.createElement(_materialUi.FlatButton, { label: 'Connect', href: '/oauth/connect', linkButton: true })
+        showMenuIconButton: false
       }),
-      _react2.default.createElement(
-        _materialUi.LeftNav,
-        {
-          style: styles.leftNav,
-          docked: docked,
-          open: leftNavOpen
-        },
-        _react2.default.createElement(
-          _materialUi.MenuItem,
-          { style: styles.leftNavLogo },
-          '--'
-        ),
-        _react2.default.createElement(
-          _materialUi.MenuItem,
-          null,
-          'Menu Item'
-        ),
-        _react2.default.createElement(
-          _materialUi.MenuItem,
-          null,
-          'Menu Item 2'
-        )
-      ),
       _react2.default.createElement(
         _materialUi.Paper,
         { zDepth: 1, style: this.prepareStyles(styles.root) },
@@ -376,8 +329,8 @@ var ItemList = _react2.default.createClass({
         return ymd.join('/') + ' ' + dt.toLocaleTimeString();
       }();
       nodes.push(_react2.default.createElement(
-        'div',
-        { key: d.item_id, className: 'item' },
+        _materialUi.Paper,
+        { key: d.item_id, zDepth: 1, rounded: false, className: 'item' },
         img,
         _react2.default.createElement(
           'div',
