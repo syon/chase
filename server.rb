@@ -1,26 +1,25 @@
 require "pocket-ruby"
 require "sinatra"
 require "sinatra/json"
+require 'dotenv'
 require "ap"
+
+Dotenv.load
 
 enable :sessions
 
 CALLBACK_URL = "http://localhost:4567/oauth/callback"
 
 Pocket.configure do |config|
-  config.consumer_key = '51252-3e5f40bb7be942d0fb9fa091'
+  config.consumer_key = ENV['consumer_key']
 end
 
 get '/reset' do
-  puts "GET /reset"
   session.clear
   redirect "/"
 end
 
 get "/" do
-  puts "===========================access_token"
-  puts session[:access_token]
-  puts "==========================="
   if session[:access_token]
     erb :index
   else
