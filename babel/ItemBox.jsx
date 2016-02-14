@@ -52,7 +52,12 @@ const ItemList = React.createClass({
         img = <img src="http://lorempixel.com/300/300/nature/"/>;
       }
       let fqdn = (() => {
-        return (d.resolved_url+"/").match(/\/\/(.*?)\//)[1];
+        try {
+          return (d.resolved_url+"/").match(/\/\/(.*?)\//)[1];
+        } catch(e) {
+          consolo.error(e, d);
+          return d.resolved_url;
+        }
       })();
       let upd_at = (() => {
         let dt = new Date(d.time_updated * 1000);

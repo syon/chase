@@ -324,7 +324,11 @@ var ItemList = _react2.default.createClass({
         img = _react2.default.createElement('img', { src: 'http://lorempixel.com/300/300/nature/' });
       }
       var fqdn = function () {
-        return (d.resolved_url + "/").match(/\/\/(.*?)\//)[1];
+        try {
+          return (d.resolved_url + "/").match(/\/\/(.*?)\//)[1];
+        } catch (e) {
+          return d.resolved_url;
+        }
       }();
       var upd_at = function () {
         var dt = new Date(d.time_updated * 1000);
