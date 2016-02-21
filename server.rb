@@ -6,7 +6,10 @@ require "ap"
 
 Dotenv.load
 
-enable :sessions
+use Rack::Session::Cookie, :key => 'rack.session',
+                           :domain => 'syon-chase.herokuapp.com',
+                           :path => '/',
+                           :expire_after => 2592000 # In seconds
 
 CALLBACK_URL = "http://#{ENV['host']}/oauth/callback"
 
