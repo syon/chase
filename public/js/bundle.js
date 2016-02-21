@@ -317,33 +317,38 @@ var ItemList = _react2.default.createClass({
     var list = _lodash2.default.toArray(this.props.data.list);
     var nodes = [];
     _lodash2.default.each(list, function (d) {
+
       var title = d.resolved_title;
       if (!title) {
         title = d.given_url;
       }
+
       var img = undefined;
       if (d.image) {
         img = _react2.default.createElement('img', { src: d.image.src });
       } else {
         img = _react2.default.createElement('img', { src: '/img/blank.png' });
       }
+
+      var url = d.resolved_url;
+      if (!url) {
+        url = d.given_url;
+      }
       var fqdn = function () {
         try {
-          var url = d.resolved_url;
-          if (!url) {
-            url = d.given_url;
-          }
           return (url + "/").match(/\/\/(.*?)\//)[1];
         } catch (e) {
           console.error(e, d);
           return d.given_url;
         }
       }();
+
       var upd_at = function () {
         var dt = new Date(d.time_updated * 1000);
         var ymd = [dt.getFullYear(), dt.getMonth() + 1, dt.getDate()];
         return ymd.join('/') + ' ' + dt.toLocaleTimeString();
       }();
+
       nodes.push(_react2.default.createElement(
         _materialUi.Paper,
         { key: d.item_id, zDepth: 1, rounded: false, className: 'item' },
@@ -352,11 +357,11 @@ var ItemList = _react2.default.createClass({
           'div',
           { className: 'item-body' },
           _react2.default.createElement(
-            'div',
+            'h3',
             { className: 'item-title' },
             _react2.default.createElement(
               'a',
-              { href: d.resolved_url, target: '_blank' },
+              { href: url, target: '_blank' },
               title
             )
           ),

@@ -45,40 +45,45 @@ const ItemList = React.createClass({
     let list = _.toArray(this.props.data.list);
     let nodes = [];
     _.each(list, (d) => {
+
       let title = d.resolved_title;
       if (!title) {
         title = d.given_url;
       }
+
       let img;
       if (d.image) {
         img = <img src={d.image.src}/>;
       } else {
         img = <img src="/img/blank.png"/>;
       }
+
+      let url = d.resolved_url;
+      if (!url) {
+        url = d.given_url;
+      }
       let fqdn = (() => {
         try {
-          let url = d.resolved_url;
-          if (!url) {
-            url = d.given_url;
-          }
           return (url+"/").match(/\/\/(.*?)\//)[1];
         } catch(e) {
           console.error(e, d);
           return d.given_url;
         }
       })();
+
       let upd_at = (() => {
         let dt = new Date(d.time_updated * 1000);
         let ymd = [dt.getFullYear(), dt.getMonth() + 1, dt.getDate()];
         return ymd.join('/') + ' ' + dt.toLocaleTimeString();
       })();
+
       nodes.push(
         <Paper key={d.item_id} zDepth={1} rounded={false} className="item">
           {img}
           <div className="item-body">
-            <div className="item-title">
-              <a href={d.resolved_url} target="_blank">{title}</a>
-            </div>
+            <h3 className="item-title">
+              <a href={url} target="_blank">{title}</a>
+            </h3>
             <div className="item-meta">
               <span>{upd_at}</span>
               <span>{fqdn}</span>
