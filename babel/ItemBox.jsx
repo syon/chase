@@ -45,18 +45,26 @@ const ItemList = React.createClass({
     let list = _.toArray(this.props.data.list);
     let nodes = [];
     _.each(list, (d) => {
+      let title = d.resolved_title;
+      if (!title) {
+        title = d.given_url;
+      }
       let img;
       if (d.image) {
         img = <img src={d.image.src}/>;
       } else {
-        img = <img src="http://lorempixel.com/300/300/nature/"/>;
+        img = <img src="/img/blank.png"/>;
       }
       let fqdn = (() => {
         try {
-          return (d.resolved_url+"/").match(/\/\/(.*?)\//)[1];
+          let url = d.resolved_url;
+          if (!url) {
+            url = d.given_url;
+          }
+          return (url+"/").match(/\/\/(.*?)\//)[1];
         } catch(e) {
-          consolo.error(e, d);
-          return d.resolved_url;
+          console.error(e, d);
+          return d.given_url;
         }
       })();
       let upd_at = (() => {
@@ -69,7 +77,7 @@ const ItemList = React.createClass({
           {img}
           <div className="item-body">
             <div className="item-title">
-              <a href={d.resolved_url} target="_blank">{d.resolved_title}</a>
+              <a href={d.resolved_url} target="_blank">{title}</a>
             </div>
             <div className="item-meta">
               <span>{upd_at}</span>

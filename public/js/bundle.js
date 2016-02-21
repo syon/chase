@@ -317,17 +317,26 @@ var ItemList = _react2.default.createClass({
     var list = _lodash2.default.toArray(this.props.data.list);
     var nodes = [];
     _lodash2.default.each(list, function (d) {
+      var title = d.resolved_title;
+      if (!title) {
+        title = d.given_url;
+      }
       var img = undefined;
       if (d.image) {
         img = _react2.default.createElement('img', { src: d.image.src });
       } else {
-        img = _react2.default.createElement('img', { src: 'http://lorempixel.com/300/300/nature/' });
+        img = _react2.default.createElement('img', { src: '/img/blank.png' });
       }
       var fqdn = function () {
         try {
-          return (d.resolved_url + "/").match(/\/\/(.*?)\//)[1];
+          var url = d.resolved_url;
+          if (!url) {
+            url = d.given_url;
+          }
+          return (url + "/").match(/\/\/(.*?)\//)[1];
         } catch (e) {
-          return d.resolved_url;
+          console.error(e, d);
+          return d.given_url;
         }
       }();
       var upd_at = function () {
@@ -348,7 +357,7 @@ var ItemList = _react2.default.createClass({
             _react2.default.createElement(
               'a',
               { href: d.resolved_url, target: '_blank' },
-              d.resolved_title
+              title
             )
           ),
           _react2.default.createElement(
