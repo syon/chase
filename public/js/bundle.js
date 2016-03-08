@@ -125,6 +125,7 @@ var ArchiveButton = _react2.default.createClass({
       url: "/archive",
       dataType: 'json',
       cache: false,
+      timeout: 10000,
       data: { item_id: this.props.item_id },
       success: function success(list) {
         console.log("Success.");
