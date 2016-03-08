@@ -15,6 +15,7 @@ const ArchiveButton = React.createClass({
       url: "/archive",
       dataType: 'json',
       cache: false,
+      timeout: 10000,
       data: {item_id: this.props.item_id},
       success: (list) => {
         console.log("Success.");
