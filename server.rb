@@ -7,11 +7,11 @@ require "ap"
 Dotenv.load
 
 use Rack::Session::Cookie, :key => 'rack.session',
-                           :domain => 'syon-chase.herokuapp.com',
+                           :domain => ENV['domain'],
                            :path => '/',
                            :expire_after => 2592000 # In seconds
 
-CALLBACK_URL = "http://#{ENV['host']}/oauth/callback"
+CALLBACK_URL = "http://#{ENV['fqdn']}/oauth/callback"
 
 Pocket.configure do |config|
   config.consumer_key = ENV['consumer_key']
@@ -38,8 +38,7 @@ get "/oauth/connect" do
   puts "OAUTH CONNECT"
   session[:code] = Pocket.get_code(:redirect_uri => CALLBACK_URL)
   new_url = Pocket.authorize_url(:code => session[:code], :redirect_uri => CALLBACK_URL)
-  puts "new_url: #{new_url}"
-  puts "session: #{session}"
+  ap session
   redirect new_url
 end
 

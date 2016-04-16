@@ -8,6 +8,26 @@ Chase is client web-app for Pocket.
 
 ## Develop
 
+### prepare
+
+```sh
+# .env (local)
+domain="local.syon-chase.herokuapp.com"
+fqdn="local.syon-chase.herokuapp.com:4567"
+consumer_key="99999-xxxxxxxxxxxxxxxxxxxxxxxx"
+```
+
+```sh
+# /etc/hosts
+127.0.0.1       local.syon-chase.herokuapp.com
+```
+
+```sh
+$ npm install
+```
+
+### build and run
+
 ```sh
 $ node build
 ```
