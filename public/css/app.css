@@ -38,6 +38,7 @@ body {
   text-overflow: ellipsis;
   color: #4078c0;
   text-decoration: none;
+  letter-spacing: -0.02em;
 }
 
 .item .item-title a:hover {
