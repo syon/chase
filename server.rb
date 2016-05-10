@@ -58,6 +58,7 @@ end
 
 get "/retrieve" do
   client = Pocket.client(:access_token => session[:access_token])
+  ap session
   info = client.retrieve(
     :detailType => :complete,
     :sort => "newest",
