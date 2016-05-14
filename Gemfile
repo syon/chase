@@ -10,3 +10,7 @@ gem "sinatra-contrib"
 gem 'dotenv'
 
 gem 'awesome_print', require: 'ap'
+
+# For Export
+gem 'open_uri_redirections'
+gem "nokogiri"
