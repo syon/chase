@@ -2,4 +2,5 @@
 /.bundle/
 /node_modules/
 /vendor/
-items.csv
+after/items.json
+after/results

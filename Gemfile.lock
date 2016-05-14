@@ -10,8 +10,12 @@ GEM
       faraday (>= 0.7.4, < 0.10)
     hashie (3.4.3)
     kgio (2.10.0)
+    mini_portile2 (2.0.0)
     multi_json (1.11.2)
     multipart-post (2.0.0)
+    nokogiri (1.6.7.2)
+      mini_portile2 (~> 2.0.0.rc2)
+    open_uri_redirections (0.2.1)
     pocket-ruby (0.0.6)
       faraday (>= 0.7)
       faraday_middleware (~> 0.9)
@@ -46,10 +50,12 @@ PLATFORMS
 DEPENDENCIES
   awesome_print
   dotenv
+  nokogiri
+  open_uri_redirections
   pocket-ruby
   sinatra
   sinatra-contrib
   unicorn
 
 BUNDLED WITH
-   1.10.6
+   1.11.2

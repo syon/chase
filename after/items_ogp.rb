@@ -35,7 +35,7 @@ end
 
 
 # url = 'http://www.perfume-web.jp'
-data = open("items.json") do |io|
+data = open("after/items.json") do |io|
   JSON.load(io)
 end
 
@@ -67,8 +67,8 @@ data.each do |r|
     end
     item_id = r["item_id"].rjust(10, '0') # leftpad
     dest_dir = item_id[0, 3]
-    `mkdir -p results/#{dest_dir}`
-    `curl -o results/#{dest_dir}/#{item_id}.#{exp} #{img_url}`
+    `mkdir -p after/results/#{dest_dir}`
+    `curl -o after/results/#{dest_dir}/#{item_id}.#{exp} #{img_url}`
   rescue
     puts "ERROR!!"
     p r

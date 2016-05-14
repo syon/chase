@@ -42,6 +42,6 @@ info['list'].each do |i|
   rows << conv(i[1])
 end
 
-open("items.json", "w") do |io|
+open("after/items.json", "w") do |io|
 	JSON.dump(rows, io)
 end
