@@ -42,6 +42,7 @@ const ItemBox = React.createClass({
 
 const ItemList = React.createClass({
   render() {
+    let thumbs_path = "https://s3.amazonaws.com/syon-chase/items/thumbs/";
     let list = _.toArray(this.props.data.list);
     let nodes = [];
     _.each(list, (d) => {
@@ -56,6 +57,15 @@ const ItemList = React.createClass({
         img = <img src={d.image.src}/>;
       } else {
         img = <img src="/img/blank.png"/>;
+      }
+
+      let ogp_img;
+      if (d.image) {
+        let item10_id = ("0000000000"+d.item_id).substr(-10,10);
+        let item_id_3 = item10_id.substring(0, 3);
+        ogp_img = <img src={thumbs_path + item_id_3 + "/" + item10_id + ".jpg"}/>;
+      } else {
+        ogp_img = <img src="/img/blank.png"/>;
       }
 
       let url = d.resolved_url;
@@ -80,6 +90,7 @@ const ItemList = React.createClass({
       nodes.push(
         <Paper key={d.item_id} zDepth={1} rounded={false} className="item">
           {img}
+          {ogp_img}
           <div className="item-body">
             <h3 className="item-title">
               <a href={url} target="_blank">{title}</a>

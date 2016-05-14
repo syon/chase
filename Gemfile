@@ -9,6 +9,7 @@ gem "sinatra"
 gem "sinatra-contrib"
 gem 'dotenv'
 
+gem 'activesupport'
 gem 'awesome_print', require: 'ap'
 
 # For Export

@@ -315,6 +315,7 @@ var ItemBox = _react2.default.createClass({
 var ItemList = _react2.default.createClass({
   displayName: 'ItemList',
   render: function render() {
+    var thumbs_path = "https://s3.amazonaws.com/syon-chase/items/thumbs/";
     var list = _lodash2.default.toArray(this.props.data.list);
     var nodes = [];
     _lodash2.default.each(list, function (d) {
@@ -329,6 +330,15 @@ var ItemList = _react2.default.createClass({
         img = _react2.default.createElement('img', { src: d.image.src });
       } else {
         img = _react2.default.createElement('img', { src: '/img/blank.png' });
+      }
+
+      var ogp_img = void 0;
+      if (d.image) {
+        var item10_id = ("0000000000" + d.item_id).substr(-10, 10);
+        var item_id_3 = item10_id.substring(0, 3);
+        ogp_img = _react2.default.createElement('img', { src: thumbs_path + item_id_3 + "/" + item10_id + ".jpg" });
+      } else {
+        ogp_img = _react2.default.createElement('img', { src: '/img/blank.png' });
       }
 
       var url = d.resolved_url;
@@ -354,6 +364,7 @@ var ItemList = _react2.default.createClass({
         _materialUi.Paper,
         { key: d.item_id, zDepth: 1, rounded: false, className: 'item' },
         img,
+        ogp_img,
         _react2.default.createElement(
           'div',
           { className: 'item-body' },

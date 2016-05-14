@@ -2,6 +2,7 @@ require 'nokogiri'
 require 'open-uri'
 require 'open_uri_redirections'
 require 'json'
+require 'active_support/core_ext/object/blank'
 
 class ScrapeUtil
   def initialize(url)
@@ -47,7 +48,7 @@ data.each do |r|
     puts site.get_title
     puts "[org] " + r["image_url"]
     puts "[ogp] " + site.get_imagepath
-    r["image_url"] = site.get_imagepath if site.get_imagepath
+    r["image_url"] = site.get_imagepath if site.get_imagepath.present?
     puts "[aft] #{r["image_url"]}"
   rescue
     puts "ERROR #{r["item_url"]}"
