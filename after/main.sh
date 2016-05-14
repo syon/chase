@@ -7,13 +7,16 @@ bundle exec ruby after/items_export.rb
 bundle exec ruby after/items_ogp.rb
 
 # convert to jpg
-mogrify -format jpg after/results/*/*.gif
-mogrify -format jpg after/results/*/*.png
+mogrify -format jpg after/thumbs/*/*.gif
+mogrify -format jpg after/thumbs/*/*.png
 
 # resize width 200px
-mogrify -resize 200x after/results/*/*.jpg
+mogrify -resize 200x after/thumbs/*/*.jpg
 
 # delete except jpg
-find after/results -type f -name '*.gif' -delete
-find after/results -type f -name '*.png' -delete
-find after/results -type f -name '*.jpg~' -delete
+find after/thumbs -type f -name '*.gif' -delete
+find after/thumbs -type f -name '*.png' -delete
+find after/thumbs -type f -name '*.jpg~' -delete
+
+# sync with S3
+aws s3 sync after/thumbs s3://syon-chase/items/thumbs/

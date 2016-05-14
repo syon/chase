@@ -67,8 +67,8 @@ data.each do |r|
     end
     item_id = r["item_id"].rjust(10, '0') # leftpad
     dest_dir = item_id[0, 3]
-    `mkdir -p after/results/#{dest_dir}`
-    `curl -o after/results/#{dest_dir}/#{item_id}.#{exp} #{img_url}`
+    `mkdir -p after/thumbs/#{dest_dir}`
+    `curl -o after/thumbs/#{dest_dir}/#{item_id}.#{exp} #{img_url}`
   rescue
     puts "ERROR!!"
     p r
