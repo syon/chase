@@ -1,7 +1,7 @@
-require "pocket-ruby"
+require 'pocket-ruby'
 require 'dotenv'
-require "ap"
-require 'csv'
+require 'ap'
+require 'json'
 
 Dotenv.load
 
@@ -15,8 +15,9 @@ client = Pocket.client(:access_token => access_token)
 
 info = client.retrieve(
   :detailType => :complete,
+  :state => :unread,
   :sort => "newest",
-  :count => 50
+  :count => 100
 )
 
 def conv(obj)
@@ -28,7 +29,11 @@ def conv(obj)
   unless item_url
     item_url = obj['given_url']
   end
-  item = {item_id: item_id, item_url: item_url}
+  image_url = nil
+  if obj['has_image'] == "1"
+    image_url = obj['images']["1"]["src"]
+  end
+  item = {item_id: item_id, item_url: item_url, image_url: image_url}
   return item
 end
 
@@ -37,15 +42,6 @@ info['list'].each do |i|
   rows << conv(i[1])
 end
 
-data = CSV.generate do |csv|
-  rows.each do |r|
-    csv << [
-      r[:item_id],
-      r[:item_url]
-    ]
-  end
-end
-
-File.open("items.csv", 'w') do |file|
-  file.write(data)
+open("items.json", "w") do |io|
+	JSON.dump(rows, io)
 end
