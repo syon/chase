@@ -315,85 +315,109 @@ var ItemBox = _react2.default.createClass({
 var ItemList = _react2.default.createClass({
   displayName: 'ItemList',
   render: function render() {
-    var thumbs_path = "https://s3.amazonaws.com/syon-chase/items/thumbs/";
     var list = _lodash2.default.toArray(this.props.data.list);
     var nodes = [];
+
     _lodash2.default.each(list, function (d) {
-
-      var title = d.resolved_title;
-      if (!title) {
-        title = d.given_url;
-      }
-
-      var img = void 0;
-      if (d.image) {
-        img = _react2.default.createElement('img', { src: d.image.src });
-      } else {
-        img = _react2.default.createElement('img', { src: '/img/blank.png' });
-      }
-
-      var item10_id = ("0000000000" + d.item_id).substr(-10, 10);
-      var item_id_3 = item10_id.substring(0, 3);
-      var ogp_img = _react2.default.createElement('img', { src: thumbs_path + item_id_3 + "/" + item10_id + ".jpg" });
-
-      var url = d.resolved_url;
-      if (!url) {
-        url = d.given_url;
-      }
-      var fqdn = function () {
-        try {
-          return (url + "/").match(/\/\/(.*?)\//)[1];
-        } catch (e) {
-          console.error(e, d);
-          return d.given_url;
-        }
-      }();
-
-      var upd_at = function () {
-        var dt = new Date(d.time_updated * 1000);
-        var ymd = [dt.getFullYear(), dt.getMonth() + 1, dt.getDate()];
-        return ymd.join('/') + ' ' + dt.toLocaleTimeString();
-      }();
-
-      nodes.push(_react2.default.createElement(
-        _materialUi.Paper,
-        { key: d.item_id, zDepth: 1, rounded: false, className: 'item' },
-        img,
-        ogp_img,
-        _react2.default.createElement(
-          'div',
-          { className: 'item-body' },
-          _react2.default.createElement(
-            'h3',
-            { className: 'item-title' },
-            _react2.default.createElement(
-              'a',
-              { href: url, target: '_blank' },
-              title
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'item-meta' },
-            _react2.default.createElement(
-              'span',
-              null,
-              upd_at
-            ),
-            _react2.default.createElement(
-              'span',
-              null,
-              fqdn
-            )
-          )
-        ),
-        _react2.default.createElement(_ArchiveButton2.default, { label: 'Archive', item_id: d.item_id })
-      ));
+      nodes.push(_react2.default.createElement(Item, { key: d.item_id, data: d }));
     });
+
     return _react2.default.createElement(
       'div',
       { className: 'itemList' },
       nodes
+    );
+  }
+});
+
+var thumbs_path = "https://s3.amazonaws.com/syon-chase/items/thumbs/";
+
+var Item = _react2.default.createClass({
+  displayName: 'Item',
+  getTitle: function getTitle(d) {
+    var title = d.resolved_title;
+    if (!title) {
+      title = d.given_url;
+    }
+    return title;
+  },
+  getImage: function getImage(d) {
+    if (d.image) {
+      return _react2.default.createElement('img', { src: d.image.src });
+    } else {
+      return _react2.default.createElement('img', { src: '/img/blank.png' });
+    }
+  },
+  getOgpImage: function getOgpImage(d) {
+    var item10_id = ("0000000000" + d.item_id).substr(-10, 10);
+    var item_id_3 = item10_id.substring(0, 3);
+    return _react2.default.createElement('img', { src: thumbs_path + item_id_3 + "/" + item10_id + ".jpg" });
+  },
+  getUrl: function getUrl(d) {
+    var url = d.resolved_url;
+    if (!url) {
+      url = d.given_url;
+    }
+    return url;
+  },
+  getFqdn: function getFqdn(d) {
+    try {
+      var url = this.getUrl(d);
+      return (url + "/").match(/\/\/(.*?)\//)[1];
+    } catch (e) {
+      console.error(e, d);
+      return d.given_url;
+    }
+  },
+  getUpdAt: function getUpdAt(d) {
+    var dt = new Date(d.time_updated * 1000);
+    var ymd = [dt.getFullYear(), dt.getMonth() + 1, dt.getDate()];
+    return ymd.join('/') + ' ' + dt.toLocaleTimeString();
+  },
+  render: function render() {
+    var d = this.props.data;
+    console.log(d);
+
+    var title = this.getTitle(d);
+    var img = this.getImage(d);
+    var ogp_img = this.getOgpImage(d);
+    var url = this.getUrl(d);
+    var fqdn = this.getFqdn(d);
+    var upd_at = this.getUpdAt(d);
+
+    return _react2.default.createElement(
+      _materialUi.Paper,
+      { zDepth: 1, rounded: false, className: 'item' },
+      img,
+      ogp_img,
+      _react2.default.createElement(
+        'div',
+        { className: 'item-body' },
+        _react2.default.createElement(
+          'h3',
+          { className: 'item-title' },
+          _react2.default.createElement(
+            'a',
+            { href: url, target: '_blank' },
+            title
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'item-meta' },
+          _react2.default.createElement(
+            'span',
+            null,
+            upd_at
+          ),
+          _react2.default.createElement(
+            'span',
+            null,
+            fqdn
+          )
+        )
+      ),
+      _react2.default.createElement(_ArchiveButton2.default, { label: 'Archive', item_id: d.item_id })
     );
   }
 });
