@@ -59,14 +59,9 @@ const ItemList = React.createClass({
         img = <img src="/img/blank.png"/>;
       }
 
-      let ogp_img;
-      if (d.image) {
-        let item10_id = ("0000000000"+d.item_id).substr(-10,10);
-        let item_id_3 = item10_id.substring(0, 3);
-        ogp_img = <img src={thumbs_path + item_id_3 + "/" + item10_id + ".jpg"}/>;
-      } else {
-        ogp_img = <img src="/img/blank.png"/>;
-      }
+      let item10_id = ("0000000000"+d.item_id).substr(-10,10);
+      let item_id_3 = item10_id.substring(0, 3);
+      let ogp_img = <img src={thumbs_path + item_id_3 + "/" + item10_id + ".jpg"}/>;
 
       let url = d.resolved_url;
       if (!url) {

@@ -1,6 +1,7 @@
 require './after/scrape_util'
 require 'json'
 require 'active_support/core_ext/object/blank'
+require "ap"
 
 def get_item10_id(item_id)
   id = item_id.rjust(10, '0') # leftpad
@@ -20,39 +21,47 @@ end
 puts "==== GET IMAGE URL ============================"
 
 sites = []
+dl_queue = []
 data.each do |r|
   puts "\n#{r["item_id"]} - - - - - - - -"
 
-  if exist_ids.include?(get_item10_id(r["item_id"]))
-    puts "-- #{r["item_id"]} (ALREADY SCRAPED)"
+  id10 = get_item10_id(r["item_id"])
+  if exist_ids.include?(id10)
+    puts "-- #{id10} (ALREADY SCRAPED)"
     next
   else
-    puts "-- #{r["item_id"]} (NEW SCRAPING)"
+    puts "-- #{id10} (NEW SCRAPING)"
   end
 
   begin
     site = ScrapeUtil.new(r["item_url"])
     puts site.get_title
-    puts "[org] " + r["image_url"]
-    puts "[ogp] " + site.get_imagepath
+    puts "[org] #{r["image_url"]}"
+    puts "[ogp] #{site.get_imagepath}"
     r["image_url"] = site.get_imagepath if site.get_imagepath.present?
     puts "[aft] #{r["image_url"]}"
-  rescue
-    puts "ERROR #{r["item_url"]}"
+    dl_queue << id10
+  rescue => e
+    puts "ERROR"
+    ap r
+    ap e
   end
 end
 
 puts "==== DOWNLOAD IMAGE ============================"
-
+ap dl_queue
 data.each do |r|
-  if exist_ids.include?(get_item10_id(r["item_id"]))
-    puts "-- #{r["item_id"]} (ALREADY DOWNLOADED)"
+  id10 = get_item10_id(r["item_id"])
+  unless dl_queue.include?(id10)
+    puts "-- #{id10} (ALREADY DOWNLOADED)"
     next
   else
-    puts "-- #{r["item_id"]} (NEW DOWNLOAD)"
+    puts "-- #{id10} (NEW DOWNLOAD)"
   end
+
   begin
     img_url = r["image_url"]
+    ap r
     next unless img_url
     m = img_url.match(%r{.(gif|jpg|png)(\?.*)?$}i)
     next unless m
@@ -61,12 +70,12 @@ data.each do |r|
       puts "Not an image: #{img_url}"
       next
     end
-    item_id = r["item_id"].rjust(10, '0') # leftpad
-    dest_dir = item_id[0, 3]
+    dest_dir = id10[0, 3]
     `mkdir -p after/thumbs/#{dest_dir}`
-    `curl -o after/thumbs/#{dest_dir}/#{item_id}.#{exp} #{img_url}`
-  rescue
+    `curl -o after/thumbs/#{dest_dir}/#{id10}.#{exp} #{img_url}`
+  rescue => e
     puts "ERROR!!"
-    p r
+    ap r
+    ap e
   end
 end
