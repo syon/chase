@@ -34,6 +34,15 @@ class ScrapeUtil
   end
 end
 
+def get_item10_id(item_id)
+  id = item_id.rjust(10, '0') # leftpad
+  id[0, 10]
+end
+
+exist_ids = []
+Dir::glob("after/thumbs/**/*.jpg").each do |f|
+  exist_ids << File.basename(f, ".jpg")
+end
 
 # url = 'http://www.perfume-web.jp'
 data = open("after/items.json") do |io|
@@ -42,8 +51,16 @@ end
 
 sites = []
 data.each do |r|
+  puts "\n#{r["item_id"]} - - - - - - - -"
+
+  if exist_ids.include?(get_item10_id(r["item_id"]))
+    puts "-- #{r["item_id"]} (ALREADY SCRAPED)"
+    next
+  else
+    puts "-- #{r["item_id"]} (NEW SCRAPING)"
+  end
+
   begin
-    puts "\n#{r["item_id"]} - - - - - - - -"
     site = ScrapeUtil.new(r["item_url"])
     puts site.get_title
     puts "[org] " + r["image_url"]
@@ -56,6 +73,12 @@ data.each do |r|
 end
 
 data.each do |r|
+  if exist_ids.include?(get_item10_id(r["item_id"]))
+    puts "-- #{r["item_id"]} (ALREADY DOWNLOADED)"
+    next
+  else
+    puts "-- #{r["item_id"]} (NEW DOWNLOAD)"
+  end
   begin
     img_url = r["image_url"]
     next unless img_url
