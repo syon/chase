@@ -30,7 +30,7 @@ def conv(obj)
     item_url = obj['given_url']
   end
   image_url = nil
-  if obj['has_image'] == "1"
+  if obj['has_image'] == "1" && obj['images']["1"]
     image_url = obj['images']["1"]["src"]
   end
   item = {item_id: item_id, item_url: item_url, image_url: image_url}

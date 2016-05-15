@@ -63,11 +63,15 @@ end
 data.each do |r|
   id10 = get_item10_id(r["item_id"])
   img_url = r["image_url"]
+  dest_dir = id10[0, 3]
+
   if !dl_queue.include?(id10)
     next
   elsif img_url
     puts "-- #{id10} (NEW DOWNLOAD)"
   else
+    `mkdir -p after/thumbs/#{dest_dir}`
+    `cp after/blank.jpg after/thumbs/#{dest_dir}/#{id10}.jpg`
     next
   end
 
@@ -79,7 +83,6 @@ data.each do |r|
       puts "EXP: #{exp}"
       next
     end
-    dest_dir = id10[0, 3]
     `mkdir -p after/thumbs/#{dest_dir}`
     puts "Downloading... #{img_url}"
     `curl -o after/thumbs/#{dest_dir}/#{id10}.#{exp} #{img_url}`
