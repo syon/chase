@@ -27,7 +27,6 @@ data.each do |r|
 
   id10 = get_item10_id(r["item_id"])
   if exist_ids.include?(id10)
-    puts "-- #{id10} (ALREADY SCRAPED)"
     next
   else
     puts "-- #{id10} (NEW SCRAPING)"
@@ -53,9 +52,12 @@ ap dl_queue
 
 def get_exp_from_content_type(url)
   c = `curl -I '#{url}'`
-  m = c.match(%r{^Content-Type: image/(gif|jpg|jpeg|png|svg)\r$})
+  ap c
+  m = c.match(%r{^Content-Type: image/(gif|jpg|jpeg|png|svg|svg\+xml)\r$})
   exp = m ? m[1] : ""
   exp.sub! /jpeg/, 'jpg'
+  exp.sub! /svg\+xml/, 'svg'
+  exp
 end
 
 data.each do |r|
@@ -72,7 +74,9 @@ data.each do |r|
   begin
     exp = get_exp_from_content_type(img_url)
     unless exp
-      puts "Not an image: #{img_url}"
+      puts "Not an image:"
+      puts "URL: #{img_url}"
+      puts "EXP: #{exp}"
       next
     end
     dest_dir = id10[0, 3]

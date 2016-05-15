@@ -18,7 +18,7 @@ mogrify -resize 200x after/thumbs/*/*.jpg
 find after/thumbs -type f -name '*.gif' -delete
 find after/thumbs -type f -name '*.png' -delete
 find after/thumbs -type f -name '*.svg' -delete
-find after/thumbs -type f -name '*.jpg~' -delete
+find after/thumbs -type f -name '*~' -delete
 
 # sync with S3
 aws s3 sync after/thumbs s3://syon-chase/items/thumbs/
