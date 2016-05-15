@@ -1,38 +1,6 @@
-require 'nokogiri'
-require 'open-uri'
-require 'open_uri_redirections'
+require './after/scrape_util'
 require 'json'
 require 'active_support/core_ext/object/blank'
-
-class ScrapeUtil
-  def initialize(url)
-    html = open(url, :allow_redirections => :safe) do |f|
-      @charset = f.charset
-      f.read
-    end
-    @doc = Nokogiri::HTML.parse(html, @charset)
-  end
-
-  def get_title
-    if @doc.css('//meta[property="og:site_name"]/@content').empty?
-      return @doc.title.to_s
-    else
-      return @doc.css('//meta[property="og:site_name"]/@content').to_s
-    end
-  end
-
-  def get_description
-    if @doc.css('//meta[property="og:description"]/@content').empty?
-      return @doc.css('//meta[name$="escription"]/@content').to_s
-    else
-      return @doc.css('//meta[property="og:description"]/@content').to_s
-    end
-  end
-
-  def get_imagepath
-    return @doc.css('//meta[property="og:image"]/@content').to_s
-  end
-end
 
 def get_item10_id(item_id)
   id = item_id.rjust(10, '0') # leftpad
@@ -48,6 +16,8 @@ end
 data = open("after/items.json") do |io|
   JSON.load(io)
 end
+
+puts "==== GET IMAGE URL ============================"
 
 sites = []
 data.each do |r|
@@ -71,6 +41,8 @@ data.each do |r|
     puts "ERROR #{r["item_url"]}"
   end
 end
+
+puts "==== DOWNLOAD IMAGE ============================"
 
 data.each do |r|
   if exist_ids.include?(get_item10_id(r["item_id"]))
