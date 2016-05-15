@@ -41,13 +41,24 @@ const ItemBox = React.createClass({
 });
 
 const ItemList = React.createClass({
+  getInitialState() {
+    return {selectedId: ""};
+  },
+  toggleSelected(item_id) {
+    this.setState({selectedId: item_id})
+  },
   render() {
     let list = _.toArray(this.props.data.list);
     let nodes = [];
 
     _.each(list, (d) => {
       nodes.push(
-        <Item key={d.item_id} data={d} />
+        <Item
+          key={d.item_id}
+          data={d}
+          selectedId={this.state.selectedId}
+          toggleSelected={this.toggleSelected}
+        />
       );
     });
 
@@ -108,8 +119,14 @@ const Item = React.createClass({
     return ymd.join('/') + ' ' + dt.toLocaleTimeString();
   },
 
+  handleClick(e,a,b,c) {
+    let id = this.props.data.item_id;
+    this.props.toggleSelected(id);
+  },
+
   render() {
     let d = this.props.data;
+
     let title   = this.getTitle(d);
     let img     = this.getImage(d);
     let ogp_img = this.getOgpImage(d);
@@ -117,11 +134,16 @@ const Item = React.createClass({
     let fqdn    = this.getFqdn(d);
     let upd_at  = this.getUpdAt(d);
 
+    let style = {};
+    if (this.props.selectedId == d.item_id) {
+      style = {backgroundColor: "#F4FF81"};
+    }
+
     return (
-      <Paper zDepth={1} rounded={false} className="item">
+      <Paper zDepth={1} rounded={false} className="item" style={style}>
         {img}
         {ogp_img}
-        <div className="item-body">
+        <div className="item-body" onClick={this.handleClick}>
           <h3 className="item-title">
             <a href={url} target="_blank">{title}</a>
           </h3>

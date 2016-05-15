@@ -314,12 +314,25 @@ var ItemBox = _react2.default.createClass({
 
 var ItemList = _react2.default.createClass({
   displayName: 'ItemList',
+  getInitialState: function getInitialState() {
+    return { selectedId: "" };
+  },
+  toggleSelected: function toggleSelected(item_id) {
+    this.setState({ selectedId: item_id });
+  },
   render: function render() {
+    var _this2 = this;
+
     var list = _lodash2.default.toArray(this.props.data.list);
     var nodes = [];
 
     _lodash2.default.each(list, function (d) {
-      nodes.push(_react2.default.createElement(Item, { key: d.item_id, data: d }));
+      nodes.push(_react2.default.createElement(Item, {
+        key: d.item_id,
+        data: d,
+        selectedId: _this2.state.selectedId,
+        toggleSelected: _this2.toggleSelected
+      }));
     });
 
     return _react2.default.createElement(
@@ -374,9 +387,12 @@ var Item = _react2.default.createClass({
     var ymd = [dt.getFullYear(), dt.getMonth() + 1, dt.getDate()];
     return ymd.join('/') + ' ' + dt.toLocaleTimeString();
   },
+  handleClick: function handleClick(e, a, b, c) {
+    var id = this.props.data.item_id;
+    this.props.toggleSelected(id);
+  },
   render: function render() {
     var d = this.props.data;
-    console.log(d);
 
     var title = this.getTitle(d);
     var img = this.getImage(d);
@@ -385,14 +401,19 @@ var Item = _react2.default.createClass({
     var fqdn = this.getFqdn(d);
     var upd_at = this.getUpdAt(d);
 
+    var style = {};
+    if (this.props.selectedId == d.item_id) {
+      style = { backgroundColor: "#F4FF81" };
+    }
+
     return _react2.default.createElement(
       _materialUi.Paper,
-      { zDepth: 1, rounded: false, className: 'item' },
+      { zDepth: 1, rounded: false, className: 'item', style: style },
       img,
       ogp_img,
       _react2.default.createElement(
         'div',
-        { className: 'item-body' },
+        { className: 'item-body', onClick: this.handleClick },
         _react2.default.createElement(
           'h3',
           { className: 'item-title' },
