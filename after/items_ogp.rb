@@ -50,29 +50,36 @@ end
 
 puts "==== DOWNLOAD IMAGE ============================"
 ap dl_queue
+
+def get_exp_from_content_type(url)
+  c = `curl -I '#{url}'`
+  m = c.match(%r{^Content-Type: image/(gif|jpg|jpeg|png|svg)\r$})
+  exp = m ? m[1] : ""
+  exp.sub! /jpeg/, 'jpg'
+end
+
 data.each do |r|
   id10 = get_item10_id(r["item_id"])
-  unless dl_queue.include?(id10)
-    puts "-- #{id10} (ALREADY DOWNLOADED)"
+  img_url = r["image_url"]
+  if !dl_queue.include?(id10)
     next
-  else
+  elsif img_url
     puts "-- #{id10} (NEW DOWNLOAD)"
+  else
+    next
   end
 
   begin
-    img_url = r["image_url"]
-    ap r
-    next unless img_url
-    m = img_url.match(%r{.(gif|jpg|png)(\?.*)?$}i)
-    next unless m
-    exp = m[1]
+    exp = get_exp_from_content_type(img_url)
     unless exp
       puts "Not an image: #{img_url}"
       next
     end
     dest_dir = id10[0, 3]
     `mkdir -p after/thumbs/#{dest_dir}`
+    puts "Downloading... #{img_url}"
     `curl -o after/thumbs/#{dest_dir}/#{id10}.#{exp} #{img_url}`
+    ap "after/thumbs/#{dest_dir}/#{id10}.#{exp}"
   rescue => e
     puts "ERROR!!"
     ap r
