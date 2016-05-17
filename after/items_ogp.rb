@@ -53,7 +53,7 @@ ap dl_queue
 def get_exp_from_content_type(url)
   c = `curl -I '#{url}'`
   ap c
-  m = c.match(%r{^Content-Type: image/(gif|jpg|jpeg|png|svg|svg\+xml)\r$})
+  m = c.match(%r{^Content-Type: image/(gif|jpg|jpeg|png|svg|svg\+xml)\r$}i)
   exp = m ? m[1] : ""
   exp.sub! /jpeg/, 'jpg'
   exp.sub! /svg\+xml/, 'svg'
@@ -78,10 +78,11 @@ data.each do |r|
 
   begin
     exp = get_exp_from_content_type(img_url)
-    unless exp
-      puts "Not an image:"
+    if exp.blank?
+      puts "Not an image, uses blank image."
       puts "URL: #{img_url}"
-      puts "EXP: #{exp}"
+      `mkdir -p after/thumbs/#{dest_dir}`
+      `cp after/blank.jpg after/thumbs/#{dest_dir}/#{id10}.jpg`
       next
     end
     `mkdir -p after/thumbs/#{dest_dir}`
