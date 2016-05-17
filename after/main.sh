@@ -1,10 +1,16 @@
 #!/bin/sh
 
+### Phase.1
+echo "\033[1;46m Scraping... \033[0;39m"
+
 # export item ids and image urls from pocket (items.json)
 bundle exec ruby after/items_export.rb
 
 # scrapes to get ogp data and download images
 bundle exec ruby after/items_ogp.rb
+
+### Phase.2
+echo "\033[1;46m Convert and resize \033[0;39m"
 
 # convert to jpg
 mogrify -format jpg after/thumbs/*/*.gif
@@ -20,6 +26,9 @@ find after/thumbs -type f -name '*.png' -delete
 find after/thumbs -type f -name '*.svg' -delete
 find after/thumbs -type f -name '*~' -delete
 find after/thumbs -type f -name '*.' -delete
+
+### Phase.3
+echo "\033[1;46m Syncing Amazon S3 \033[0;39m"
 
 # sync with S3
 aws s3 sync after/thumbs s3://syon-chase/items/thumbs/

@@ -68,6 +68,7 @@ data.each do |r|
   if !dl_queue.include?(id10)
     next
   elsif img_url
+    puts "\n----------------------------"
     puts "-- #{id10} (NEW DOWNLOAD)"
   else
     `mkdir -p after/thumbs/#{dest_dir}`
@@ -84,7 +85,8 @@ data.each do |r|
       next
     end
     `mkdir -p after/thumbs/#{dest_dir}`
-    puts "Downloading... #{img_url}"
+    puts "Downloading..."
+    ap img_url
     `curl -o after/thumbs/#{dest_dir}/#{id10}.#{exp} #{img_url}`
     ap "after/thumbs/#{dest_dir}/#{id10}.#{exp}"
   rescue => e
