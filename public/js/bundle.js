@@ -317,6 +317,13 @@ var ItemList = _react2.default.createClass({
   getInitialState: function getInitialState() {
     return { selectedId: "" };
   },
+  getItemId: function getItemId(d) {
+    var id = d.resolved_id;
+    if (id == "0") {
+      id = d.item_id;
+    }
+    return id;
+  },
   toggleSelected: function toggleSelected(item_id) {
     this.setState({ selectedId: item_id });
   },
@@ -328,7 +335,8 @@ var ItemList = _react2.default.createClass({
 
     _lodash2.default.each(list, function (d) {
       nodes.push(_react2.default.createElement(Item, {
-        key: d.item_id,
+        key: _this2.getItemId(d),
+        uniqId: _this2.getItemId(d),
         data: d,
         selectedId: _this2.state.selectedId,
         toggleSelected: _this2.toggleSelected
@@ -361,8 +369,8 @@ var Item = _react2.default.createClass({
       return _react2.default.createElement('img', { src: '/img/blank.png' });
     }
   },
-  getOgpImage: function getOgpImage(d) {
-    var item10_id = ("0000000000" + d.item_id).substr(-10, 10);
+  getOgpImage: function getOgpImage() {
+    var item10_id = ("0000000000" + this.props.uniqId).substr(-10, 10);
     var item_id_3 = item10_id.substring(0, 3);
     return _react2.default.createElement('img', { src: thumbs_path + item_id_3 + "/" + item10_id + ".jpg" });
   },
@@ -396,7 +404,7 @@ var Item = _react2.default.createClass({
 
     var title = this.getTitle(d);
     var img = this.getImage(d);
-    var ogp_img = this.getOgpImage(d);
+    var ogp_img = this.getOgpImage();
     var url = this.getUrl(d);
     var fqdn = this.getFqdn(d);
     var upd_at = this.getUpdAt(d);

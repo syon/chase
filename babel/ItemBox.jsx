@@ -44,6 +44,13 @@ const ItemList = React.createClass({
   getInitialState() {
     return {selectedId: ""};
   },
+  getItemId(d) {
+    let id = d.resolved_id;
+    if (id == "0") {
+      id = d.item_id;
+    }
+    return id;
+  },
   toggleSelected(item_id) {
     this.setState({selectedId: item_id})
   },
@@ -54,7 +61,8 @@ const ItemList = React.createClass({
     _.each(list, (d) => {
       nodes.push(
         <Item
-          key={d.item_id}
+          key={this.getItemId(d)}
+          uniqId={this.getItemId(d)}
           data={d}
           selectedId={this.state.selectedId}
           toggleSelected={this.toggleSelected}
@@ -89,8 +97,8 @@ const Item = React.createClass({
     }
   },
 
-  getOgpImage(d) {
-    let item10_id = ("0000000000"+d.item_id).substr(-10,10);
+  getOgpImage() {
+    let item10_id = ("0000000000"+this.props.uniqId).substr(-10,10);
     let item_id_3 = item10_id.substring(0, 3);
     return <img src={thumbs_path + item_id_3 + "/" + item10_id + ".jpg"}/>;
   },
@@ -129,7 +137,7 @@ const Item = React.createClass({
 
     let title   = this.getTitle(d);
     let img     = this.getImage(d);
-    let ogp_img = this.getOgpImage(d);
+    let ogp_img = this.getOgpImage();
     let url     = this.getUrl(d);
     let fqdn    = this.getFqdn(d);
     let upd_at  = this.getUpdAt(d);
