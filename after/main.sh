@@ -30,5 +30,5 @@ find after/thumbs -type f -name '*.' -delete
 ### Phase.3
 echo "\033[1;46m Syncing Amazon S3 \033[0;39m"
 
-# sync with S3
-aws s3 sync after/thumbs s3://syon-chase/items/thumbs/
+# Upload to S3
+bundle exec ruby after/upload-s3.rb

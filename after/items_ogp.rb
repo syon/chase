@@ -1,16 +1,26 @@
 require './after/scrape_util'
 require 'json'
 require 'active_support/core_ext/object/blank'
-require "ap"
+require 'aws-sdk'
+require 'dotenv'
+require 'ap'
+
+Dotenv.load
+
+Aws.config.update({
+  region: 'us-east-1',
+  credentials: Aws::Credentials.new(ENV['AWS_ACCESS_KEY_ID'], ENV['AWS_SECRET_ACCESS_KEY'])
+})
+
+S3_BUCKET = Aws::S3::Resource.new.bucket(ENV['S3_BUCKET'])
 
 def get_item10_id(item_id)
   id = item_id.rjust(10, '0') # leftpad
   id[0, 10]
 end
 
-exist_ids = []
-Dir::glob("after/thumbs/**/*.jpg").each do |f|
-  exist_ids << File.basename(f, ".jpg")
+def get_s3_obj_key(item10_id)
+  "items/thumbs/#{item10_id[0, 3]}/#{item10_id}.jpg"
 end
 
 # url = 'http://www.perfume-web.jp'
@@ -23,14 +33,15 @@ puts "==== GET IMAGE URL ============================"
 sites = []
 dl_queue = []
 data.each do |r|
-  puts "\n#{r["item_id"]} - - - - - - - -"
-
   id10 = get_item10_id(r["item_id"])
-  if exist_ids.include?(id10)
+  key  = get_s3_obj_key(id10)
+  obj  = S3_BUCKET.object(key)
+
+  if obj.exists?
+    puts "#{r["item_id"]} (skip)"
     next
-  else
-    puts "-- #{id10} (NEW SCRAPING)"
   end
+  puts "\n-- #{id10} (NEW SCRAPING)"
 
   begin
     site = ScrapeUtil.new(r["item_url"])
