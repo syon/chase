@@ -91,3 +91,10 @@ get "/info" do
   puts Time.now
   json result
 end
+
+get "/thumbs" do
+  puts `ruby after/items_export.rb`
+  puts `ruby after/items_ogp.rb`
+  puts `after/make_thumbs.sh`
+  puts `ruby after/upload-s3.rb`
+end
