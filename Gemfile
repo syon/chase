@@ -15,3 +15,4 @@ gem 'awesome_print', require: 'ap'
 # For Export
 gem 'open_uri_redirections'
 gem "nokogiri"
+gem 'aws-sdk', '~> 2'
