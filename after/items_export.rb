@@ -9,9 +9,7 @@ Pocket.configure do |config|
   config.consumer_key = ENV['consumer_key']
 end
 
-access_token = ENV["sandbag_token"]
-
-client = Pocket.client(:access_token => access_token)
+client = Pocket.client(:access_token => ARGV[0])
 
 info = client.retrieve(
   :detailType => :complete,

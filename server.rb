@@ -93,8 +93,10 @@ get "/info" do
 end
 
 get "/thumbs" do
-  puts `ruby after/items_export.rb`
+  puts `ruby after/items_export.rb #{session[:access_token]}`
   puts `ruby after/items_ogp.rb`
   puts `after/make_thumbs.sh`
   puts `ruby after/upload-s3.rb`
+  status 200
+  body ''
 end
