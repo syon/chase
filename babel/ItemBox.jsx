@@ -12,15 +12,30 @@ const ItemBox = React.createClass({
       cache: false,
       success: (list) => {
         console.log("/retrieve", list);
-        this.setState({data: {list: list}});
+        this.setState({list: list});
       },
       error: (xhr, status, err) => {
         console.error("/retrieve", status, err.toString());
       }
     });
+
+    $.ajax({
+      url: "/thumbs",
+      cache: false,
+      success: (res) => {
+        console.log("/thumbs", res);
+        this.setState({thumbed: true});
+      },
+      error: (xhr, status, err) => {
+        console.error("/thumbs", status, err.toString());
+      }
+    });
   },
   getInitialState() {
-    return {data: {list: []}};
+    return {
+      thumbed: false,
+      list: []
+    };
   },
   componentDidMount() {
     this.loadFromServer();
@@ -34,7 +49,7 @@ const ItemBox = React.createClass({
     }
     return (
       <div className="itemBox" style={styles.itemBox}>
-        <ItemList data={this.state.data} />
+        <ItemList data={this.state} />
       </div>
     );
   }
@@ -64,6 +79,7 @@ const ItemList = React.createClass({
           key={this.getItemId(d)}
           uniqId={this.getItemId(d)}
           data={d}
+          thumbed={this.props.data.thumbed}
           selectedId={this.state.selectedId}
           toggleSelected={this.toggleSelected}
         />
@@ -100,7 +116,13 @@ const Item = React.createClass({
   getOgpImage() {
     let item10_id = ("0000000000"+this.props.uniqId).substr(-10,10);
     let item_id_3 = item10_id.substring(0, 3);
-    return <img src={thumbs_path + item_id_3 + "/" + item10_id + ".jpg"}/>;
+    let emitter = "";
+    if (this.props.thumbed) {
+      emitter = "?";
+    }
+    return (
+      <img src={thumbs_path + item_id_3 + "/" + item10_id + ".jpg" + emitter} />
+    );
   },
 
   getUrl(d) {

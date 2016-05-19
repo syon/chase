@@ -284,15 +284,30 @@ var ItemBox = _react2.default.createClass({
       cache: false,
       success: function success(list) {
         console.log("/retrieve", list);
-        _this.setState({ data: { list: list } });
+        _this.setState({ list: list });
       },
       error: function error(xhr, status, err) {
         console.error("/retrieve", status, err.toString());
       }
     });
+
+    _jquery2.default.ajax({
+      url: "/thumbs",
+      cache: false,
+      success: function success(res) {
+        console.log("/thumbs", res);
+        _this.setState({ thumbed: true });
+      },
+      error: function error(xhr, status, err) {
+        console.error("/thumbs", status, err.toString());
+      }
+    });
   },
   getInitialState: function getInitialState() {
-    return { data: { list: [] } };
+    return {
+      thumbed: false,
+      list: []
+    };
   },
   componentDidMount: function componentDidMount() {
     this.loadFromServer();
@@ -307,7 +322,7 @@ var ItemBox = _react2.default.createClass({
     return _react2.default.createElement(
       'div',
       { className: 'itemBox', style: styles.itemBox },
-      _react2.default.createElement(ItemList, { data: this.state.data })
+      _react2.default.createElement(ItemList, { data: this.state })
     );
   }
 });
@@ -338,6 +353,7 @@ var ItemList = _react2.default.createClass({
         key: _this2.getItemId(d),
         uniqId: _this2.getItemId(d),
         data: d,
+        thumbed: _this2.props.data.thumbed,
         selectedId: _this2.state.selectedId,
         toggleSelected: _this2.toggleSelected
       }));
@@ -372,7 +388,11 @@ var Item = _react2.default.createClass({
   getOgpImage: function getOgpImage() {
     var item10_id = ("0000000000" + this.props.uniqId).substr(-10, 10);
     var item_id_3 = item10_id.substring(0, 3);
-    return _react2.default.createElement('img', { src: thumbs_path + item_id_3 + "/" + item10_id + ".jpg" });
+    var emitter = "";
+    if (this.props.thumbed) {
+      emitter = "?";
+    }
+    return _react2.default.createElement('img', { src: thumbs_path + item_id_3 + "/" + item10_id + ".jpg" + emitter });
   },
   getUrl: function getUrl(d) {
     var url = d.resolved_url;
