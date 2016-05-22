@@ -1,12 +1,15 @@
 import React from 'react';
 import $ from 'jquery';
-import RaisedButton from 'material-ui/lib/raised-button';
+import RaisedButton from 'material-ui/RaisedButton';
 
-const ArchiveButton = React.createClass({
+class ArchiveButton extends React.Component {
+  constructor(props, context) {
+    super(props, context);
 
-  getInitialState() {
-    return {disabled: false};
-  },
+    this.state = {
+      disabled: false
+    };
+  }
 
   handleClick(event) {
     console.log("Archiving...", this.props.item_id);
@@ -25,7 +28,7 @@ const ArchiveButton = React.createClass({
         console.error("/archive", xhr, status, err.toString());
       }
     });
-  },
+  }
 
   render() {
     return (
@@ -37,6 +40,6 @@ const ArchiveButton = React.createClass({
     );
   }
 
-});
+}
 
 export default ArchiveButton;

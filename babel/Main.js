@@ -6,6 +6,7 @@ import FlatButton from 'material-ui/FlatButton';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import CountGraph from './my/CountGraph';
+import ItemBox from './my/ItemBox';
 
 const muiTheme = getMuiTheme({
   palette: {
@@ -38,6 +39,7 @@ class Main extends React.Component {
           />
           <div>
             <CountGraph />
+            <ItemBox />
           </div>
         </div>
       </MuiThemeProvider>
