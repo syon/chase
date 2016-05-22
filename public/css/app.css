@@ -11,10 +11,24 @@ body {
 }
 
 .item .ogpimg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100px;
   height: 80px;
-  background-size: cover;
-  background-position: 50%;
+  position: relative;
+  overflow: hidden;
+}
+
+.item .ogpimg img {
+  width: 100%;
+  height: auto;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  min-height: 100%;
+  min-width: 100%;
 }
 
 .item .item-body {

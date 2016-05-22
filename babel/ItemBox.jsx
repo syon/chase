@@ -97,6 +97,10 @@ const ItemList = React.createClass({
 const thumbs_path = "https://s3.amazonaws.com/syon-chase/items/thumbs/";
 
 const Item = React.createClass({
+  getInitialState() {
+    return {isLoadImgError: false};
+  },
+
   getTitle(d) {
     let title = d.resolved_title;
     if (!title) {
@@ -105,18 +109,24 @@ const Item = React.createClass({
     return title;
   },
 
+  onImgError(a,b,c) {
+    this.setState({
+      isLoadImgError: true
+    });
+  },
+
   getOgpImage() {
     let item10_id = ("0000000000"+this.props.uniqId).substr(-10,10);
     let item_id_3 = item10_id.substring(0, 3);
     let emitter = "";
-    if (this.props.thumbed) {
+    if (this.props.thumbed && this.state.isLoadImgError) {
       emitter = "?";
     }
-    let style = {
-      'backgroundImage': 'url(' + thumbs_path + item_id_3 + "/" + item10_id + ".jpg" + emitter + ')'
-    }
+    let img_url_s3 = thumbs_path + item_id_3 + "/" + item10_id + ".jpg" + emitter;
     return (
-      <div className='ogpimg' style={style} />
+      <div className='ogpimg'>
+        <img src={img_url_s3} onError={this.onImgError} />
+      </div>
     );
   },
 

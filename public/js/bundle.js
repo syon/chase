@@ -371,6 +371,9 @@ var thumbs_path = "https://s3.amazonaws.com/syon-chase/items/thumbs/";
 
 var Item = _react2.default.createClass({
   displayName: 'Item',
+  getInitialState: function getInitialState() {
+    return { isLoadImgError: false };
+  },
   getTitle: function getTitle(d) {
     var title = d.resolved_title;
     if (!title) {
@@ -378,17 +381,24 @@ var Item = _react2.default.createClass({
     }
     return title;
   },
+  onImgError: function onImgError(a, b, c) {
+    this.setState({
+      isLoadImgError: true
+    });
+  },
   getOgpImage: function getOgpImage() {
     var item10_id = ("0000000000" + this.props.uniqId).substr(-10, 10);
     var item_id_3 = item10_id.substring(0, 3);
     var emitter = "";
-    if (this.props.thumbed) {
+    if (this.props.thumbed && this.state.isLoadImgError) {
       emitter = "?";
     }
-    var style = {
-      'backgroundImage': 'url(' + thumbs_path + item_id_3 + "/" + item10_id + ".jpg" + emitter + ')'
-    };
-    return _react2.default.createElement('div', { className: 'ogpimg', style: style });
+    var img_url_s3 = thumbs_path + item_id_3 + "/" + item10_id + ".jpg" + emitter;
+    return _react2.default.createElement(
+      'div',
+      { className: 'ogpimg' },
+      _react2.default.createElement('img', { src: img_url_s3, onError: this.onImgError })
+    );
   },
   getUrl: function getUrl(d) {
     var url = d.resolved_url;
