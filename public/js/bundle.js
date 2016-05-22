@@ -378,13 +378,6 @@ var Item = _react2.default.createClass({
     }
     return title;
   },
-  getImage: function getImage(d) {
-    if (d.image) {
-      return _react2.default.createElement('img', { src: d.image.src });
-    } else {
-      return _react2.default.createElement('img', { src: '/img/blank.png' });
-    }
-  },
   getOgpImage: function getOgpImage() {
     var item10_id = ("0000000000" + this.props.uniqId).substr(-10, 10);
     var item_id_3 = item10_id.substring(0, 3);
@@ -423,7 +416,6 @@ var Item = _react2.default.createClass({
     var d = this.props.data;
 
     var title = this.getTitle(d);
-    var img = this.getImage(d);
     var ogp_img = this.getOgpImage();
     var url = this.getUrl(d);
     var fqdn = this.getFqdn(d);
@@ -437,7 +429,6 @@ var Item = _react2.default.createClass({
     return _react2.default.createElement(
       _materialUi.Paper,
       { zDepth: 1, rounded: false, className: 'item', style: style },
-      img,
       ogp_img,
       _react2.default.createElement(
         'div',

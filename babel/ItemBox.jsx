@@ -105,14 +105,6 @@ const Item = React.createClass({
     return title;
   },
 
-  getImage(d) {
-    if (d.image) {
-      return <img src={d.image.src}/>;
-    } else {
-      return <img src="/img/blank.png"/>;
-    }
-  },
-
   getOgpImage() {
     let item10_id = ("0000000000"+this.props.uniqId).substr(-10,10);
     let item_id_3 = item10_id.substring(0, 3);
@@ -158,7 +150,6 @@ const Item = React.createClass({
     let d = this.props.data;
 
     let title   = this.getTitle(d);
-    let img     = this.getImage(d);
     let ogp_img = this.getOgpImage();
     let url     = this.getUrl(d);
     let fqdn    = this.getFqdn(d);
@@ -171,7 +162,6 @@ const Item = React.createClass({
 
     return (
       <Paper zDepth={1} rounded={false} className="item" style={style}>
-        {img}
         {ogp_img}
         <div className="item-body" onClick={this.handleClick}>
           <h3 className="item-title">
