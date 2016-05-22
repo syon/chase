@@ -69,6 +69,12 @@ var App = _react2.default.createClass({
   },
   render: function render() {
     var styles = this.getStyles();
+    var pocket = _react2.default.createElement(_materialUi.FlatButton, {
+      label: 'Pocket',
+      linkButton: true,
+      href: 'https://getpocket.com',
+      target: '_blank'
+    });
 
     return _react2.default.createElement(
       'div',
@@ -76,7 +82,8 @@ var App = _react2.default.createClass({
       _react2.default.createElement(_materialUi.AppBar, {
         title: 'Chase',
         style: styles.appBar,
-        showMenuIconButton: false
+        showMenuIconButton: false,
+        iconElementRight: pocket
       }),
       _react2.default.createElement(
         _materialUi.Paper,

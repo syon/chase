@@ -53,6 +53,14 @@ const App = React.createClass({
 
   render() {
     const styles = this.getStyles();
+    const pocket = (
+      <FlatButton
+        label="Pocket"
+        linkButton={true}
+        href="https://getpocket.com"
+        target="_blank"
+      />
+    );
 
     return (
       <div>
@@ -60,6 +68,7 @@ const App = React.createClass({
           title="Chase"
           style={styles.appBar}
           showMenuIconButton={false}
+          iconElementRight={pocket}
         />
         <Paper zDepth={1} style={this.prepareStyles(styles.root)}>
           <CountGraph />
