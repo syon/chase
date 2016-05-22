@@ -407,6 +407,18 @@ var Item = _react2.default.createClass({
     }
     return url;
   },
+  getHatebu: function getHatebu(url) {
+    return _react2.default.createElement(
+      'a',
+      { href: "http://b.hatena.ne.jp/entry/" + url, target: '_blank' },
+      _react2.default.createElement('img', { src: "http://b.hatena.ne.jp/entry/image/" + url })
+    );
+  },
+  getUpdAt: function getUpdAt(d) {
+    var dt = new Date(d.time_updated * 1000);
+    var ymd = [dt.getFullYear(), dt.getMonth() + 1, dt.getDate()];
+    return ymd.join('/') + ' ' + dt.toLocaleTimeString();
+  },
   getFqdn: function getFqdn(d) {
     try {
       var url = this.getUrl(d);
@@ -415,11 +427,6 @@ var Item = _react2.default.createClass({
       console.error(e, d);
       return d.given_url;
     }
-  },
-  getUpdAt: function getUpdAt(d) {
-    var dt = new Date(d.time_updated * 1000);
-    var ymd = [dt.getFullYear(), dt.getMonth() + 1, dt.getDate()];
-    return ymd.join('/') + ' ' + dt.toLocaleTimeString();
   },
   handleClick: function handleClick(e, a, b, c) {
     var id = this.props.data.item_id;
@@ -431,8 +438,9 @@ var Item = _react2.default.createClass({
     var title = this.getTitle(d);
     var ogp_img = this.getOgpImage();
     var url = this.getUrl(d);
-    var fqdn = this.getFqdn(d);
+    var hatebu = this.getHatebu(url);
     var upd_at = this.getUpdAt(d);
+    var fqdn = this.getFqdn(d);
 
     var style = {};
     if (this.props.selectedId == d.item_id) {
@@ -458,6 +466,11 @@ var Item = _react2.default.createClass({
         _react2.default.createElement(
           'div',
           { className: 'item-meta' },
+          _react2.default.createElement(
+            'span',
+            { className: 'hatebu' },
+            hatebu
+          ),
           _react2.default.createElement(
             'span',
             null,

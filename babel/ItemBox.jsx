@@ -138,6 +138,20 @@ const Item = React.createClass({
     return url;
   },
 
+  getHatebu(url) {
+    return (
+      <a href={"http://b.hatena.ne.jp/entry/" + url} target="_blank">
+        <img src={"http://b.hatena.ne.jp/entry/image/" + url} />
+      </a>
+    )
+  },
+
+  getUpdAt(d) {
+    let dt = new Date(d.time_updated * 1000);
+    let ymd = [dt.getFullYear(), dt.getMonth() + 1, dt.getDate()];
+    return ymd.join('/') + ' ' + dt.toLocaleTimeString();
+  },
+
   getFqdn(d) {
     try {
       let url = this.getUrl(d);
@@ -146,12 +160,6 @@ const Item = React.createClass({
       console.error(e, d);
       return d.given_url;
     }
-  },
-
-  getUpdAt(d) {
-    let dt = new Date(d.time_updated * 1000);
-    let ymd = [dt.getFullYear(), dt.getMonth() + 1, dt.getDate()];
-    return ymd.join('/') + ' ' + dt.toLocaleTimeString();
   },
 
   handleClick(e,a,b,c) {
@@ -165,8 +173,9 @@ const Item = React.createClass({
     let title   = this.getTitle(d);
     let ogp_img = this.getOgpImage();
     let url     = this.getUrl(d);
-    let fqdn    = this.getFqdn(d);
+    let hatebu  = this.getHatebu(url);
     let upd_at  = this.getUpdAt(d);
+    let fqdn    = this.getFqdn(d);
 
     let style = {};
     if (this.props.selectedId == d.item_id) {
@@ -181,6 +190,7 @@ const Item = React.createClass({
             <a href={url} target="_blank">{title}</a>
           </h3>
           <div className="item-meta">
+            <span className="hatebu">{hatebu}</span>
             <span>{upd_at}</span>
             <span>{fqdn}</span>
           </div>

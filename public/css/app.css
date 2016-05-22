@@ -62,12 +62,18 @@ body {
 }
 
 .item .item-meta {
+  display: flex;
+  align-items: center;
   font-size: 12px;
   color: #757575;
 }
 
 .item .item-meta span {
   margin-right: 1em;
+}
+
+.item .item-meta span.hatebu a {
+  display: flex;
 }
 
 .countGraph {
