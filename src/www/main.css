@@ -1,7 +1,96 @@
-html {
-  font-family: 'Roboto', sans-serif;
-}
-
 body {
   margin: 0;
+  font-family: Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background-color: #fafafa;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+}
+
+.item .ogpimg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.item .ogpimg img {
+  width: 100%;
+  height: auto;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  min-height: 100%;
+  min-width: 100%;
+}
+
+.item .item-body {
+  flex: 1;
+  padding: 15px;
+  overflow: hidden;
+  font-family: "ヒラギノ角ゴ Pro W3" , "Hiragino Kaku Gothic Pro", sans-serif;
+}
+
+.item .item-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: bold;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-family: "ヒラギノ角ゴ Pro W3" , "Hiragino Kaku Gothic Pro", sans-serif;
+}
+
+.item .item-title a {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #4078c0;
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+
+.item .item-title a:hover {
+  text-decoration: underline;
+}
+
+.item .item-meta {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  color: #757575;
+}
+
+.item .item-meta span {
+  margin-right: 1em;
+}
+
+.item .item-meta span.hatebu a {
+  display: flex;
+}
+
+.countGraph {
+  width: 100%;
+  height: 30px;
+}
+
+.countGraph-inner {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 0;
+  height: 30px;
+  transition: width 1s ease;
+}
+
+.countGraph-inner span {
+  margin-right: 10px;
+  color: white;
 }

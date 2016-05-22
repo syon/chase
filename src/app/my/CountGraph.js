@@ -1,9 +1,21 @@
 import React from 'react';
 import $ from 'jquery';
-import Colors from 'material-ui/lib/styles/colors';
-import CircularProgress from 'material-ui/lib/circular-progress';
+import {grey200, pink300} from 'material-ui/styles/colors';
+import CircularProgress from 'material-ui/CircularProgress';
 
-const CountGraph = React.createClass({
+class CountGraph extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = {
+      fetched: false,
+      info: {
+        label: "",
+        count_unread: 0,
+        count_archive: 0
+      }
+    };
+  }
 
   loadFromServer() {
     $.ajax({
@@ -28,22 +40,11 @@ const CountGraph = React.createClass({
         console.error("/info", status, err.toString());
       }
     });
-  },
-
-  getInitialState() {
-    return {
-      fetched: false,
-      info: {
-        label: "",
-        count_unread: 0,
-        count_archive: 0
-      }
-    };
-  },
+  }
 
   componentDidMount() {
     this.loadFromServer();
-  },
+  }
 
   render() {
     let info = this.state.info;
@@ -51,11 +52,11 @@ const CountGraph = React.createClass({
     let rate = info.count_unread / deno * 100;
     let styles = {
       outer: {
-        backgroundColor: Colors.grey200
+        backgroundColor: grey200
       },
       inner: {
         width: `${rate}%`,
-        backgroundColor: Colors.pink300
+        backgroundColor: pink300
       }
     }
     let cp = this.state.fetched ? null: <CircularProgress size={0.5} />;
@@ -68,6 +69,6 @@ const CountGraph = React.createClass({
       </div>
     );
   }
-});
+}
 
 export default CountGraph;

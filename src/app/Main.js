@@ -5,6 +5,7 @@ import {deepOrange500} from 'material-ui/styles/colors';
 import FlatButton from 'material-ui/FlatButton';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import CountGraph from './my/CountGraph';
 
 const muiTheme = getMuiTheme({
   palette: {
@@ -18,10 +19,26 @@ class Main extends React.Component {
   }
 
   render() {
+    const pocket = (
+      <FlatButton
+        label="Pocket"
+        linkButton={true}
+        href="https://getpocket.com"
+        target="_blank"
+      />
+    );
+
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div>
-          <AppBar title="Chase" />
+          <AppBar
+            title="Chase"
+            showMenuIconButton={false}
+            iconElementRight={pocket}
+          />
+          <div>
+            <CountGraph />
+          </div>
         </div>
       </MuiThemeProvider>
     );
