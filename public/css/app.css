@@ -10,9 +10,11 @@ body {
   align-items: center;
 }
 
-.item img {
+.item .ogpimg {
   width: 100px;
   height: 80px;
+  background-size: cover;
+  background-position: 50%;
 }
 
 .item .item-body {

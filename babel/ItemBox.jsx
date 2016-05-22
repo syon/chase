@@ -112,8 +112,11 @@ const Item = React.createClass({
     if (this.props.thumbed) {
       emitter = "?";
     }
+    let style = {
+      'backgroundImage': 'url(' + thumbs_path + item_id_3 + "/" + item10_id + ".jpg" + emitter + ')'
+    }
     return (
-      <img src={thumbs_path + item_id_3 + "/" + item10_id + ".jpg" + emitter} />
+      <div className='ogpimg' style={style} />
     );
   },
 

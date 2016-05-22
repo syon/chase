@@ -385,7 +385,10 @@ var Item = _react2.default.createClass({
     if (this.props.thumbed) {
       emitter = "?";
     }
-    return _react2.default.createElement('img', { src: thumbs_path + item_id_3 + "/" + item10_id + ".jpg" + emitter });
+    var style = {
+      'backgroundImage': 'url(' + thumbs_path + item_id_3 + "/" + item10_id + ".jpg" + emitter + ')'
+    };
+    return _react2.default.createElement('div', { className: 'ogpimg', style: style });
   },
   getUrl: function getUrl(d) {
     var url = d.resolved_url;
