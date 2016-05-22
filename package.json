@@ -1,22 +1,38 @@
 {
   "name": "Chase",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "description": "A client web-app for Pocket.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/syon/chase.git"
   },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
+  "scripts": {
+    "start": "webpack-dev-server --config webpack-dev-server.config.js --progress --inline --colors",
+    "build": "webpack --config webpack-production.config.js --progress --colors",
+    "lint": "eslint src && echo \"eslint: no lint errors\""
+  },
+  "private": true,
+  "devDependencies": {
+    "babel-core": "^6.3.26",
+    "babel-eslint": "^6.0.0",
+    "babel-loader": "^6.2.4",
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-react": "^6.3.13",
-    "babelify": "^7.2.0",
-    "browserify": "^13.0.0",
-    "jquery": "^2.2.0",
-    "lodash": "^4.3.0",
-    "material-ui": "^0.14.4",
-    "react": "^0.14.7",
-    "react-dom": "^0.14.7"
+    "babelify": "^7.3.0",
+    "browserify": "^13.0.1",
+    "eslint": "^2.5.1",
+    "eslint-plugin-react": "^4.0.0",
+    "html-webpack-plugin": "^2.7.2",
+    "react-hot-loader": "^1.3.0",
+    "transfer-webpack-plugin": "^0.1.4",
+    "webpack": "^1.12.9",
+    "webpack-dev-server": "^1.14.0"
+  },
+  "dependencies": {
+    "jquery": "^2.2.4",
+    "material-ui": "^0.15.0",
+    "react": "^15.0.1",
+    "react-dom": "^15.0.1",
+    "react-tap-event-plugin": "^1.0.0"
   }
 }

@@ -1,10 +1,19 @@
 import React from 'react';
 import $ from 'jquery';
 import _ from 'lodash';
-import {Paper, FlatButton} from 'material-ui';
-import ArchiveButton from './ArchiveButton.jsx';
+import Paper from 'material-ui/Paper';
+import ArchiveButton from './ArchiveButton';
 
-const ItemBox = React.createClass({
+class ItemBox extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = {
+      thumbed: false,
+      list: []
+    };
+  }
+
   loadFromServer() {
     $.ajax({
       url: "/retrieve",
@@ -30,16 +39,12 @@ const ItemBox = React.createClass({
         console.error("/thumbs", status, err.toString());
       }
     });
-  },
-  getInitialState() {
-    return {
-      thumbed: false,
-      list: []
-    };
-  },
+  }
+
   componentDidMount() {
     this.loadFromServer();
-  },
+  }
+
   render() {
     let styles = {
       itemBox: {
@@ -53,22 +58,29 @@ const ItemBox = React.createClass({
       </div>
     );
   }
-});
+}
 
-const ItemList = React.createClass({
-  getInitialState() {
-    return {selectedId: ""};
-  },
+class ItemList extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = {
+      selectedId: ""
+    };
+  }
+
   getItemId(d) {
     let id = d.resolved_id;
     if (id == "0") {
       id = d.item_id;
     }
     return id;
-  },
+  }
+
   toggleSelected(item_id) {
     this.setState({selectedId: item_id})
-  },
+  }
+
   render() {
     let list = _.toArray(this.props.data.list);
     let nodes = [];
@@ -92,14 +104,20 @@ const ItemList = React.createClass({
       </div>
     );
   }
-});
+}
 
 const thumbs_path = "https://s3.amazonaws.com/syon-chase/items/thumbs/";
 
-const Item = React.createClass({
-  getInitialState() {
-    return {isLoadImgError: false};
-  },
+class Item extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+
+    this.onImgError = this.onImgError.bind(this);
+
+    this.state = {
+      isLoadImgError: false
+    };
+  }
 
   getTitle(d) {
     let title = d.resolved_title;
@@ -107,13 +125,13 @@ const Item = React.createClass({
       title = d.given_url;
     }
     return title;
-  },
+  }
 
   onImgError(a,b,c) {
     this.setState({
       isLoadImgError: true
     });
-  },
+  }
 
   getOgpImage() {
     let item10_id = ("0000000000"+this.props.uniqId).substr(-10,10);
@@ -128,7 +146,7 @@ const Item = React.createClass({
         <img src={img_url_s3} onError={this.onImgError} />
       </div>
     );
-  },
+  }
 
   getUrl(d) {
     let url = d.resolved_url;
@@ -136,7 +154,7 @@ const Item = React.createClass({
       url = d.given_url;
     }
     return url;
-  },
+  }
 
   getHatebu(url) {
     return (
@@ -144,13 +162,13 @@ const Item = React.createClass({
         <img src={"http://b.hatena.ne.jp/entry/image/" + url} />
       </a>
     )
-  },
+  }
 
   getUpdAt(d) {
     let dt = new Date(d.time_updated * 1000);
     let ymd = [dt.getFullYear(), dt.getMonth() + 1, dt.getDate()];
     return ymd.join('/') + ' ' + dt.toLocaleTimeString();
-  },
+  }
 
   getFqdn(d) {
     try {
@@ -160,12 +178,12 @@ const Item = React.createClass({
       console.error(e, d);
       return d.given_url;
     }
-  },
+  }
 
   handleClick(e,a,b,c) {
     let id = this.props.data.item_id;
     this.props.toggleSelected(id);
-  },
+  }
 
   render() {
     let d = this.props.data;
@@ -199,6 +217,6 @@ const Item = React.createClass({
       </Paper>
     );
   }
-});
+}
 
 export default ItemBox;
