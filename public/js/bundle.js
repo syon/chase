@@ -565,11 +565,7 @@ var Item = function (_React$Component3) {
   }, {
     key: 'getHatebu',
     value: function getHatebu(url) {
-      return _react2.default.createElement(
-        'a',
-        { href: "http://b.hatena.ne.jp/entry/" + url, target: '_blank' },
-        _react2.default.createElement('img', { src: "http://b.hatena.ne.jp/entry/image/" + url })
-      );
+      return _react2.default.createElement('img', { src: "http://b.hatena.ne.jp/entry/image/" + url });
     }
   }, {
     key: 'getUpdAt',

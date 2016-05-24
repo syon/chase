@@ -158,9 +158,7 @@ class Item extends React.Component {
 
   getHatebu(url) {
     return (
-      <a href={"http://b.hatena.ne.jp/entry/" + url} target="_blank">
-        <img src={"http://b.hatena.ne.jp/entry/image/" + url} />
-      </a>
+      <img src={"http://b.hatena.ne.jp/entry/image/" + url} />
     )
   }
 
