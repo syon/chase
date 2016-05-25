@@ -1,6 +1,8 @@
 import React from 'react';
 import $ from 'jquery';
-import RaisedButton from 'material-ui/RaisedButton';
+import IconButton from 'material-ui/IconButton';
+import ActionDone from 'material-ui/svg-icons/action/done';
+import {cyan500} from 'material-ui/styles/colors';
 
 class ArchiveButton extends React.Component {
   constructor(props, context) {
@@ -34,11 +36,14 @@ class ArchiveButton extends React.Component {
 
   render() {
     return (
-      <RaisedButton
+      <IconButton
+        tooltip="Archive"
         label={this.props.label}
         onClick={this.handleClick}
         disabled={this.state.disabled}
-      />
+      >
+        <ActionDone color={cyan500} />
+      </IconButton>
     );
   }
 
