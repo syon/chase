@@ -113,6 +113,7 @@ class Item extends React.Component {
     super(props, context);
 
     this.onImgError = this.onImgError.bind(this);
+    this.handleClick = this.handleClick.bind(this);
 
     this.state = {
       isLoadImgError: false
