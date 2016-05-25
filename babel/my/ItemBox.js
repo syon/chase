@@ -64,6 +64,8 @@ class ItemList extends React.Component {
   constructor(props, context) {
     super(props, context);
 
+    this.toggleSelected = this.toggleSelected.bind(this);
+
     this.state = {
       selectedId: ""
     };
