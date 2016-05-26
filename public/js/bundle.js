@@ -422,6 +422,7 @@ var ItemBox = function (_React$Component) {
       _jquery2.default.ajax({
         url: "/thumbs",
         cache: false,
+        timeout: 30000,
         success: function success(res) {
           console.log("/thumbs", res);
           _this2.setState({ thumbed: true });

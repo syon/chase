@@ -31,6 +31,7 @@ class ItemBox extends React.Component {
     $.ajax({
       url: "/thumbs",
       cache: false,
+      timeout: 30000,
       success: (res) => {
         console.log("/thumbs", res);
         this.setState({thumbed: true});
