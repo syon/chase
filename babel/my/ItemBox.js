@@ -26,19 +26,6 @@ class ItemBox extends React.Component {
         console.error("/retrieve", status, err.toString());
       }
     });
-
-    $.ajax({
-      url: "/thumbs",
-      cache: false,
-      timeout: 30000,
-      success: (res) => {
-        console.log("/thumbs", res);
-        this.setState({thumbed: true});
-      },
-      error: (xhr, status, err) => {
-        console.error("/thumbs", status, err.toString());
-      }
-    });
   }
 
   componentDidMount() {
@@ -93,7 +80,6 @@ class ItemList extends React.Component {
           key={this.getItemId(d)}
           uniqId={this.getItemId(d)}
           data={d}
-          thumbed={this.props.data.thumbed}
           selectedId={this.state.selectedId}
           toggleSelected={this.toggleSelected}
         />

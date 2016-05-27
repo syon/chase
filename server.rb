@@ -102,11 +102,6 @@ get "/info" do
   json result
 end
 
-get "/thumbs" do
-  status 200
-  body ''
-end
-
 post "/thumbnail" do
   item = conv(params)
   id10 = get_item10_id(item[:item_id])
@@ -144,7 +139,7 @@ post "/thumbnail" do
     obj.upload_file('after/blank.jpg')
     status 403
   end
-  body result
+  json result
 end
 
 def conv(obj)
@@ -175,7 +170,6 @@ end
 
 def get_exp_from_content_type(url)
   c = `curl -I '#{url}'`
-  ap c
   m = c.match(%r{^Content-Type: image/(gif|jpg|jpeg|png|svg|svg\+xml)\r$}i)
   exp = m ? m[1] : ""
   exp.sub! /jpeg/, 'jpg'

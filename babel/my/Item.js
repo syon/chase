@@ -13,7 +13,7 @@ class Item extends React.Component {
     this.handleClick = this.handleClick.bind(this);
 
     this.state = {
-      isLoadImgError: false
+      imageReloaded: false
     };
   }
 
@@ -25,15 +25,18 @@ class Item extends React.Component {
     return title;
   }
 
-  postThumbnail(data) {
+  onImgError(a,b,c) {
     $.ajax({
       type: "POST",
       url: "/thumbnail",
       dataType: 'json',
-      data: data,
+      data: this.props.data,
       cache: false,
       success: (result) => {
         console.log("/thumbnail", result);
+        this.setState({
+          imageReloaded: true
+        });
       },
       error: (xhr, status, err) => {
         console.error("/thumbnail", status, err.toString());
@@ -41,18 +44,11 @@ class Item extends React.Component {
     });
   }
 
-  onImgError(a,b,c) {
-    this.setState({
-      isLoadImgError: true
-    });
-    this.postThumbnail(this.props.data);
-  }
-
   getOgpImage() {
     let item10_id = ("0000000000"+this.props.uniqId).substr(-10,10);
     let item_id_3 = item10_id.substring(0, 3);
     let emitter = "";
-    if (this.props.thumbed && this.state.isLoadImgError) {
+    if (this.state.imageReloaded) {
       emitter = "?";
     }
     let img_url_s3 = thumbs_path + item_id_3 + "/" + item10_id + ".jpg" + emitter;

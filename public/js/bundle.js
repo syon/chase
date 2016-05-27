@@ -396,7 +396,7 @@ var Item = function (_React$Component) {
     _this.handleClick = _this.handleClick.bind(_this);
 
     _this.state = {
-      isLoadImgError: false
+      imageReloaded: false
     };
     return _this;
   }
@@ -411,16 +411,21 @@ var Item = function (_React$Component) {
       return title;
     }
   }, {
-    key: 'postThumbnail',
-    value: function postThumbnail(data) {
+    key: 'onImgError',
+    value: function onImgError(a, b, c) {
+      var _this2 = this;
+
       _jquery2.default.ajax({
         type: "POST",
         url: "/thumbnail",
         dataType: 'json',
-        data: data,
+        data: this.props.data,
         cache: false,
         success: function success(result) {
           console.log("/thumbnail", result);
+          _this2.setState({
+            imageReloaded: true
+          });
         },
         error: function error(xhr, status, err) {
           console.error("/thumbnail", status, err.toString());
@@ -428,20 +433,12 @@ var Item = function (_React$Component) {
       });
     }
   }, {
-    key: 'onImgError',
-    value: function onImgError(a, b, c) {
-      this.setState({
-        isLoadImgError: true
-      });
-      this.postThumbnail(this.props.data);
-    }
-  }, {
     key: 'getOgpImage',
     value: function getOgpImage() {
       var item10_id = ("0000000000" + this.props.uniqId).substr(-10, 10);
       var item_id_3 = item10_id.substring(0, 3);
       var emitter = "";
-      if (this.props.thumbed && this.state.isLoadImgError) {
+      if (this.state.imageReloaded) {
         emitter = "?";
       }
       var img_url_s3 = thumbs_path + item_id_3 + "/" + item10_id + ".jpg" + emitter;
@@ -617,19 +614,6 @@ var ItemBox = function (_React$Component) {
           console.error("/retrieve", status, err.toString());
         }
       });
-
-      _jquery2.default.ajax({
-        url: "/thumbs",
-        cache: false,
-        timeout: 30000,
-        success: function success(res) {
-          console.log("/thumbs", res);
-          _this2.setState({ thumbed: true });
-        },
-        error: function error(xhr, status, err) {
-          console.error("/thumbs", status, err.toString());
-        }
-      });
     }
   }, {
     key: 'componentDidMount',
@@ -699,7 +683,6 @@ var ItemList = function (_React$Component2) {
           key: _this4.getItemId(d),
           uniqId: _this4.getItemId(d),
           data: d,
-          thumbed: _this4.props.data.thumbed,
           selectedId: _this4.state.selectedId,
           toggleSelected: _this4.toggleSelected
         }));
