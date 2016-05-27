@@ -1,4 +1,5 @@
 import React from 'react';
+import $ from 'jquery';
 import Paper from 'material-ui/Paper';
 import ArchiveButton from './ArchiveButton';
 
@@ -24,10 +25,27 @@ class Item extends React.Component {
     return title;
   }
 
+  postThumbnail(data) {
+    $.ajax({
+      type: "POST",
+      url: "/thumbnail",
+      dataType: 'json',
+      data: data,
+      cache: false,
+      success: (result) => {
+        console.log("/thumbnail", result);
+      },
+      error: (xhr, status, err) => {
+        console.error("/thumbnail", status, err.toString());
+      }
+    });
+  }
+
   onImgError(a,b,c) {
     this.setState({
       isLoadImgError: true
     });
+    this.postThumbnail(this.props.data);
   }
 
   getOgpImage() {

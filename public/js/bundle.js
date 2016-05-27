@@ -362,6 +362,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
 var _Paper = require('material-ui/Paper');
 
 var _Paper2 = _interopRequireDefault(_Paper);
@@ -407,11 +411,29 @@ var Item = function (_React$Component) {
       return title;
     }
   }, {
+    key: 'postThumbnail',
+    value: function postThumbnail(data) {
+      _jquery2.default.ajax({
+        type: "POST",
+        url: "/thumbnail",
+        dataType: 'json',
+        data: data,
+        cache: false,
+        success: function success(result) {
+          console.log("/thumbnail", result);
+        },
+        error: function error(xhr, status, err) {
+          console.error("/thumbnail", status, err.toString());
+        }
+      });
+    }
+  }, {
     key: 'onImgError',
     value: function onImgError(a, b, c) {
       this.setState({
         isLoadImgError: true
       });
+      this.postThumbnail(this.props.data);
     }
   }, {
     key: 'getOgpImage',
@@ -530,7 +552,7 @@ var Item = function (_React$Component) {
 
 exports.default = Item;
 
-},{"./ArchiveButton":3,"material-ui/Paper":130,"react":314}],6:[function(require,module,exports){
+},{"./ArchiveButton":3,"jquery":65,"material-ui/Paper":130,"react":314}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {

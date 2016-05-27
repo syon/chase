@@ -3,8 +3,18 @@ require "sinatra"
 require "sinatra/json"
 require 'dotenv'
 require "ap"
+require 'active_support/core_ext/object/blank'
+require 'aws-sdk'
+require './after/scrape_util'
 
 Dotenv.load
+
+Aws.config.update({
+  region: 'us-east-1',
+  credentials: Aws::Credentials.new(ENV['AWS_ACCESS_KEY_ID'], ENV['AWS_SECRET_ACCESS_KEY'])
+})
+
+S3_BUCKET = Aws::S3::Resource.new.bucket(ENV['S3_BUCKET'])
 
 use Rack::Session::Cookie, :key => 'rack.session',
                            :domain => ENV['domain'],
@@ -93,10 +103,82 @@ get "/info" do
 end
 
 get "/thumbs" do
-  puts `ruby after/items_export.rb #{session[:access_token]}`
-  puts `ruby after/items_ogp.rb`
-  puts `after/make_thumbs.sh`
-  puts `ruby after/upload-s3.rb`
   status 200
   body ''
+end
+
+post "/thumbnail" do
+  item = conv(params)
+  id10 = get_item10_id(item[:item_id])
+  img_url = item[:image_url]
+  dest_dir = id10[0, 3]
+  key  = get_s3_obj_key(id10)
+  obj  = S3_BUCKET.object(key)
+  return if obj.exists?
+
+  result = ''
+  begin
+    site = ScrapeUtil.new(item[:item_url])
+    img_url = site.get_imagepath if site.get_imagepath.present?
+    exp = get_exp_from_content_type(img_url)
+    if exp.blank?
+      raise "Cannot get extention: #{img_url}"
+    end
+    img_path = 'tmp/' + key
+    `mkdir -p #{File.dirname(img_path)}`
+    open(img_path, 'wb') do |output|
+      open(img_url) do |data|
+        output.write(data.read)
+      end
+    end
+    `mogrify -format jpg #{img_path}`
+    `mogrify -resize 200x #{img_path}`
+    obj.upload_file(img_path)
+    File.delete(img_path)
+    status 200
+    result = 'OK!'
+  rescue => e
+    puts "ERROR!!"
+    ap e
+    result = 'NG...'
+    obj.upload_file('after/blank.jpg')
+    status 403
+  end
+  body result
+end
+
+def conv(obj)
+  item_id = obj['resolved_id']
+  if item_id == "0"
+    item_id = obj['item_id']
+  end
+  item_url = obj['resolved_url']
+  unless item_url
+    item_url = obj['given_url']
+  end
+  image_url = nil
+  if obj['has_image'] == "1" && obj['images']["1"]
+    image_url = obj['images']["1"]["src"]
+  end
+  item = {item_id: item_id, item_url: item_url, image_url: image_url}
+  return item
+end
+
+def get_item10_id(item_id)
+  id = item_id.rjust(10, '0') # leftpad
+  id[0, 10]
+end
+
+def get_s3_obj_key(item10_id)
+  "items/thumbs/#{item10_id[0, 3]}/#{item10_id}.jpg"
+end
+
+def get_exp_from_content_type(url)
+  c = `curl -I '#{url}'`
+  ap c
+  m = c.match(%r{^Content-Type: image/(gif|jpg|jpeg|png|svg|svg\+xml)\r$}i)
+  exp = m ? m[1] : ""
+  exp.sub! /jpeg/, 'jpg'
+  exp.sub! /svg\+xml/, 'svg'
+  exp
 end
