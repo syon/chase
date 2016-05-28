@@ -27,6 +27,7 @@ class ArchiveButton extends React.Component {
       success: (list) => {
         console.log("Success.");
         this.setState({disabled: true});
+        this.props.handleArchive();
       },
       error: (xhr, status, err) => {
         console.error("/archive", xhr, status, err.toString());

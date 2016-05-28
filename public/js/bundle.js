@@ -201,6 +201,7 @@ var ArchiveButton = function (_React$Component) {
         success: function success(list) {
           console.log("Success.");
           _this2.setState({ disabled: true });
+          _this2.props.handleArchive();
         },
         error: function error(xhr, status, err) {
           console.error("/archive", xhr, status, err.toString());
@@ -374,6 +375,8 @@ var _ArchiveButton = require('./ArchiveButton');
 
 var _ArchiveButton2 = _interopRequireDefault(_ArchiveButton);
 
+var _colors = require('material-ui/styles/colors');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -394,9 +397,11 @@ var Item = function (_React$Component) {
 
     _this.onImgError = _this.onImgError.bind(_this);
     _this.handleClick = _this.handleClick.bind(_this);
+    _this.handleArchive = _this.handleArchive.bind(_this);
 
     _this.state = {
-      imageReloaded: false
+      imageReloaded: false,
+      archived: false
     };
     return _this;
   }
@@ -482,9 +487,14 @@ var Item = function (_React$Component) {
     }
   }, {
     key: 'handleClick',
-    value: function handleClick(e, a, b, c) {
+    value: function handleClick() {
       var id = this.props.data.item_id;
       this.props.toggleSelected(id);
+    }
+  }, {
+    key: 'handleArchive',
+    value: function handleArchive() {
+      this.setState({ archived: true });
     }
   }, {
     key: 'render',
@@ -501,6 +511,9 @@ var Item = function (_React$Component) {
       var style = {};
       if (this.props.selectedId == d.item_id) {
         style = { backgroundColor: "#F4FF81" };
+      }
+      if (this.state.archived) {
+        style = { backgroundColor: _colors.grey200 };
       }
 
       return _react2.default.createElement(
@@ -539,7 +552,7 @@ var Item = function (_React$Component) {
             )
           )
         ),
-        _react2.default.createElement(_ArchiveButton2.default, { label: 'Archive', item_id: d.item_id })
+        _react2.default.createElement(_ArchiveButton2.default, { label: 'Archive', item_id: d.item_id, handleArchive: this.handleArchive })
       );
     }
   }]);
@@ -549,7 +562,7 @@ var Item = function (_React$Component) {
 
 exports.default = Item;
 
-},{"./ArchiveButton":3,"jquery":65,"material-ui/Paper":130,"react":314}],6:[function(require,module,exports){
+},{"./ArchiveButton":3,"jquery":65,"material-ui/Paper":130,"material-ui/styles/colors":144,"react":314}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {

@@ -2,6 +2,7 @@ import React from 'react';
 import $ from 'jquery';
 import Paper from 'material-ui/Paper';
 import ArchiveButton from './ArchiveButton';
+import {grey200} from 'material-ui/styles/colors';
 
 const thumbs_path = "https://s3.amazonaws.com/syon-chase/items/thumbs/";
 
@@ -11,9 +12,11 @@ class Item extends React.Component {
 
     this.onImgError = this.onImgError.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.handleArchive = this.handleArchive.bind(this);
 
     this.state = {
-      imageReloaded: false
+      imageReloaded: false,
+      archived: false
     };
   }
 
@@ -89,9 +92,13 @@ class Item extends React.Component {
     }
   }
 
-  handleClick(e,a,b,c) {
+  handleClick() {
     let id = this.props.data.item_id;
     this.props.toggleSelected(id);
+  }
+
+  handleArchive() {
+    this.setState({archived: true});
   }
 
   render() {
@@ -108,6 +115,9 @@ class Item extends React.Component {
     if (this.props.selectedId == d.item_id) {
       style = {backgroundColor: "#F4FF81"};
     }
+    if (this.state.archived) {
+      style = {backgroundColor: grey200};
+    }
 
     return (
       <Paper zDepth={1} rounded={false} className="item" style={style}>
@@ -122,7 +132,7 @@ class Item extends React.Component {
             <span>{fqdn}</span>
           </div>
         </div>
-        <ArchiveButton label="Archive" item_id={d.item_id} />
+        <ArchiveButton label="Archive" item_id={d.item_id} handleArchive={this.handleArchive} />
       </Paper>
     );
   }
