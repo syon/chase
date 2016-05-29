@@ -472,7 +472,7 @@ var Item = function (_React$Component) {
     value: function getUpdAt(d) {
       var dt = new Date(d.time_updated * 1000);
       var ymd = [dt.getFullYear(), dt.getMonth() + 1, dt.getDate()];
-      return ymd.join('/') + ' ' + dt.toLocaleTimeString();
+      return ymd.join('.');
     }
   }, {
     key: 'getFqdn',
@@ -542,12 +542,12 @@ var Item = function (_React$Component) {
             ),
             _react2.default.createElement(
               'span',
-              null,
+              { className: 'upd_at' },
               upd_at
             ),
             _react2.default.createElement(
               'span',
-              null,
+              { className: 'fqdn' },
               fqdn
             )
           )

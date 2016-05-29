@@ -33,7 +33,7 @@ body {
 
 .item .item-body {
   flex: 1;
-  padding: 15px;
+  padding-left: 15px;
   overflow: hidden;
   font-family: "ヒラギノ角ゴ Pro W3" , "Hiragino Kaku Gothic Pro", sans-serif;
 }
@@ -42,16 +42,17 @@ body {
   margin: 0;
   font-size: 16px;
   font-weight: bold;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  line-height: 1.3;
+  /*overflow: hidden;*/
+  /*white-space: nowrap;*/
+  /*text-overflow: ellipsis;*/
   font-family: "ヒラギノ角ゴ Pro W3" , "Hiragino Kaku Gothic Pro", sans-serif;
 }
 
 .item .item-title a {
   overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  /*white-space: nowrap;*/
+  /*text-overflow: ellipsis;*/
   color: #4078c0;
   text-decoration: none;
   letter-spacing: -0.02em;
@@ -64,12 +65,15 @@ body {
 .item .item-meta {
   display: flex;
   align-items: center;
+  padding: 3px 0 0;
   font-size: 12px;
   color: #757575;
 }
 
 .item .item-meta span {
+  display: inline-flex;
   margin-right: 1em;
+  white-space: nowrap;
 }
 
 .item .item-meta span.hatebu a {
@@ -93,4 +97,23 @@ body {
 .countGraph-inner span {
   margin-right: 10px;
   color: white;
+}
+
+@media(max-width:400px) {
+  .item .ogpimg {
+    width: 80px;
+    height: 72px;
+  }
+  .item .item-title {
+    font-size: 12px;
+  }
+  .item .item-meta {
+    font-size: 10px;
+  }
+  .item .item-meta .hatebu {
+    /*display: none;*/
+  }
+  .item .item-meta .upd_at {
+    /*display: none;*/
+  }
 }

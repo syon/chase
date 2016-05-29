@@ -79,7 +79,7 @@ class Item extends React.Component {
   getUpdAt(d) {
     let dt = new Date(d.time_updated * 1000);
     let ymd = [dt.getFullYear(), dt.getMonth() + 1, dt.getDate()];
-    return ymd.join('/') + ' ' + dt.toLocaleTimeString();
+    return ymd.join('.');
   }
 
   getFqdn(d) {
@@ -128,8 +128,8 @@ class Item extends React.Component {
           </h3>
           <div className="item-meta">
             <span className="hatebu">{hatebu}</span>
-            <span>{upd_at}</span>
-            <span>{fqdn}</span>
+            <span className="upd_at">{upd_at}</span>
+            <span className="fqdn">{fqdn}</span>
           </div>
         </div>
         <ArchiveButton label="Archive" item_id={d.item_id} handleArchive={this.handleArchive} />
