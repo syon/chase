@@ -1,7 +1,7 @@
 Chase
 =====
 
-Chase is client web-app for Pocket.
+Pocket client web-app
 
 - http://syon-chase.herokuapp.com
 

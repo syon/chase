@@ -31,15 +31,15 @@ get "/" do
   if session[:access_token]
     erb :index
   else
-    redirect "/login"
+    redirect "/connect"
   end
 end
 
-get "/login" do
-  erb :login
+get "/connect" do
+  erb :connect
 end
 
-get "/logout" do
+get "/disconnect" do
   session.clear
   redirect "/"
 end

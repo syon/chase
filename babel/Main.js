@@ -4,7 +4,7 @@ import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import ExitToApp from 'material-ui/svg-icons/action/exit-to-app';
+import SyncDisabled from 'material-ui/svg-icons/notification/sync-disabled';
 import OpenInNew from 'material-ui/svg-icons/action/open-in-new';
 import RaisedButton from 'material-ui/RaisedButton';
 import {deepOrange500} from 'material-ui/styles/colors';
@@ -30,7 +30,7 @@ class Main extends React.Component {
   }
 
   exitApp() {
-    window.location = "/logout";
+    window.location = "/disconnect";
   }
 
   render() {
@@ -49,7 +49,7 @@ class Main extends React.Component {
                 anchorOrigin={{horizontal: 'right', vertical: 'top'}}
               >
                 <MenuItem primaryText="Pocket" leftIcon={<OpenInNew />} onTouchTap={this.openPocket} />
-                <MenuItem primaryText="Exit" leftIcon={<ExitToApp />} onTouchTap={this.exitApp} />
+                <MenuItem primaryText="Disconnect" leftIcon={<SyncDisabled />} onTouchTap={this.exitApp} />
               </IconMenu>
             }
           />
