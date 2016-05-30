@@ -76,6 +76,10 @@ body {
   white-space: nowrap;
 }
 
+.item .item-meta span.hatebu {
+  opacity: .5;
+}
+
 .item .item-meta span.hatebu a {
   display: flex;
 }
