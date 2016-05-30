@@ -1,7 +1,7 @@
 Chase
 =====
 
-Pocket client web-app
+Web App client for Pocket
 
 - http://syon-chase.herokuapp.com
 
@@ -29,7 +29,7 @@ $ npm install
 ### build and run
 
 ```sh
-$ node build
+$ gulp
 ```
 
 ```sh
