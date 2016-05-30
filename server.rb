@@ -27,11 +27,6 @@ Pocket.configure do |config|
   config.consumer_key = ENV['consumer_key']
 end
 
-get '/reset' do
-  session.clear
-  redirect "/"
-end
-
 get "/" do
   if session[:access_token]
     erb :index
@@ -42,6 +37,11 @@ end
 
 get "/login" do
   erb :login
+end
+
+get "/logout" do
+  session.clear
+  redirect "/"
 end
 
 get "/oauth/connect" do
@@ -60,12 +60,6 @@ get "/oauth/callback" do
   redirect "/"
 end
 
-get '/add' do
-  client = Pocket.client(:access_token => session[:access_token])
-  info = client.add(:url => 'http://getpocket.com')
-  "<pre>#{info}</pre>"
-end
-
 get "/retrieve" do
   client = Pocket.client(:access_token => session[:access_token])
   ap session
@@ -81,7 +75,7 @@ get "/retrieve" do
   json list
 end
 
-post '/archive' do
+post "/archive" do
   client = Pocket.client(:access_token => session[:access_token])
   actions = [{action: 'archive', item_id: params['item_id']}]
   res = client.modify(actions)

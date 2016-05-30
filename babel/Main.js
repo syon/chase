@@ -1,5 +1,11 @@
 import React from 'react';
 import AppBar from 'material-ui/AppBar';
+import IconButton from 'material-ui/IconButton';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import ExitToApp from 'material-ui/svg-icons/action/exit-to-app';
+import OpenInNew from 'material-ui/svg-icons/action/open-in-new';
 import RaisedButton from 'material-ui/RaisedButton';
 import {deepOrange500} from 'material-ui/styles/colors';
 import FlatButton from 'material-ui/FlatButton';
@@ -19,23 +25,33 @@ class Main extends React.Component {
     super(props, context);
   }
 
-  render() {
-    const pocket = (
-      <FlatButton
-        label="Pocket"
-        linkButton={true}
-        href="https://getpocket.com"
-        target="_blank"
-      />
-    );
+  openPocket() {
+    window.open("https://getpocket.com");
+  }
 
+  exitApp() {
+    window.location = "/logout";
+  }
+
+  render() {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div>
           <AppBar
             title="Chase"
             showMenuIconButton={false}
-            iconElementRight={pocket}
+            iconElementRight={
+              <IconMenu
+                iconButtonElement={
+                  <IconButton><MoreVertIcon /></IconButton>
+                }
+                targetOrigin={{horizontal: 'right', vertical: 'top'}}
+                anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+              >
+                <MenuItem primaryText="Pocket" leftIcon={<OpenInNew />} onTouchTap={this.openPocket} />
+                <MenuItem primaryText="Exit" leftIcon={<ExitToApp />} onTouchTap={this.exitApp} />
+              </IconMenu>
+            }
           />
           <div>
             <CountGraph />
