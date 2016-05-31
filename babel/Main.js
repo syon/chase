@@ -1,16 +1,8 @@
 import React from 'react';
-import AppBar from 'material-ui/AppBar';
-import IconButton from 'material-ui/IconButton';
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import SyncDisabled from 'material-ui/svg-icons/notification/sync-disabled';
-import OpenInNew from 'material-ui/svg-icons/action/open-in-new';
-import RaisedButton from 'material-ui/RaisedButton';
 import {deepOrange500} from 'material-ui/styles/colors';
-import FlatButton from 'material-ui/FlatButton';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import TopBar from './my/TopBar';
 import CountGraph from './my/CountGraph';
 import ItemBox from './my/ItemBox';
 
@@ -37,22 +29,7 @@ class Main extends React.Component {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div>
-          <AppBar
-            title="Chase"
-            showMenuIconButton={false}
-            iconElementRight={
-              <IconMenu
-                iconButtonElement={
-                  <IconButton><MoreVertIcon /></IconButton>
-                }
-                targetOrigin={{horizontal: 'right', vertical: 'top'}}
-                anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-              >
-                <MenuItem primaryText="Pocket" leftIcon={<OpenInNew />} onTouchTap={this.openPocket} />
-                <MenuItem primaryText="Disconnect" leftIcon={<SyncDisabled />} onTouchTap={this.exitApp} />
-              </IconMenu>
-            }
-          />
+          <TopBar />
           <div>
             <CountGraph />
             <ItemBox />
