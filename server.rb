@@ -120,7 +120,11 @@ post "/thumbnail" do
         output.write(data.read)
       end
     end
-    `mogrify -format jpg #{img_path}`
+    option = ''
+    if 'png' == File.extname(img_path)
+      option = '-fill "#FFFFFF" -opaque none'
+    end
+    `mogrify -format jpg #{option} #{img_path}`
     `mogrify -resize 200x #{img_path}`
     obj.upload_file(img_path)
     File.delete(img_path)
