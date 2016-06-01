@@ -6,6 +6,13 @@ import { grey200 } from 'material-ui/styles/colors';
 
 const thumbsPath = 'https://s3.amazonaws.com/syon-chase/items/thumbs/';
 
+const propTypes = {
+  data: React.PropTypes.object,
+  uniqId: React.PropTypes.string,
+  selectedId: React.PropTypes.string,
+  toggleSelected: React.PropTypes.func,
+};
+
 class Item extends React.Component {
   constructor(props, context) {
     super(props, context);
@@ -112,7 +119,7 @@ class Item extends React.Component {
     let fqdn   = this.getFqdn(d);
 
     let style = {};
-    if (this.props.selectedId == d.item_id) {
+    if (this.props.selectedId === d.item_id) {
       style = { backgroundColor: '#F4FF81' };
     }
     if (this.state.archived) {
@@ -132,10 +139,12 @@ class Item extends React.Component {
             <span className="fqdn">{fqdn}</span>
           </div>
         </div>
-        <ArchiveButton label="Archive" item_id={d.item_id} handleArchive={this.handleArchive} />
+        <ArchiveButton label="Archive" itemId={d.item_id} handleArchive={this.handleArchive} />
       </Paper>
     );
   }
 }
+
+Item.propTypes = propTypes;
 
 export default Item;
