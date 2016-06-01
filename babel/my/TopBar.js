@@ -8,10 +8,6 @@ import SyncDisabled from 'material-ui/svg-icons/notification/sync-disabled';
 import OpenInNew from 'material-ui/svg-icons/action/open-in-new';
 
 class TopBar extends React.Component {
-  constructor(props, context) {
-    super(props, context);
-  }
-
   render() {
     return (
       <AppBar
@@ -22,15 +18,23 @@ class TopBar extends React.Component {
             iconButtonElement={
               <IconButton><MoreVertIcon /></IconButton>
             }
-            targetOrigin={{horizontal: 'right', vertical: 'top'}}
-            anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+            targetOrigin={{ horizontal: 'right', vertical: 'top' }}
+            anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
           >
-            <MenuItem primaryText="Pocket" leftIcon={<OpenInNew />} onTouchTap={this.openPocket} />
-            <MenuItem primaryText="Disconnect" leftIcon={<SyncDisabled />} onTouchTap={this.exitApp} />
+            <MenuItem
+              primaryText="Pocket"
+              leftIcon={<OpenInNew />}
+              onTouchTap={this.openPocket}
+            />
+            <MenuItem
+              primaryText="Disconnect"
+              leftIcon={<SyncDisabled />}
+              onTouchTap={this.exitApp}
+            />
           </IconMenu>
         }
       />
-    )
+    );
   }
 }
 

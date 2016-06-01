@@ -2,7 +2,7 @@ import React from 'react';
 import $ from 'jquery';
 import IconButton from 'material-ui/IconButton';
 import ActionDone from 'material-ui/svg-icons/action/done';
-import {cyan500} from 'material-ui/styles/colors';
+import { cyan500 } from 'material-ui/styles/colors';
 
 class ArchiveButton extends React.Component {
   constructor(props, context) {
@@ -11,22 +11,22 @@ class ArchiveButton extends React.Component {
     this.handleClick = this.handleClick.bind(this);
 
     this.state = {
-      disabled: false
+      disabled: false,
     };
   }
 
-  handleClick(event) {
+  handleClick() {
     console.log("Archiving...", this.props.item_id);
     $.ajax({
-      type: "POST",
-      url: "/archive",
+      type: 'POST',
+      url: '/archive',
       dataType: 'json',
       cache: false,
       timeout: 10000,
-      data: {item_id: this.props.item_id},
-      success: (list) => {
-        console.log("Success.");
-        this.setState({disabled: true});
+      data: { item_id: this.props.item_id },
+      success: (res) => {
+        console.log("Success.", res);
+        this.setState({ disabled: true });
         this.props.handleArchive();
       },
       error: (xhr, status, err) => {
@@ -47,7 +47,6 @@ class ArchiveButton extends React.Component {
       </IconButton>
     );
   }
-
 }
 
 export default ArchiveButton;

@@ -1,6 +1,6 @@
 import React from 'react';
 import $ from 'jquery';
-import {grey200, pink300} from 'material-ui/styles/colors';
+import { grey200, pink300 } from 'material-ui/styles/colors';
 import CircularProgress from 'material-ui/CircularProgress';
 
 class CountGraph extends React.Component {
@@ -10,56 +10,56 @@ class CountGraph extends React.Component {
     this.state = {
       fetched: false,
       info: {
-        label: "",
+        label: '',
         count_unread: 0,
-        count_archive: 0
-      }
-    };
-  }
-
-  loadFromServer() {
-    $.ajax({
-      url: "/info",
-      dataType: 'json',
-      cache: false,
-      success: (info) => {
-        console.log("/info", info);
-        this.setState({fetched: true, info: info});
-        let unread  = this.state.info.count_unread;
-        let archive = this.state.info.count_archive;
-        this.setState({
-          fetched: true,
-          info: {
-            label: `${unread} / ${unread + archive}`,
-            count_unread: unread,
-            count_archive: archive
-          }
-        });
+        count_archive: 0,
       },
-      error: (xhr, status, err) => {
-        console.error("/info", status, err.toString());
-      }
-    });
+    };
   }
 
   componentDidMount() {
     this.loadFromServer();
   }
 
+  loadFromServer() {
+    $.ajax({
+      url: '/info',
+      dataType: 'json',
+      cache: false,
+      success: (info) => {
+        console.log("/info", info);
+        this.setState({ fetched: true, info });
+        const unread  = this.state.info.count_unread;
+        const archive = this.state.info.count_archive;
+        this.setState({
+          fetched: true,
+          info: {
+            label: `${unread} / ${unread + archive}`,
+            count_unread: unread,
+            count_archive: archive,
+          },
+        });
+      },
+      error: (xhr, status, err) => {
+        console.error("/info", status, err.toString());
+      },
+    });
+  }
+
   render() {
-    let info = this.state.info;
-    let deno = info.count_unread + info.count_archive;
-    let rate = info.count_unread / deno * 100;
-    let styles = {
+    const info = this.state.info;
+    const deno = info.count_unread + info.count_archive;
+    const rate = info.count_unread / deno * 100;
+    const styles = {
       outer: {
-        backgroundColor: grey200
+        backgroundColor: grey200,
       },
       inner: {
         width: `${rate}%`,
-        backgroundColor: pink300
-      }
-    }
-    let cp = this.state.fetched ? null: <CircularProgress size={0.5} />;
+        backgroundColor: pink300,
+      },
+    };
+    let cp = this.state.fetched ? null : <CircularProgress size={0.5} />;
     return (
       <div className="countGraph" style={styles.outer}>
         {cp}

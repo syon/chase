@@ -2,9 +2,9 @@ import React from 'react';
 import $ from 'jquery';
 import Paper from 'material-ui/Paper';
 import ArchiveButton from './ArchiveButton';
-import {grey200} from 'material-ui/styles/colors';
+import { grey200 } from 'material-ui/styles/colors';
 
-const thumbs_path = "https://s3.amazonaws.com/syon-chase/items/thumbs/";
+const thumbsPath = 'https://s3.amazonaws.com/syon-chase/items/thumbs/';
 
 class Item extends React.Component {
   constructor(props, context) {
@@ -16,8 +16,27 @@ class Item extends React.Component {
 
     this.state = {
       imageReloaded: false,
-      archived: false
+      archived: false,
     };
+  }
+
+  onImgError() {
+    $.ajax({
+      type: 'POST',
+      url: '/thumbnail',
+      dataType: 'json',
+      data: this.props.data,
+      cache: false,
+      success: (result) => {
+        console.log("/thumbnail", result);
+        this.setState({
+          imageReloaded: true,
+        });
+      },
+      error: (xhr, status, err) => {
+        console.error("/thumbnail", status, err.toString());
+      },
+    });
   }
 
   getTitle(d) {
@@ -28,36 +47,17 @@ class Item extends React.Component {
     return title;
   }
 
-  onImgError(a,b,c) {
-    $.ajax({
-      type: "POST",
-      url: "/thumbnail",
-      dataType: 'json',
-      data: this.props.data,
-      cache: false,
-      success: (result) => {
-        console.log("/thumbnail", result);
-        this.setState({
-          imageReloaded: true
-        });
-      },
-      error: (xhr, status, err) => {
-        console.error("/thumbnail", status, err.toString());
-      }
-    });
-  }
-
   getOgpImage() {
-    let item10_id = ("0000000000"+this.props.uniqId).substr(-10,10);
-    let item_id_3 = item10_id.substring(0, 3);
-    let emitter = "";
+    const item10Id = `0000000000${this.props.uniqId}`.substr(-10, 10);
+    const itemId3 = item10Id.substring(0, 3);
+    let emitter = '';
     if (this.state.imageReloaded) {
-      emitter = "?";
+      emitter = '?';
     }
-    let img_url_s3 = thumbs_path + item_id_3 + "/" + item10_id + ".jpg" + emitter;
+    const imgUrlS3 = `${thumbsPath}${itemId3}/${item10Id}.jpg${emitter}`;
     return (
-      <div className='ogpimg'>
-        <img src={img_url_s3} onError={this.onImgError} />
+      <div className="ogpimg">
+        <img src={imgUrlS3} onError={this.onImgError} role="presentation" />
       </div>
     );
   }
@@ -72,63 +72,63 @@ class Item extends React.Component {
 
   getHatebu(url) {
     return (
-      <img src={"http://b.hatena.ne.jp/entry/image/" + url} />
-    )
+      <img src={`http://b.hatena.ne.jp/entry/image/${url}`} role="presentation" />
+    );
   }
 
   getUpdAt(d) {
-    let dt = new Date(d.time_updated * 1000);
-    let ymd = [dt.getFullYear(), dt.getMonth() + 1, dt.getDate()];
+    const dt = new Date(d.time_updated * 1000);
+    const ymd = [dt.getFullYear(), dt.getMonth() + 1, dt.getDate()];
     return ymd.join('.');
   }
 
   getFqdn(d) {
     try {
-      let url = this.getUrl(d);
-      return (url+"/").match(/\/\/(.*?)\//)[1];
-    } catch(e) {
+      const url = this.getUrl(d);
+      return `${url}/`.match(/\/\/(.*?)\//)[1];
+    } catch (e) {
       console.error(e, d);
       return d.given_url;
     }
   }
 
   handleClick() {
-    let id = this.props.data.item_id;
+    const id = this.props.data.item_id;
     this.props.toggleSelected(id);
   }
 
   handleArchive() {
-    this.setState({archived: true});
+    this.setState({ archived: true });
   }
 
   render() {
-    let d = this.props.data;
+    const d = this.props.data;
 
-    let title   = this.getTitle(d);
-    let ogp_img = this.getOgpImage();
-    let url     = this.getUrl(d);
-    let hatebu  = this.getHatebu(url);
-    let upd_at  = this.getUpdAt(d);
-    let fqdn    = this.getFqdn(d);
+    let title  = this.getTitle(d);
+    let ogpImg = this.getOgpImage();
+    let url    = this.getUrl(d);
+    let hatebu = this.getHatebu(url);
+    let updAt  = this.getUpdAt(d);
+    let fqdn   = this.getFqdn(d);
 
     let style = {};
     if (this.props.selectedId == d.item_id) {
-      style = {backgroundColor: "#F4FF81"};
+      style = { backgroundColor: '#F4FF81' };
     }
     if (this.state.archived) {
-      style = {backgroundColor: grey200};
+      style = { backgroundColor: grey200 };
     }
 
     return (
       <Paper zDepth={1} rounded={false} className="item" style={style}>
-        {ogp_img}
+        {ogpImg}
         <div className="item-body" onClick={this.handleClick}>
           <h3 className="item-title">
             <a href={url} target="_blank">{title}</a>
           </h3>
           <div className="item-meta">
             <span className="hatebu">{hatebu}</span>
-            <span className="upd_at">{upd_at}</span>
+            <span className="upd_at">{updAt}</span>
             <span className="fqdn">{fqdn}</span>
           </div>
         </div>
