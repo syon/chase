@@ -22,11 +22,10 @@ class ItemBox extends React.Component {
       dataType: 'json',
       cache: false,
       success: (list) => {
-        console.log("/retrieve", list);
         this.setState({ list });
       },
       error: (xhr, status, err) => {
-        console.error("/retrieve", status, err.toString());
+        console.error('/retrieve', status, err.toString());
       },
     });
   }

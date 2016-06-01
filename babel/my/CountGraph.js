@@ -27,7 +27,6 @@ class CountGraph extends React.Component {
       dataType: 'json',
       cache: false,
       success: (info) => {
-        console.log("/info", info);
         this.setState({ fetched: true, info });
         const unread  = this.state.info.count_unread;
         const archive = this.state.info.count_archive;
@@ -41,7 +40,7 @@ class CountGraph extends React.Component {
         });
       },
       error: (xhr, status, err) => {
-        console.error("/info", status, err.toString());
+        console.error('/info', status, err.toString());
       },
     });
   }

@@ -22,7 +22,6 @@ class ArchiveButton extends React.Component {
   }
 
   handleClick() {
-    console.log("Archiving...", this.props.itemId);
     $.ajax({
       type: 'POST',
       url: '/archive',
@@ -30,13 +29,12 @@ class ArchiveButton extends React.Component {
       cache: false,
       timeout: 10000,
       data: { item_id: this.props.itemId },
-      success: (res) => {
-        console.log("Success.", res);
+      success: () => {
         this.setState({ disabled: true });
         this.props.handleArchive();
       },
       error: (xhr, status, err) => {
-        console.error("/archive", xhr, status, err.toString());
+        console.error('/archive', xhr, status, err.toString());
       },
     });
   }

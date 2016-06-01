@@ -34,14 +34,13 @@ class Item extends React.Component {
       dataType: 'json',
       data: this.props.data,
       cache: false,
-      success: (result) => {
-        console.log("/thumbnail", result);
+      success: () => {
         this.setState({
           imageReloaded: true,
         });
       },
       error: (xhr, status, err) => {
-        console.error("/thumbnail", status, err.toString());
+        console.error('/thumbnail', status, err.toString());
       },
     });
   }
