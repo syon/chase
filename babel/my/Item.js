@@ -1,5 +1,5 @@
 import React from 'react';
-import $ from 'jquery';
+import axios from 'axios';
 import Paper from 'material-ui/Paper';
 import ArchiveButton from './ArchiveButton';
 import { grey200 } from 'material-ui/styles/colors';
@@ -28,21 +28,15 @@ class Item extends React.Component {
   }
 
   onImgError() {
-    $.ajax({
-      type: 'POST',
-      url: '/thumbnail',
-      dataType: 'json',
-      data: this.props.data,
-      cache: false,
-      success: () => {
+    axios.post('/thumbnail', this.props.data, { timeout: 10000 })
+      .then(() => {
         this.setState({
           imageReloaded: true,
         });
-      },
-      error: (xhr, status, err) => {
-        console.error('/thumbnail', status, err.toString());
-      },
-    });
+      })
+      .catch((response) => {
+        console.error('/thumbnail', response);
+      });
   }
 
   getTitle(d) {

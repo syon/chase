@@ -1,5 +1,5 @@
 import React from 'react';
-import $ from 'jquery';
+import axios from 'axios';
 import { grey200, pink300 } from 'material-ui/styles/colors';
 import CircularProgress from 'material-ui/CircularProgress';
 
@@ -22,14 +22,10 @@ class CountGraph extends React.Component {
   }
 
   loadFromServer() {
-    $.ajax({
-      url: '/info',
-      dataType: 'json',
-      cache: false,
-      success: (info) => {
-        this.setState({ fetched: true, info });
-        const unread  = this.state.info.count_unread;
-        const archive = this.state.info.count_archive;
+    axios.get('/info')
+      .then((response) => {
+        const unread  = response.data.count_unread;
+        const archive = response.data.count_archive;
         this.setState({
           fetched: true,
           info: {
@@ -38,11 +34,10 @@ class CountGraph extends React.Component {
             count_archive: archive,
           },
         });
-      },
-      error: (xhr, status, err) => {
-        console.error('/info', status, err.toString());
-      },
-    });
+      })
+      .catch((response) => {
+        console.error('/info', response);
+      });
   }
 
   render() {

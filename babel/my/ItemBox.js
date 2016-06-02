@@ -1,5 +1,5 @@
 import React from 'react';
-import $ from 'jquery';
+import axios from 'axios';
 import ItemList from './ItemList';
 
 class ItemBox extends React.Component {
@@ -17,17 +17,13 @@ class ItemBox extends React.Component {
   }
 
   loadFromServer() {
-    $.ajax({
-      url: '/retrieve',
-      dataType: 'json',
-      cache: false,
-      success: (list) => {
-        this.setState({ list });
-      },
-      error: (xhr, status, err) => {
-        console.error('/retrieve', status, err.toString());
-      },
-    });
+    axios.get('/retrieve')
+      .then((response) => {
+        this.setState({ list: response.data });
+      })
+      .catch((response) => {
+        console.error('/retrieve', response);
+      });
   }
 
   render() {

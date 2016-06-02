@@ -1,5 +1,5 @@
 import React from 'react';
-import $ from 'jquery';
+import axios from 'axios';
 import IconButton from 'material-ui/IconButton';
 import ActionDone from 'material-ui/svg-icons/action/done';
 import { cyan500 } from 'material-ui/styles/colors';
@@ -22,21 +22,14 @@ class ArchiveButton extends React.Component {
   }
 
   handleClick() {
-    $.ajax({
-      type: 'POST',
-      url: '/archive',
-      dataType: 'json',
-      cache: false,
-      timeout: 10000,
-      data: { item_id: this.props.itemId },
-      success: () => {
+    axios.post('/archive', { item_id: this.props.itemId })
+      .then(() => {
         this.setState({ disabled: true });
         this.props.handleArchive();
-      },
-      error: (xhr, status, err) => {
-        console.error('/archive', xhr, status, err.toString());
-      },
-    });
+      })
+      .catch((response) => {
+        console.error('/archive', response);
+      });
   }
 
   render() {

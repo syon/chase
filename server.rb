@@ -76,8 +76,9 @@ get "/retrieve" do
 end
 
 post "/archive" do
+  data = JSON.parse request.body.read
   client = Pocket.client(:access_token => session[:access_token])
-  actions = [{action: 'archive', item_id: params['item_id']}]
+  actions = [{action: 'archive', item_id: data['item_id']}]
   res = client.modify(actions)
   json res
 end
@@ -97,7 +98,8 @@ get "/info" do
 end
 
 post "/thumbnail" do
-  item = ScrapeUtil.conv(params)
+  data = JSON.parse request.body.read
+  item = ScrapeUtil.conv(data)
   id10 = ScrapeUtil.get_item10_id(item[:item_id])
   img_url = item[:image_url]
   dest_dir = id10[0, 3]
