@@ -123,7 +123,7 @@ post "/thumbnail" do
       end
     end
     option = ''
-    if 'png' == File.extname(img_path)
+    if 'png' == exp
       option = '-fill "#FFFFFF" -opaque none'
     end
     `mogrify -format jpg #{option} #{img_path}`
