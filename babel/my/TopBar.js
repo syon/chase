@@ -8,6 +8,14 @@ import SyncDisabled from 'material-ui/svg-icons/notification/sync-disabled';
 import OpenInNew from 'material-ui/svg-icons/action/open-in-new';
 
 class TopBar extends React.Component {
+  openPocket() {
+    window.open('https://getpocket.com');
+  }
+
+  exitApp() {
+    window.location = '/disconnect';
+  }
+
   render() {
     return (
       <AppBar

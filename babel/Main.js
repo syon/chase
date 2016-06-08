@@ -12,28 +12,18 @@ const muiTheme = getMuiTheme({
   },
 });
 
-class Main extends React.Component {
-  openPocket() {
-    window.open('https://getpocket.com');
-  }
-
-  exitApp() {
-    window.location = '/disconnect';
-  }
-
-  render() {
-    return (
-      <MuiThemeProvider muiTheme={muiTheme}>
+function Main() {
+  return (
+    <MuiThemeProvider muiTheme={muiTheme}>
+      <div>
+        <TopBar />
         <div>
-          <TopBar />
-          <div>
-            <CountGraph />
-            <ItemBox />
-          </div>
+          <CountGraph />
+          <ItemBox />
         </div>
-      </MuiThemeProvider>
-    );
-  }
+      </div>
+    </MuiThemeProvider>
+  );
 }
 
 export default Main;
