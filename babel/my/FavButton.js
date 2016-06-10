@@ -3,6 +3,7 @@ import axios from 'axios';
 import IconButton from 'material-ui/IconButton';
 import Star from 'material-ui/svg-icons/toggle/star';
 import { yellowA700, grey300 } from 'material-ui/styles/colors';
+import RefreshIndicator from 'material-ui/RefreshIndicator';
 
 const propTypes = {
   itemId: React.PropTypes.string,
@@ -24,12 +25,22 @@ class FavButton extends React.Component {
     this.state = {
       label: (isFav ? 'Unfavorite' : 'Favorite'),
       isFav,
-      icon: this.getIcon(isFav),
+      icon: this.getFavIcon(isFav),
     };
   }
 
-  getIcon(isFav) {
+  getFavIcon(isFav) {
     return isFav ? <Star color={yellowA700} /> : <Star color={grey300} />;
+  }
+
+  getIngIcon() {
+    return (
+      <RefreshIndicator
+        size={24}
+        left={12}
+        top={12}
+        status="loading"
+      />);
   }
 
   handleClick() {
@@ -41,12 +52,15 @@ class FavButton extends React.Component {
   }
 
   sendFav() {
+    this.setState({
+      icon: this.getIngIcon(),
+    });
     axios.post('/fav', { item_id: this.props.itemId })
       .then(() => {
         this.setState({
           label: 'Unfavorite',
           isFav: true,
-          icon: this.getIcon(true),
+          icon: this.getFavIcon(true),
         });
       })
       .catch((response) => {
@@ -55,12 +69,15 @@ class FavButton extends React.Component {
   }
 
   sendUnfav() {
+    this.setState({
+      icon: this.getIngIcon(),
+    });
     axios.post('/unfav', { item_id: this.props.itemId })
       .then(() => {
         this.setState({
           label: 'Favorite',
           isFav: false,
-          icon: this.getIcon(false),
+          icon: this.getFavIcon(false),
         });
       })
       .catch((response) => {
