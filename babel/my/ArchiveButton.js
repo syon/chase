@@ -3,12 +3,15 @@ import axios from 'axios';
 import IconButton from 'material-ui/IconButton';
 import ActionDone from 'material-ui/svg-icons/action/done';
 import { cyan500 } from 'material-ui/styles/colors';
+import RefreshIndicator from 'material-ui/RefreshIndicator';
 
 const propTypes = {
   label: React.PropTypes.string,
   itemId: React.PropTypes.string,
   handleArchive: React.PropTypes.func,
 };
+
+const icon = <ActionDone color={cyan500} />;
 
 class ArchiveButton extends React.Component {
   constructor(props, context) {
@@ -18,13 +21,30 @@ class ArchiveButton extends React.Component {
 
     this.state = {
       disabled: false,
+      icon,
     };
   }
 
+  getIngIcon() {
+    return (
+      <RefreshIndicator
+        size={24}
+        left={12}
+        top={12}
+        status="loading"
+      />);
+  }
+
   handleClick() {
+    this.setState({
+      icon: this.getIngIcon(),
+    });
     axios.post('/archive', { item_id: this.props.itemId })
       .then(() => {
-        this.setState({ disabled: true });
+        this.setState({
+          disabled: true,
+          icon,
+        });
         this.props.handleArchive();
       })
       .catch((response) => {
@@ -40,7 +60,7 @@ class ArchiveButton extends React.Component {
         onClick={this.handleClick}
         disabled={this.state.disabled}
       >
-        <ActionDone color={cyan500} />
+        {this.state.icon}
       </IconButton>
     );
   }
