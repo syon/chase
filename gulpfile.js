@@ -1,4 +1,6 @@
+/* ES5 */
 var gulp = require('gulp'),
+    fs = require('fs'),
     source = require('vinyl-source-stream'),
     babelify = require('babelify'),
     browserify = require('browserify'),
@@ -7,15 +9,18 @@ var gulp = require('gulp'),
     less = require('gulp-less'),
     path = require('path');
 
+var bundler = browserify({
+  entries: ['babel/app.js'],
+  transform: [[babelify, {presets: ["es2015", "react"]}]],
+  debug: true // sourcemapping
+});
+
 gulp.task('browserify', function () {
-  var bundler = browserify({
-      entries: ['babel/app.js'],
-      transform: [[babelify, {presets: ["es2015", "react"]}]],
-      debug: true // sourcemapping
-  });
-
   bundler.plugin('minifyify', {map: 'map.json', output: './public/js/map.json'});
+  bundler.bundle().pipe(fs.createWriteStream("public/js/bundle.js"));
+});
 
+gulp.task('watch', function () {
   var watcher = watchify(bundler);
   return watcher
     .on('update', function () {
@@ -38,4 +43,5 @@ gulp.task('less', function () {
     .pipe(gulp.dest('./public/css'));
 });
 
-gulp.task('default', ['browserify', 'less']);
+gulp.task('default', ['watch', 'less']);
+gulp.task('bundle', ['browserify', 'less']);
