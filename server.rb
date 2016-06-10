@@ -75,6 +75,22 @@ get "/retrieve" do
   json list
 end
 
+post "/fav" do
+  data = JSON.parse request.body.read
+  client = Pocket.client(:access_token => session[:access_token])
+  actions = [{action: 'favorite', item_id: data['item_id']}]
+  res = client.modify(actions)
+  json res
+end
+
+post "/unfav" do
+  data = JSON.parse request.body.read
+  client = Pocket.client(:access_token => session[:access_token])
+  actions = [{action: 'unfavorite', item_id: data['item_id']}]
+  res = client.modify(actions)
+  json res
+end
+
 post "/archive" do
   data = JSON.parse request.body.read
   client = Pocket.client(:access_token => session[:access_token])

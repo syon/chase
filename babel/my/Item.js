@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import Paper from 'material-ui/Paper';
+import FavButton from './FavButton';
 import ArchiveButton from './ArchiveButton';
 import { grey200 } from 'material-ui/styles/colors';
 
@@ -132,6 +133,7 @@ class Item extends React.Component {
             <span className="fqdn">{fqdn}</span>
           </div>
         </div>
+        <FavButton itemId={d.item_id} favorite={d.favorite} />
         <ArchiveButton label="Archive" itemId={d.item_id} handleArchive={this.handleArchive} />
       </Paper>
     );
