@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import IconButton from 'material-ui/IconButton';
-import ToggleStar from 'material-ui/svg-icons/toggle/star';
+import Star from 'material-ui/svg-icons/toggle/star';
 import { yellowA700, grey300 } from 'material-ui/styles/colors';
 
 const propTypes = {
@@ -24,7 +24,12 @@ class FavButton extends React.Component {
     this.state = {
       label: (isFav ? 'Unfavorite' : 'Favorite'),
       isFav,
+      icon: this.getIcon(isFav),
     };
+  }
+
+  getIcon(isFav) {
+    return isFav ? <Star color={yellowA700} /> : <Star color={grey300} />;
   }
 
   handleClick() {
@@ -41,6 +46,7 @@ class FavButton extends React.Component {
         this.setState({
           label: 'Unfavorite',
           isFav: true,
+          icon: this.getIcon(true),
         });
       })
       .catch((response) => {
@@ -54,6 +60,7 @@ class FavButton extends React.Component {
         this.setState({
           label: 'Favorite',
           isFav: false,
+          icon: this.getIcon(false),
         });
       })
       .catch((response) => {
@@ -62,17 +69,13 @@ class FavButton extends React.Component {
   }
 
   render() {
-    let icon =  <ToggleStar color={grey300} />;
-    if (this.state.isFav) {
-      icon = <ToggleStar color={yellowA700} />;
-    }
     return (
       <IconButton
         tooltip={this.state.label}
         label={this.state.label}
         onClick={this.handleClick}
       >
-        {icon}
+        {this.state.icon}
       </IconButton>
     );
   }
