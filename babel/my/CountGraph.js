@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { grey200, pink300 } from 'material-ui/styles/colors';
+import { grey200 } from 'material-ui/styles/colors';
 import CircularProgress from 'material-ui/CircularProgress';
 
 class CountGraph extends React.Component {
@@ -50,7 +50,7 @@ class CountGraph extends React.Component {
       },
       inner: {
         width: `${rate}%`,
-        backgroundColor: pink300,
+        backgroundColor: this.context.muiTheme.palette.accent1Color,
       },
     };
     let cp = this.state.fetched ? null : <CircularProgress size={0.5} />;
@@ -64,5 +64,9 @@ class CountGraph extends React.Component {
     );
   }
 }
+
+CountGraph.contextTypes = {
+  muiTheme: React.PropTypes.object.isRequired,
+};
 
 export default CountGraph;

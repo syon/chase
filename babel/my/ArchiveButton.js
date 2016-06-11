@@ -2,7 +2,6 @@ import React from 'react';
 import axios from 'axios';
 import IconButton from 'material-ui/IconButton';
 import ActionDone from 'material-ui/svg-icons/action/done';
-import { cyan500 } from 'material-ui/styles/colors';
 import RefreshIndicator from 'material-ui/RefreshIndicator';
 
 const propTypes = {
@@ -11,18 +10,22 @@ const propTypes = {
   handleArchive: React.PropTypes.func,
 };
 
-const icon = <ActionDone color={cyan500} />;
 
 class ArchiveButton extends React.Component {
   constructor(props, context) {
     super(props, context);
 
+    this.getIcon = this.getIcon.bind(this);
     this.handleClick = this.handleClick.bind(this);
 
     this.state = {
       disabled: false,
-      icon,
+      icon: this.getIcon(),
     };
+  }
+
+  getIcon() {
+    return <ActionDone color={this.context.muiTheme.palette.primary1Color} />;
   }
 
   getIngIcon() {
@@ -43,7 +46,7 @@ class ArchiveButton extends React.Component {
       .then(() => {
         this.setState({
           disabled: true,
-          icon,
+          icon: this.getIcon(),
         });
         this.props.handleArchive();
       })
@@ -67,5 +70,8 @@ class ArchiveButton extends React.Component {
 }
 
 ArchiveButton.propTypes = propTypes;
+ArchiveButton.contextTypes = {
+  muiTheme: React.PropTypes.object.isRequired,
+};
 
 export default ArchiveButton;
