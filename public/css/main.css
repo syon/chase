@@ -96,4 +96,7 @@ body {
   .item .item-meta {
     font-size: 10px;
   }
+  .item .btn-fav {
+    display: none !important;
+  }
 }

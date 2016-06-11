@@ -88,6 +88,7 @@ class FavButton extends React.Component {
   render() {
     return (
       <IconButton
+        className="btn-fav"
         tooltip={this.state.label}
         label={this.state.label}
         onClick={this.handleClick}
