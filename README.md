@@ -1,7 +1,7 @@
 Chase
 =====
 
-Web App client for Pocket
+Web client for Pocket
 
 - http://syon-chase.herokuapp.com
 
