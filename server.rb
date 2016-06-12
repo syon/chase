@@ -21,7 +21,7 @@ use Rack::Session::Cookie, :key => 'rack.session',
                            :path => '/',
                            :expire_after => 2592000 # In seconds
 
-CALLBACK_URL = "http://#{ENV['fqdn']}/oauth/callback"
+CALLBACK_URL = "https://#{ENV['fqdn']}/oauth/callback"
 
 Pocket.configure do |config|
   config.consumer_key = ENV['consumer_key']

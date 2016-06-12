@@ -73,7 +73,7 @@ class Item extends React.Component {
 
   getHatebu(url) {
     return (
-      <img src={`http://b.hatena.ne.jp/entry/image/${url}`} role="presentation" />
+      <img src={`https://b.hatena.ne.jp/entry/image/${url}`} role="presentation" />
     );
   }
 
