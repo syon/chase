@@ -1,13 +1,14 @@
 {
   "name": "Chase",
   "version": "1.0.0",
-  "description": "A client web-app for Pocket.",
+  "description": "Web client for Pocket",
   "repository": {
     "type": "git",
     "url": "https://github.com/syon/chase.git"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "watch": "gulp",
+    "build": "gulp bundle"
   },
   "private": true,
   "devDependencies": {

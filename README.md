@@ -26,14 +26,20 @@ consumer_key="99999-xxxxxxxxxxxxxxxxxxxxxxxx"
 $ npm install
 ```
 
-### build and run
+### dev
 
 ```sh
-$ gulp
+$ npm run watch
 ```
 
 ```sh
 $ bundle exec ruby server.rb
+```
+
+### build
+
+```sh
+$ npm run build
 ```
 
 
