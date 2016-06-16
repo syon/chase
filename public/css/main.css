@@ -54,7 +54,6 @@ body {
   align-items: center;
   color: #757575;
   display: flex;
-  font-size: 10px;
   font-size: 12px;
   padding: 3px 0 0;
 }
@@ -104,6 +103,9 @@ body {
   }
   .item .item-meta {
     font-size: 10px;
+  }
+  .item .item-meta .tag {
+    display: none;
   }
   .item .btn-fav {
     display: none !important;
