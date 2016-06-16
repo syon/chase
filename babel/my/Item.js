@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import _ from 'lodash';
 import Paper from 'material-ui/Paper';
 import FavButton from './FavButton';
 import ArchiveButton from './ArchiveButton';
@@ -112,6 +113,15 @@ class Item extends React.Component {
     let updAt  = this.getUpdAt(d);
     let fqdn   = this.getFqdn(d);
 
+    let tagNodes = [];
+    if (d.tags) {
+      _.each(d.tags, (t) => {
+        tagNodes.push(
+          <span key={t.tag} className="tag">{t.tag}</span>
+        );
+      });
+    }
+
     let style = {};
     if (this.props.selectedId === d.item_id) {
       style = { backgroundColor: '#F4FF81' };
@@ -131,6 +141,7 @@ class Item extends React.Component {
             <span className="hatebu">{hatebu}</span>
             <span className="upd_at">{updAt}</span>
             <span className="fqdn">{fqdn}</span>
+            {tagNodes}
           </div>
         </div>
         <FavButton itemId={d.item_id} favorite={d.favorite} />
