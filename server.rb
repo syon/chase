@@ -115,45 +115,6 @@ end
 
 post "/thumbnail" do
   data = JSON.parse request.body.read
-  item = ScrapeUtil.conv(data)
-  id10 = ScrapeUtil.get_item10_id(item[:item_id])
-  img_url = item[:image_url]
-  dest_dir = id10[0, 3]
-  key  = ScrapeUtil.get_s3_obj_key(id10)
-  obj  = S3_BUCKET.object(key)
-  return if obj.exists?
-
-  result = ''
-  begin
-    site = ScrapeUtil.new(item[:item_url])
-    img_url = site.get_imagepath if site.get_imagepath.present?
-    exp = ScrapeUtil.get_exp_from_content_type(img_url)
-    if exp.blank?
-      raise "Cannot get extention: #{img_url}"
-    end
-    img_path = 'tmp/' + key
-    `mkdir -p #{File.dirname(img_path)}`
-    open(img_path, 'wb') do |output|
-      open(img_url) do |data|
-        output.write(data.read)
-      end
-    end
-    option = ''
-    if 'png' == exp
-      option = '-fill "#FFFFFF" -opaque none'
-    end
-    `mogrify -format jpg #{option} #{img_path}`
-    `mogrify -resize 200x #{img_path}`
-    obj.upload_file(img_path)
-    File.delete(img_path)
-    status 200
-    result = 'OK!'
-  rescue => e
-    puts "ERROR!!"
-    ap e
-    result = 'NG...'
-    obj.upload_file('after/blank.jpg')
-    status 403
-  end
-  json result
+  su = ScrapeUtil.new
+  su.put_thumbnail(data)
 end

@@ -3,7 +3,7 @@ require 'open-uri'
 require 'open_uri_redirections'
 
 class ScrapeUtil
-  def initialize(url)
+  def prepare(url)
     html = open(url, :allow_redirections => :safe) do |f|
       @charset = f.charset
       f.read
@@ -11,27 +11,70 @@ class ScrapeUtil
     @doc = Nokogiri::HTML.parse(html, @charset)
   end
 
-  def get_title
-    if @doc.css('//meta[property="og:site_name"]/@content').empty?
-      return @doc.title.to_s
-    else
-      return @doc.css('//meta[property="og:site_name"]/@content').to_s
+  def put_thumbnail(data)
+    item = conv(data)
+    id10 = get_item10_id(item[:item_id])
+    img_url = item[:image_url]
+    dest_dir = id10[0, 3]
+    key  = get_s3_obj_key(id10)
+    obj  = S3_BUCKET.object(key)
+    return if obj.exists?
+
+    result = ''
+    begin
+      prepare(item[:item_url])
+      img_url = get_imagepath if get_imagepath.present?
+      exp = get_exp_from_content_type(img_url)
+      if exp.blank?
+        raise "Cannot get extention: #{img_url}"
+      end
+      img_path = 'tmp/' + key
+      `mkdir -p #{File.dirname(img_path)}`
+      open(img_path, 'wb') do |output|
+        open(img_url) do |data|
+          output.write(data.read)
+        end
+      end
+      option = ''
+      if 'png' == exp
+        option = '-fill "#FFFFFF" -opaque none'
+      end
+      `mogrify -format jpg #{option} #{img_path}`
+      `mogrify -resize 200x #{img_path}`
+      obj.upload_file(img_path)
+      File.delete(img_path)
+      result = 'Thumbnail OK!'
+    rescue => e
+      puts "== ERROR on put_thumbnail =="
+      ap e
+      result = 'Thumbnail NG...'
+      obj.upload_file('after/blank.jpg')
     end
+    result
   end
 
-  def get_description
-    if @doc.css('//meta[property="og:description"]/@content').empty?
-      return @doc.css('//meta[name$="escription"]/@content').to_s
-    else
-      return @doc.css('//meta[property="og:description"]/@content').to_s
+  private
+
+    def get_title
+      if @doc.css('//meta[property="og:site_name"]/@content').empty?
+        return @doc.title.to_s
+      else
+        return @doc.css('//meta[property="og:site_name"]/@content').to_s
+      end
     end
-  end
 
-  def get_imagepath
-    return @doc.css('//meta[property="og:image"]/@content').to_s
-  end
+    def get_description
+      if @doc.css('//meta[property="og:description"]/@content').empty?
+        return @doc.css('//meta[name$="escription"]/@content').to_s
+      else
+        return @doc.css('//meta[property="og:description"]/@content').to_s
+      end
+    end
 
-  class << self
+    def get_imagepath
+      return @doc.css('//meta[property="og:image"]/@content').to_s
+    end
+
     def conv(obj)
       item_id = obj['resolved_id']
       if item_id == "0"
@@ -66,5 +109,4 @@ class ScrapeUtil
       exp.sub! /svg\+xml/, 'svg'
       exp
     end
-  end
 end
