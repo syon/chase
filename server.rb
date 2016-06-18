@@ -1,8 +1,7 @@
-require "pocket-ruby"
-require "sinatra"
-require "sinatra/json"
+require 'pocket-ruby'
+require 'sinatra'
+require 'sinatra/json'
 require 'dotenv'
-require "ap"
 require 'active_support/core_ext/object/blank'
 require './after/scrape_util'
 
@@ -47,21 +46,18 @@ get "/oauth/connect" do
   puts "OAUTH CONNECT"
   session[:code] = Pocket.get_code(:redirect_uri => CALLBACK_URL)
   new_url = Pocket.authorize_url(:code => session[:code], :redirect_uri => CALLBACK_URL)
-  ap session
   redirect new_url
 end
 
 get "/oauth/callback" do
   puts "OAUTH CALLBACK"
   result = Pocket.get_result(session[:code], :redirect_uri => CALLBACK_URL)
-  ap result
   session[:access_token] = result['access_token']
   redirect "/"
 end
 
 get "/retrieve" do
   client = Pocket.client(:access_token => session[:access_token])
-  ap session
   info = client.retrieve(
     :detailType => :complete,
     :sort => "newest",
