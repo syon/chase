@@ -49,7 +49,7 @@ class ScrapeUtil
       puts "== ERROR on put_thumbnail =="
       ap e
       result = 'Thumbnail NG...'
-      obj.upload_file('public/blank.jpg')
+      obj.upload_file('after/blank.jpg')
     end
     result
   end

@@ -3,7 +3,7 @@ require 'sinatra'
 require 'sinatra/json'
 require 'dotenv'
 require 'active_support/core_ext/object/blank'
-require './after/scrape_util'
+require './lib/scrape_util'
 
 Dotenv.load
 
