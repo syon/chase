@@ -4,7 +4,6 @@ require "sinatra/json"
 require 'dotenv'
 require "ap"
 require 'active_support/core_ext/object/blank'
-require 'aws-sdk'
 require './after/scrape_util'
 
 Dotenv.load
