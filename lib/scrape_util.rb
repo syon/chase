@@ -36,11 +36,10 @@ class ScrapeUtil
           output.write(data.read)
         end
       end
-      option = ''
       if 'png' == exp
-        option = '-fill "#FFFFFF" -opaque none'
+        `convert #{img_path} -background white -alpha remove #{img_path}`
       end
-      `mogrify -format jpg #{option} #{img_path}`
+      `mogrify -format jpg #{img_path}`
       `mogrify -resize 200x #{img_path}`
       obj.upload_file(img_path)
       File.delete(img_path)
