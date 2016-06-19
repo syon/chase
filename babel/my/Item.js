@@ -30,7 +30,7 @@ class Item extends React.Component {
   }
 
   onImgError() {
-    axios.post('/thumbnail', this.props.data, { timeout: 10000 })
+    axios.post('/thumbnail', this.props.data, { timeout: 20000 })
       .then(() => {
         this.setState({
           imageReloaded: true,
