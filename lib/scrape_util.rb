@@ -47,9 +47,8 @@ class ScrapeUtil
       result = 'Thumbnail OK!'
     rescue => e
       puts "== ERROR on put_thumbnail =="
-      ap e
       result = 'Thumbnail NG...'
-      obj.upload_file('after/blank.jpg')
+      obj.upload_file('public/img/blank.jpg')
     end
     result
   end
