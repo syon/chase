@@ -6,6 +6,7 @@ import MenuItem from 'material-ui/MenuItem';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import SyncDisabled from 'material-ui/svg-icons/notification/sync-disabled';
 import OpenInNew from 'material-ui/svg-icons/action/open-in-new';
+import CodeIcon from 'material-ui/svg-icons/action/code';
 
 function TopBar() {
   return (
@@ -29,6 +30,11 @@ function TopBar() {
             primaryText="Disconnect"
             leftIcon={<SyncDisabled />}
             onTouchTap={() => (window.location = '/disconnect')}
+          />
+          <MenuItem
+            primaryText="GitHub"
+            leftIcon={<CodeIcon />}
+            onTouchTap={() => window.open('https://github.com/syon/chase')}
           />
         </IconMenu>
       }
