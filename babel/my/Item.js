@@ -6,7 +6,7 @@ import FavButton from './FavButton';
 import ArchiveButton from './ArchiveButton';
 import { grey200 } from 'material-ui/styles/colors';
 
-const thumbsPath = 'https://s3.amazonaws.com/syon-chase/items/thumbs/';
+const thumbsPath = 'https://d2aed4ktvx51jm.cloudfront.net/items/thumbs/';
 
 const propTypes = {
   data: React.PropTypes.object,
