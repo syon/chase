@@ -6,7 +6,7 @@ import FavButton from './FavButton';
 import ArchiveButton from './ArchiveButton';
 import { grey200 } from 'material-ui/styles/colors';
 
-const thumbsPath = 'https://d2aed4ktvx51jm.cloudfront.net/items/thumbs/';
+let thumbsPath = 'https://d2aed4ktvx51jm.cloudfront.net/items/thumbs/';
 
 const propTypes = {
   data: React.PropTypes.object,
@@ -35,6 +35,7 @@ class Item extends React.Component {
         this.setState({
           imageReloaded: true,
         });
+        thumbsPath = 'https://s3.amazonaws.com/syon-chase/items/thumbs/';
       })
       .catch((response) => {
         console.error('/thumbnail', response);
