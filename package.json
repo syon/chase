@@ -7,7 +7,7 @@
     "url": "https://github.com/syon/chase.git"
   },
   "scripts": {
-    "watch": "gulp",
+    "dev": "nf start --procfile Procfile.dev",
     "build": "gulp bundle"
   },
   "private": true,
@@ -21,6 +21,7 @@
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^3.0.2",
     "eslint-plugin-react": "^6.8.0",
+    "foreman": "^2.0.0",
     "gulp": "^3.9.1",
     "gulp-less": "^3.1.0",
     "minifyify": "^7.3.3",

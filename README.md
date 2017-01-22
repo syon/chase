@@ -28,12 +28,10 @@ $ npm install
 
 ### dev
 
-```sh
-$ npm run watch
-```
+starts __gulp watch__ and __unicorn__ by foreman
 
 ```sh
-$ bundle exec ruby server.rb
+$ npm run dev
 ```
 
 ### build
