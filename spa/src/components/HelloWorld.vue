@@ -1,6 +1,5 @@
 <template lang="pug">
 .screen
-  h2 Chase
   em {{ pocketUsername }}
   pre
     code {{ pocketAccessToken }}
