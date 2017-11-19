@@ -1,14 +1,19 @@
 <template lang="pug">
-  #app.page-container
-    nav.page-nav
-      h1 Chase
-    article.page-content
-      router-view
+#app.page-container
+  nav.page-nav
+    sidebar
+  article.page-content
+    router-view
 </template>
 
 <script>
+import Sidebar from '@/components/Sidebar';
+
 export default {
   name: 'app',
+  components: {
+    Sidebar,
+  },
 };
 </script>
 
