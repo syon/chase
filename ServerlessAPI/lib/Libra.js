@@ -7,7 +7,7 @@ module.exports = class Libra {
   }
 
   getInfo() {
-    return axios(this.url).then(res => {
+    return axios.get(this.url, { timeout: 3000 }).then(res => {
         return res.data
       }).then(html => {
         const standardProps = this.extractStandardProps(html)
@@ -17,6 +17,9 @@ module.exports = class Libra {
         const description = this.resolveDesc(standardProps, metaProps)
         const image = this.resolveImageUrl(metaProps)
         return { site_name, title, description, image }
+      }).catch(error => {
+        console.log('Error on axios in Libra.getInfo', error)
+        throw error
       });
   }
 

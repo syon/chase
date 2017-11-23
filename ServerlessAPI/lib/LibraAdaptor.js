@@ -36,14 +36,7 @@ module.exports.libraInfo = (event, context, callback) => {
   const libra = new Libra(params.url);
   libra.getInfo()
     .then(info => {
-      const response = {
-        statusCode: 200,
-        headers: {
-          "Access-Control-Allow-Origin" : "*",
-        },
-        body: JSON.stringify(info),
-      };
-      callback(null, response);
+      callback(null, successResponseBuilder(info));
     })
     .catch(error => {
       callback(null, errorResponseBuilder(error));
