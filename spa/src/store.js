@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
+const CHASE_API_ENDPOINT = 'https://ua5uhzf79d.execute-api.us-east-1.amazonaws.com/dev';
+
 Vue.use(Vuex);
 
 function getDate(time10) {
@@ -33,6 +35,21 @@ export default new Vuex.Store({
   state: {
     count: 777,
     entries: {},
+    libraInfo: {},
+  },
+  getters: {
+    catalog(state) {
+      const list = state.entries;
+      const arr = Object.keys(list).map((key) => {
+        const info = state.libraInfo[key];
+        return { ...list[key], ...info };
+      });
+      return arr.sort((a, b) => {
+        if (a.sortId > b.sortId) return 1;
+        if (a.sortId < b.sortId) return -1;
+        return 0;
+      });
+    },
   },
   mutations: {
     increment(state) {
@@ -43,6 +60,9 @@ export default new Vuex.Store({
     },
     mergeEntries(state, newEntries) {
       state.entries = { ...state.entries, ...newEntries };
+    },
+    addLibraInfo(state, { eid, pageinfo }) {
+      state.libraInfo = { ...state.libraInfo, [eid]: pageinfo };
     },
   },
   actions: {
@@ -56,6 +76,25 @@ export default new Vuex.Store({
         newEntries[key] = moldRawItem(listFromPocket[key]);
       });
       context.commit('updateEntries', newEntries);
+      Object.keys(newEntries).forEach((key) => {
+        context.dispatch('fetchLibraInfo', newEntries[key]);
+      });
+    },
+    async fetchLibraInfo(context, payload) {
+      const eid = payload.eid;
+      const url = payload.url;
+      const pageinfo = await fetch(`${CHASE_API_ENDPOINT}/libra/info?url=${url}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }).then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        return {};
+      });
+      context.commit('addLibraInfo', { eid, pageinfo });
     },
   },
 });
