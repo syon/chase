@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 
 const CHASE_API_ENDPOINT = 'https://ua5uhzf79d.execute-api.us-east-1.amazonaws.com/dev';
+const CHASE_S3_BASE_URL = 'https://s3.amazonaws.com/syon-chase';
 
 Vue.use(Vuex);
 
@@ -17,10 +18,14 @@ function moldRawItem(pocketRawItem) {
   const m = pocketRawItem;
   const url = m.resolved_url ? m.resolved_url : m.given_url;
   const title = m.resolved_title ? m.resolved_title : m.given_title;
+  const item10Id = `0000000000${m.item_id}`.substr(-10, 10);
+  const itemId3 = item10Id.slice(0, 3);
+  const s3path = `items/thumbs/${itemId3}/${item10Id}.jpg`;
   return {
     eid: m.item_id,
     url,
     image_suggested: (m.has_image === '1') ? m.image.src : '',
+    image_s3_url: `${CHASE_S3_BASE_URL}/${s3path}`,
     title,
     excerpt: m.excerpt,
     fqdn: `${url}/`.match(/\/\/(.*?)\//)[1],
@@ -92,7 +97,11 @@ export default new Vuex.Store({
         if (response.ok) {
           return response.json();
         }
-        return {};
+        throw response;
+      }).catch((e) => {
+        // eslint-disable-next-line
+        console.warn(eid, url, e);
+        throw e;
       });
       context.commit('addLibraInfo', { eid, pageinfo });
     },
