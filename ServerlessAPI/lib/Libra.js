@@ -3,7 +3,7 @@ const cheerio = require('cheerio');
 
 module.exports = class Libra {
   constructor(url) {
-    this.url = url
+    this.url = encodeURI(url)
   }
 
   getInfo() {
