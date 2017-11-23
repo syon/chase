@@ -56,6 +56,7 @@ export default {
           this.requestToken = json.request_token;
           this.authUri = json.auth_uri;
         }).catch((ex) => {
+          // eslint-disable-next-line
           console.log(ex);
         });
     },
@@ -73,6 +74,7 @@ export default {
           this.$cookie.set('pocket_access_token', json.access_token, { expires: '3M' });
           this.$cookie.set('pocket_username', json.username, { expires: '3M' });
         }).catch((ex) => {
+          // eslint-disable-next-line
           console.log(ex);
         });
     },
@@ -85,12 +87,14 @@ export default {
         body: JSON.stringify({
           access_token: this.pocketAccessToken,
           count: 10,
+          detailType: 'complete',
         }),
       })
         .then(res => res.json()).then((json) => {
           this.getResult = json;
-          this.$store.dispatch('setApiResult', json.list);
+          this.$store.dispatch('updateEntries', json);
         }).catch((ex) => {
+          // eslint-disable-next-line
           console.log(ex);
         });
     },
