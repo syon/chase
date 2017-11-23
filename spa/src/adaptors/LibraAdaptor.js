@@ -1,8 +1,8 @@
 const LAMBDA_ENDPOINT = 'https://ua5uhzf79d.execute-api.us-east-1.amazonaws.com/dev';
 
-function thumb(arg) {
+async function thumb(arg) {
   const { eid, url, image_suggested } = arg;
-  fetch(`${LAMBDA_ENDPOINT}/libra/thumb`, {
+  const result = await fetch(`${LAMBDA_ENDPOINT}/libra/thumb`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -16,10 +16,13 @@ function thumb(arg) {
     .then(res => res.json()).then((json) => {
       // eslint-disable-next-line
       console.log(json);
-    }).catch((ex) => {
+      return json;
+    }).catch((error) => {
       // eslint-disable-next-line
-      console.log(arg, ex);
+      console.log(arg, error);
+      throw error;
     });
+  return result;
 }
 
 export default {

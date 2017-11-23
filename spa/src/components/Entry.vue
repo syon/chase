@@ -20,7 +20,7 @@
     dd {{ obj.image_suggested }}
     dt image_s3_url
     dd {{ obj.image_s3_url }}
-    img(:src="obj.image_s3_url" @error="onLoadImageError")
+    img(:src="imgSrc" @error="onLoadImageError")
     dt excerpt
     dd {{ obj.excerpt }}
     dt description
@@ -34,15 +34,22 @@ import Libra from '@/adaptors/LibraAdaptor';
 
 export default {
   props: ['obj'],
+  data() {
+    return {
+      imgSrc: this.obj.image_s3_url,
+    };
+  },
   methods: {
     onLoadImageError() {
       const o = this.obj;
       // eslint-disable-next-line
       console.log('★Libra.thumb★', o);
-      Libra.thumb({ eid: o.eid, url: o.url, image_suggested: o.image_suggested });
-      if (o.image_suggested) {
-        o.image_s3_url = o.image_suggested;
-      }
+      Libra.thumb({ eid: o.eid, url: o.url, image_suggested: o.image_suggested })
+        .then((r) => {
+          // eslint-disable-next-line
+          console.log('★Libra.thumb', r);
+          this.imgSrc = `${this.imgSrc}?etag=${r.ETag}`;
+        });
     },
   },
 };
