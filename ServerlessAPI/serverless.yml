@@ -28,3 +28,10 @@ functions:
           path: pocket/get
           method: post
           cors: true
+  librainfo:
+    handler: handler.libraInfo
+    events:
+      - http:
+          path: libra/info
+          method: get
+          cors: true

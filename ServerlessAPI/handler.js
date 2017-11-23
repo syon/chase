@@ -14,6 +14,8 @@
 require('dotenv').config();
 const axios = require('axios');
 
+const Libra = require('./lib/Libra');
+
 const redirectUri = 'https://syon-chase.herokuapp.com?authorizationFinished';
 const HTTP_CONFIG = {
   headers: {
@@ -114,6 +116,26 @@ module.exports.pocketGet = (event, context, callback) => {
       callback(null, response);
     })
     .catch(function (error) {
+      console.log(error);
+      callback(null, errorResponseBuilder(error));
+    });
+};
+
+module.exports.libraInfo = (event, context, callback) => {
+  const params = event.queryStringParameters;
+  const libra = new Libra(params.url);
+  libra.getInfo()
+    .then(info => {
+      const response = {
+        statusCode: 200,
+        headers: {
+          "Access-Control-Allow-Origin" : "*",
+        },
+        body: JSON.stringify(info),
+      };
+      callback(null, response);
+    })
+    .catch(error => {
       console.log(error);
       callback(null, errorResponseBuilder(error));
     });
