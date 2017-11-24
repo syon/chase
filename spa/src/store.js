@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-const CHASE_API_ENDPOINT = 'https://ua5uhzf79d.execute-api.us-east-1.amazonaws.com/dev';
+import Libra from '@/adaptors/LibraAdaptor';
+
 const CHASE_S3_BASE_URL = 'https://s3.amazonaws.com/syon-chase';
 
 Vue.use(Vuex);
@@ -86,23 +87,8 @@ export default new Vuex.Store({
       });
     },
     async fetchLibraInfo(context, payload) {
-      const eid = payload.eid;
-      const url = payload.url;
-      const pageinfo = await fetch(`${CHASE_API_ENDPOINT}/libra/info?url=${url}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }).then((response) => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw response;
-      }).catch((e) => {
-        // eslint-disable-next-line
-        console.warn(eid, url, e);
-        throw e;
-      });
+      const { eid, url } = payload;
+      const pageinfo = Libra.info({ eid, url });
       context.commit('addLibraInfo', { eid, pageinfo });
     },
   },
