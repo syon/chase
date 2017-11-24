@@ -30,8 +30,6 @@
 </template>
 
 <script>
-import Libra from '@/adaptors/LibraAdaptor';
-
 export default {
   props: ['obj'],
   data() {
@@ -41,14 +39,9 @@ export default {
   },
   methods: {
     onLoadImageError() {
-      const o = this.obj;
-      // eslint-disable-next-line
-      console.log('★Libra.thumb★', o);
-      Libra.thumb({ eid: o.eid, url: o.url, image_suggested: o.image_suggested })
-        .then((r) => {
-          // eslint-disable-next-line
-          console.log('★Libra.thumb', r);
-          this.imgSrc = `${this.imgSrc}?etag=${r.ETag}`;
+      this.$store.dispatch('fetchLibraThumb', this.obj)
+        .then((ETag) => {
+          this.imgSrc = `${this.imgSrc}?etag=${ETag}`;
         });
     },
   },

@@ -1,9 +1,11 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import Debug from 'debug';
 
 import Libra from '@/adaptors/LibraAdaptor';
 import ChaseUtil from '@/lib/ChaseUtil';
 
+const debug = Debug('chase:store');
 Vue.use(Vuex);
 
 /* eslint-disable operator-assignment, no-param-reassign */
@@ -56,6 +58,15 @@ export default new Vuex.Store({
       const { eid, url } = payload;
       const pageinfo = Libra.info({ eid, url });
       context.commit('addLibraInfo', { eid, pageinfo });
+    },
+    async fetchLibraThumb(context, payload) {
+      const { eid, url, image_suggested } = payload;
+      debug('[fetchLibraThumb]>>>>');
+      return Libra.thumb({ eid, url, image_suggested })
+        .then((r) => {
+          debug('[fetchLibraThumb]<<<<', r);
+          return r.ETag;
+        });
     },
   },
 });
