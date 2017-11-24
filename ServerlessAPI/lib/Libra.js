@@ -2,6 +2,7 @@ const axios = require('axios')
 const cheerio = require('cheerio')
 const fs = require('fs')
 const execSync = require('child_process').execSync
+const debug = require('debug')('chase:libra')
 
 module.exports = class Libra {
   constructor(url) {
@@ -14,9 +15,10 @@ module.exports = class Libra {
         return res.data
       }).then(html => {
         const encoding = this.detectEncoding(html)
+        debug('Detected Encoding:', encoding)
         if (encoding && encoding.toUpperCase() !== 'UTF-8') {
-          fs.writeFileSync('doc.html', html)
-          const cmd = `iconv -f ${encoding} -t utf-8 doc.html`
+          fs.writeFileSync('/tmp/doc.html', html)
+          const cmd = `iconv -f ${encoding} -t utf-8 /tmp/doc.html`
           return execSync(cmd).toString()
         } else {
           return html.toString()
@@ -102,6 +104,7 @@ module.exports = class Libra {
       const property = $(el).attr('property')
       const content = $(el).attr('content')
       if (property && content) {
+        debug({ [property]: content })
         results.push({ [property]: content })
       }
     })

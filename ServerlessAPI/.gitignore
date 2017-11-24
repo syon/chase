@@ -7,3 +7,6 @@ jspm_packages
 
 # env
 .env
+
+# test
+testdata.json
