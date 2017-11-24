@@ -1,5 +1,7 @@
-const axios = require('axios');
-const cheerio = require('cheerio');
+const axios = require('axios')
+const cheerio = require('cheerio')
+const fs = require('fs')
+const execSync = require('child_process').execSync
 
 module.exports = class Libra {
   constructor(url) {
@@ -7,8 +9,18 @@ module.exports = class Libra {
   }
 
   getInfo() {
-    return axios.get(this.url, { timeout: 3000 }).then(res => {
+    const config = { responseType: 'arraybuffer', timeout: 3000 }
+    return axios.get(this.url, config).then(res => {
         return res.data
+      }).then(html => {
+        const encoding = this.detectEncoding(html)
+        if (encoding && encoding.toUpperCase() !== 'UTF-8') {
+          fs.writeFileSync('doc.html', html)
+          const cmd = `iconv -f ${encoding} -t utf-8 doc.html`
+          return execSync(cmd).toString()
+        } else {
+          return html.toString()
+        }
       }).then(html => {
         const standardProps = this.extractStandardProps(html)
         const metaProps = this.extractMetaProps(html)
@@ -20,7 +32,24 @@ module.exports = class Libra {
       }).catch(error => {
         console.log('Error on axios in Libra.getInfo', error)
         throw error
-      });
+      })
+  }
+
+  detectEncoding(html) {
+    const $ = cheerio.load(html)
+    // Pattern: <meta charset="utf-8">
+    const cs = $('meta[charset]').attr('charset')
+    if (cs) return cs
+    // Pattern: <meta http-equiv="Content-Type" content="text/html charset=UTF-8">
+    const q1 = 'meta[http-equiv="Content-Type"]'
+    const q2 = 'meta[http-equiv="content-type"]'
+    const ct = $(`${q1}, ${q2}`).attr('content')
+    console.log(ct)
+    if (ct) {
+      const m = ct.match(/charset=([\w-]*)/)
+      if (m && m[1]) return m[1]
+    }
+    return 'UTF-8'
   }
 
   resolveSiteName(metaProps) {
