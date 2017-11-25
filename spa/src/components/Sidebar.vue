@@ -21,7 +21,9 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
+import Debug from 'debug';
 
+const debug = Debug('chase');
 const LAMBDA_ENDPOINT = 'https://ua5uhzf79d.execute-api.us-east-1.amazonaws.com/dev';
 
 export default {
@@ -49,6 +51,7 @@ export default {
       doIncrement: 'increment',
     }),
     getRequestToken() {
+      debug('★getRequestToken()★');
       fetch(`${LAMBDA_ENDPOINT}/pocket/oauth/request`, {
         method: 'POST',
       })
@@ -86,7 +89,7 @@ export default {
         },
         body: JSON.stringify({
           access_token: this.pocketAccessToken,
-          count: 10,
+          count: 20,
           detailType: 'complete',
         }),
       })

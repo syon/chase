@@ -2,6 +2,7 @@ const AWS = require('aws-sdk');
 const gm = require('gm').subClass({ imageMagick: true });
 const axios = require('axios');
 
+const debug = require('debug')('chase:libra-adaptor')
 const Libra = require('./Libra');
 const s3 = new AWS.S3();
 
@@ -32,10 +33,11 @@ function errorResponseBuilder(error) {
 
 module.exports.libraInfo = (event, context, callback) => {
   const params = event.queryStringParameters;
-  console.log('[libraInfo]>>>>', params);
+  debug('[libraInfo]>>>>', params);
   const libra = new Libra(params.url);
   libra.getInfo()
     .then(info => {
+      debug('[libraInfo]<<<<', info);
       callback(null, successResponseBuilder(info));
     })
     .catch(error => {

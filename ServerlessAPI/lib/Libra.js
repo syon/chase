@@ -32,7 +32,7 @@ module.exports = class Libra {
         const image = this.resolveImageUrl(metaProps)
         return { site_name, title, description, image }
       }).catch(error => {
-        console.log('Error on axios in Libra.getInfo', error)
+        debug('Error on axios in Libra.getInfo', error)
         throw error
       })
   }
@@ -100,7 +100,7 @@ module.exports = class Libra {
   extractMetaProps(html) {
     const $ = cheerio.load(html)
     let results = []
-    $('head meta').each((i, el) => {
+    $('meta').each((i, el) => {
       const property = $(el).attr('property')
       const content = $(el).attr('content')
       if (property && content) {
@@ -113,6 +113,7 @@ module.exports = class Libra {
       if (Object.keys(a)[0] > Object.keys(b)[0]) return 1
       return 0
     })
+    debug(results)
     return results
   }
 

@@ -56,7 +56,7 @@ export default new Vuex.Store({
     },
     async fetchLibraInfo(context, payload) {
       const { eid, url } = payload;
-      const pageinfo = Libra.info({ eid, url });
+      const pageinfo = await Libra.info({ eid, url });
       context.commit('addLibraInfo', { eid, pageinfo });
     },
     async fetchLibraThumb(context, payload) {
