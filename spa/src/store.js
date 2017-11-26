@@ -50,7 +50,7 @@ export default new Vuex.Store({
       state.login.requestToken = payload.request_token;
       state.login.authUri = payload.auth_uri;
     },
-    setAccessToken(state, payload) {
+    setLogin(state, payload) {
       state.login.accessToken = payload.access_token;
       state.login.username = payload.username;
     },
@@ -61,6 +61,11 @@ export default new Vuex.Store({
   actions: {
     increment(context) {
       context.commit('increment');
+    },
+    restoreLogin({ commit }, $cookie) {
+      const at = $cookie.get('pocket_access_token');
+      const un = $cookie.get('pocket_username');
+      commit('setLogin', { access_token: at, username: un });
     },
     updateEntries(context, payload) {
       const newEntries = ChaseUtil.makeEntries(payload.list);
@@ -76,7 +81,7 @@ export default new Vuex.Store({
     async getAccessToken({ commit, state }) {
       const rt = state.login.requestToken;
       const json = await LambdaPocket.getAccessToken(rt);
-      commit('setAccessToken', json);
+      commit('setLogin', json);
       return json;
     },
     async fetchEntries({ state, dispatch }) {

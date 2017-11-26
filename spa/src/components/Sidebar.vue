@@ -1,9 +1,9 @@
 <template lang="pug">
 .screen
   h1 Chase
-  em {{ pocketUsername }} {{ countAlias }}
+  em {{ login.username }} {{ countAlias }}
   pre
-    code {{ pocketAccessToken }}
+    code {{ login.accessToken }}
   hr
   button(@click="getRequestToken") Request Token
   hr
@@ -29,12 +29,9 @@ export default {
       countAlias: 'count',
       login: 'login',
     }),
-    pocketAccessToken() {
-      return this.$cookie.get('pocket_access_token');
-    },
-    pocketUsername() {
-      return this.$cookie.get('pocket_username');
-    },
+  },
+  mounted() {
+    this.$store.dispatch('restoreLogin', this.$cookie);
   },
   methods: {
     ...mapActions({
