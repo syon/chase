@@ -59,6 +59,12 @@ export default new Vuex.Store({
     addLibraInfo(state, { eid, pageinfo }) {
       state.libraInfo = { ...state.libraInfo, [eid]: pageinfo };
     },
+    archive(state, payload) {
+      const { eid } = payload;
+      const entry = state.entries[eid];
+      entry.archived = true;
+      state.entries = { ...state.entries, [eid]: entry };
+    },
   },
   actions: {
     increment(context) {
@@ -94,11 +100,11 @@ export default new Vuex.Store({
       const json = await LambdaPocket.get(at);
       dispatch('updateEntries', json);
     },
-    async archive({ state, dispatch }, eid) {
+    async archive({ commit, state, dispatch }, eid) {
       const at = state.login.accessToken;
       const json = await LambdaPocket.archive(at, eid);
       debug(json.status === 1);
-      // TODO: disable it
+      commit('archive', { eid });
     },
     async fetchLibraInfo(context, payload) {
       const { eid, url } = payload;

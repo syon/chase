@@ -6,6 +6,8 @@
       dd {{ obj.eid }}
       dt ready
       dd {{ obj.ready }}
+      dt archived
+      dd {{ obj.archived }}
       dt fqdn
       dd {{ obj.fqdn }}
       dt sortId
