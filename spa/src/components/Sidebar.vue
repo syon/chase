@@ -23,7 +23,8 @@
   em {{ catalogCount }}
   hr
   ul
-    li(v-for="tag in recentTags") {{ tag }}
+    li(v-for="tag in recentTags")
+      button(@click="fetchByTag(tag)") {{ tag }}
 </template>
 
 <script>
@@ -48,6 +49,7 @@ export default {
     ...mapActions({
       doIncrement: 'increment',
       fetchFavorites: 'fetchFavorites',
+      fetchByTag: 'fetchByTag',
     }),
     getRequestToken() {
       this.$store.dispatch('getRequestToken');

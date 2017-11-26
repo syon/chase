@@ -117,6 +117,11 @@ export default new Vuex.Store({
       const json = await LambdaPocket.getFavorites(at);
       dispatch('updateEntries', json);
     },
+    async fetchByTag({ state, dispatch }, tag) {
+      const at = state.login.accessToken;
+      const json = await LambdaPocket.getByTag(at, tag);
+      dispatch('updateEntries', json);
+    },
     async archive({ commit, state, dispatch }, eid) {
       const at = state.login.accessToken;
       const json = await LambdaPocket.archive(at, eid);

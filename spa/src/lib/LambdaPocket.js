@@ -65,6 +65,26 @@ async function getFavorites(accessToken) {
     .catch(err => debug(err));
 }
 
+async function getByTag(accessToken, tag) {
+  debug('[getByTag]>>>>', accessToken, tag);
+  const result = await fetch(`${LAMBDA_ENDPOINT}/pocket/get`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      access_token: accessToken,
+      tag,
+      count: 100,
+      detailType: 'complete',
+    }),
+  })
+    .then(res => res.json())
+    .catch(err => debug(err));
+  debug('[getByTag]<<<<', result);
+  return result;
+}
+
 async function archive(accessToken, itemId) {
   debug('[archive]>>>>', accessToken, itemId);
   const q = new URLSearchParams();
@@ -85,5 +105,6 @@ export default {
   getAccessToken,
   get,
   getFavorites,
+  getByTag,
   archive,
 };
