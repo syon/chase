@@ -73,7 +73,10 @@ export default new Vuex.Store({
       const newEntries = ChaseUtil.makeEntries(payload.list);
       context.commit('updateEntries', newEntries);
       Object.keys(newEntries).forEach((key) => {
-        context.dispatch('fetchLibraInfo', newEntries[key]);
+        const entry = newEntries[key];
+        if (!entry.ready) {
+          context.dispatch('fetchLibraInfo', entry);
+        }
       });
     },
     async getRequestToken({ commit }) {
