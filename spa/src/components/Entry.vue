@@ -10,31 +10,21 @@
       dd {{ obj.archived }}
       dt fqdn
       dd {{ obj.fqdn }}
-      dt sortId
-      dd {{ obj.sortId }}
-      dt added
-      dd {{ obj.added }}
-      dt updated
-      dd {{ obj.updated }}
       dt send
       dd
         button(@click="archive(obj.eid)") archive
+      dt
+      dd
+        button(@click="activate(obj.eid)") activate
     dl
-      dt title
-      dd {{ obj.title }}
+      dt article
+      dd
+        a(:href="obj.url" target="_blank") {{ obj.title }}
       dt site_name
       dd {{ obj.site_name }}
-      dt url
-      dd {{ obj.url }}
-      dt image_suggested
-      dd {{ obj.image_suggested }}
-      dt image_s3_url
-      dd {{ obj.image_s3_url }}
-      img(:src="imgSrc" @error="onLoadImageError")
+      img.thumb(:src="imgSrc" @error="onLoadImageError")
       dt excerpt
-      dd {{ obj.excerpt }}
-      dt description
-      dd {{ obj.description }}
+      dd.excerpt {{ obj.excerpt }}
       dt tags
       dd {{ Object.keys(obj.tags) }}
   template(v-else)
@@ -53,6 +43,7 @@ export default {
   },
   methods: {
     ...mapActions([
+      'activate',
       'archive',
     ]),
     onLoadImageError() {
@@ -79,4 +70,9 @@ export default {
       color white
     dd
       margin 0 1em 0 0
+  .thumb
+    width 100px
+    height 80px
+  .excerpt
+    font-size 0.75em
 </style>

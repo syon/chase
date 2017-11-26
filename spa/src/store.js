@@ -21,6 +21,7 @@ export default new Vuex.Store({
     },
     entries: {},
     libraInfo: {},
+    activeEid: '',
   },
   getters: {
     catalog(state) {
@@ -39,6 +40,13 @@ export default new Vuex.Store({
     },
     catalogCount(state, getters) {
       return getters.catalog.length;
+    },
+    activeEntry(state, getters) {
+      const eid = state.activeEid;
+      if (!eid) {
+        return {};
+      }
+      return getters.catalog.find(e => e.eid === eid) || {};
     },
     recentTags(state) {
       let tags = [];
@@ -70,6 +78,10 @@ export default new Vuex.Store({
     },
     addLibraInfo(state, { eid, pageinfo }) {
       state.libraInfo = { ...state.libraInfo, [eid]: pageinfo };
+    },
+    activate(state, payload) {
+      const { eid } = payload;
+      state.activeEid = eid;
     },
     archive(state, payload) {
       const { eid } = payload;
@@ -121,6 +133,9 @@ export default new Vuex.Store({
       const at = state.login.accessToken;
       const json = await LambdaPocket.getByTag(at, tag);
       dispatch('updateEntries', json);
+    },
+    async activate({ commit }, eid) {
+      commit('activate', { eid });
     },
     async archive({ commit, state, dispatch }, eid) {
       const at = state.login.accessToken;

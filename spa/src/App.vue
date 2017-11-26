@@ -4,24 +4,32 @@
     sidebar
   article.page-content
     router-view
+  section.page-interlude
+    interlude
 </template>
 
 <script>
 import Sidebar from '@/components/Sidebar';
+import Interlude from '@/components/Interlude';
 
 export default {
   name: 'app',
   components: {
     Sidebar,
+    Interlude,
   },
 };
 </script>
 
 <style lang="stylus" scoped>
 .page-container
+  // width 1140px
+  width 100%
   display flex
   .page-nav
     width 240px
   .page-content
-    width 900px
+    flex 1
+  .page-interlude
+    width 320px
 </style>
