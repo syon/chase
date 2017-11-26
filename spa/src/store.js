@@ -79,6 +79,11 @@ export default new Vuex.Store({
       commit('setAccessToken', json);
       return json;
     },
+    async fetchEntries({ state, dispatch }) {
+      const at = state.login.accessToken;
+      const json = await LambdaPocket.get(at);
+      dispatch('updateEntries', json);
+    },
     async fetchLibraInfo(context, payload) {
       const { eid, url } = payload;
       const pageinfo = await Libra.info({ eid, url });

@@ -31,7 +31,24 @@ async function getAccessToken(requestToken) {
     .catch(err => debug(err));
 }
 
+async function get(accessToken) {
+  return fetch(`${LAMBDA_ENDPOINT}/pocket/get`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      access_token: accessToken,
+      count: 20,
+      detailType: 'complete',
+    }),
+  })
+    .then(res => res.json())
+    .catch(err => debug(err));
+}
+
 export default {
   getRequestToken,
   getAccessToken,
+  get,
 };

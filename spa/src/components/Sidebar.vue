@@ -22,8 +22,6 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 
-const LAMBDA_ENDPOINT = 'https://ua5uhzf79d.execute-api.us-east-1.amazonaws.com/dev';
-
 export default {
   name: 'Sidebar',
   computed: {
@@ -53,23 +51,7 @@ export default {
         });
     },
     getGet() {
-      fetch(`${LAMBDA_ENDPOINT}/pocket/get`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          access_token: this.pocketAccessToken,
-          count: 20,
-          detailType: 'complete',
-        }),
-      })
-        .then(res => res.json()).then((json) => {
-          this.$store.dispatch('updateEntries', json);
-        }).catch((ex) => {
-          // eslint-disable-next-line
-          console.log(ex);
-        });
+      this.$store.dispatch('fetchEntries');
     },
   },
 };
