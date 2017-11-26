@@ -21,6 +21,9 @@
   button(@click="fetchFavorites") fetchFavorites
   hr
   em {{ catalogCount }}
+  hr
+  ul
+    li(v-for="tag in recentTags") {{ tag }}
 </template>
 
 <script>
@@ -35,6 +38,7 @@ export default {
     }),
     ...mapGetters([
       'catalogCount',
+      'recentTags',
     ]),
   },
   mounted() {

@@ -40,6 +40,15 @@ export default new Vuex.Store({
     catalogCount(state, getters) {
       return getters.catalog.length;
     },
+    recentTags(state) {
+      let tags = [];
+      const list = state.entries;
+      Object.keys(list).forEach((key) => {
+        const entry = list[key];
+        tags = tags.concat(Object.keys(entry.tags));
+      });
+      return [...new Set(tags)];
+    },
   },
   mutations: {
     increment(state) {

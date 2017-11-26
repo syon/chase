@@ -36,7 +36,7 @@
       dt description
       dd {{ obj.description }}
       dt tags
-      dd {{ obj.tags }}
+      dd {{ Object.keys(obj.tags) }}
   template(v-else)
     p Loading...
 </template>

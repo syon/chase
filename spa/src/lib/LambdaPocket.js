@@ -40,7 +40,7 @@ async function get(accessToken) {
     },
     body: JSON.stringify({
       access_token: accessToken,
-      count: 20,
+      count: 100,
       detailType: 'complete',
     }),
   })
