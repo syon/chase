@@ -1,24 +1,23 @@
 <template lang="pug">
-.screen
+.sidebar
   h1.logo Chase
-  em {{ login.username }} {{ countAlias }}
-  pre
-    code {{ login.accessToken }}
+
+  template(v-if="login")
+    .username {{ login.username }}
+  template(v-else)
+    button(@click="getRequestToken") Request Token
+    hr
+    pre
+      code {{ login.requestToken }}
+    hr
+    a(:href="login.authUri" target="_blank") クリックして認証…
+    hr
+    button(@click="getAccessToken") アクセストークンを入手
+
   hr
-  button(@click="getRequestToken") Request Token
+  button(@click="getGet") リストを表示
   hr
-  pre
-    code {{ login.requestToken }}
-  hr
-  a(:href="login.authUri") {{ login.authUri }}
-  hr
-  button(@click="getAccessToken") Access Token
-  hr
-  button(@click="getGet") Get
-  hr
-  button(@click="doIncrement") Increment
-  hr
-  button(@click="fetchFavorites") fetchFavorites
+  button(@click="fetchFavorites") お気に入り
   hr
   em {{ catalogCount }}
   hr
@@ -34,7 +33,6 @@ export default {
   name: 'Sidebar',
   computed: {
     ...mapState({
-      countAlias: 'count',
       login: 'login',
     }),
     ...mapGetters([
@@ -44,10 +42,10 @@ export default {
   },
   mounted() {
     this.$store.dispatch('restoreLogin', this.$cookie);
+    this.$store.dispatch('fetchEntries');
   },
   methods: {
     ...mapActions({
-      doIncrement: 'increment',
       fetchFavorites: 'fetchFavorites',
       fetchByTag: 'fetchByTag',
     }),
@@ -69,7 +67,14 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.sidebar
+  position fixed
+  width inherit
+  padding 0 15px 0 0
+
 .logo
   margin 0
   font-size 100%
+.username
+  font-size 0.75em
 </style>

@@ -36,6 +36,9 @@ export default {
 
 <style lang="stylus" scoped>
 .interlude
+  position fixed
+  width inherit
+  padding 0 15px
   figure
     margin 0
     img

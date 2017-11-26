@@ -12,7 +12,6 @@ Vue.use(Vuex);
 /* eslint-disable operator-assignment, no-param-reassign */
 export default new Vuex.Store({
   state: {
-    count: 777,
     login: {
       requestToken: '',
       authUri: '',
