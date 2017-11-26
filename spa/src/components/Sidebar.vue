@@ -8,9 +8,9 @@
   button(@click="getRequestToken") Request Token
   hr
   pre
-    code {{ requestToken }}
+    code {{ login.requestToken }}
   hr
-  a(:href="authUri") {{ authUri }}
+  a(:href="login.authUri") {{ login.authUri }}
   hr
   button(@click="getAccessToken") Access Token
   hr
@@ -21,23 +21,15 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import Debug from 'debug';
 
-const debug = Debug('chase');
 const LAMBDA_ENDPOINT = 'https://ua5uhzf79d.execute-api.us-east-1.amazonaws.com/dev';
 
 export default {
   name: 'Sidebar',
-  data() {
-    return {
-      requestToken: '',
-      authUri: '',
-      getResult: '',
-    };
-  },
   computed: {
     ...mapState({
       countAlias: 'count',
+      login: 'login',
     }),
     pocketAccessToken() {
       return this.$cookie.get('pocket_access_token');
@@ -51,17 +43,7 @@ export default {
       doIncrement: 'increment',
     }),
     getRequestToken() {
-      debug('★getRequestToken()★');
-      fetch(`${LAMBDA_ENDPOINT}/pocket/oauth/request`, {
-        method: 'POST',
-      })
-        .then(res => res.json()).then((json) => {
-          this.requestToken = json.request_token;
-          this.authUri = json.auth_uri;
-        }).catch((ex) => {
-          // eslint-disable-next-line
-          console.log(ex);
-        });
+      this.$store.dispatch('fetchRequestToken');
     },
     getAccessToken() {
       fetch(`${LAMBDA_ENDPOINT}/pocket/oauth/authorize`, {
@@ -70,7 +52,7 @@ export default {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          code: this.requestToken,
+          code: this.$store.state.login.requestToken,
         }),
       })
         .then(res => res.json()).then((json) => {
@@ -94,7 +76,6 @@ export default {
         }),
       })
         .then(res => res.json()).then((json) => {
-          this.getResult = json;
           this.$store.dispatch('updateEntries', json);
         }).catch((ex) => {
           // eslint-disable-next-line

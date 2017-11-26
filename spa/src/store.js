@@ -4,6 +4,7 @@ import Debug from 'debug';
 
 import Libra from '@/adaptors/LibraAdaptor';
 import ChaseUtil from '@/lib/ChaseUtil';
+import LambdaPocket from '@/lib/LambdaPocket';
 
 const debug = Debug('chase:store');
 Vue.use(Vuex);
@@ -12,6 +13,10 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     count: 777,
+    login: {
+      requestToken: '',
+      authUri: '',
+    },
     entries: {},
     libraInfo: {},
   },
@@ -39,6 +44,10 @@ export default new Vuex.Store({
     mergeEntries(state, newEntries) {
       state.entries = { ...state.entries, ...newEntries };
     },
+    setRequestToken(state, payload) {
+      state.login.requestToken = payload.request_token;
+      state.login.authUri = payload.auth_uri;
+    },
     addLibraInfo(state, { eid, pageinfo }) {
       state.libraInfo = { ...state.libraInfo, [eid]: pageinfo };
     },
@@ -53,6 +62,10 @@ export default new Vuex.Store({
       Object.keys(newEntries).forEach((key) => {
         context.dispatch('fetchLibraInfo', newEntries[key]);
       });
+    },
+    async fetchRequestToken(context) {
+      const json = await LambdaPocket.requestToken();
+      context.commit('setRequestToken', json);
     },
     async fetchLibraInfo(context, payload) {
       const { eid, url } = payload;
