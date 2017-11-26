@@ -4,3 +4,7 @@
 .page-container
   padding 0
   margin 0 auto
+
+hr
+  border 0
+  border-top 1px solid #e9e9e9

@@ -1,6 +1,6 @@
 <template lang="pug">
 .screen
-  h1 Chase
+  h1.logo Chase
   em {{ login.username }} {{ countAlias }}
   pre
     code {{ login.accessToken }}
@@ -67,3 +67,9 @@ export default {
   },
 };
 </script>
+
+<style lang="stylus" scoped>
+.logo
+  margin 0
+  font-size 100%
+</style>

@@ -28,8 +28,11 @@ export default {
   display flex
   .page-nav
     width 240px
+    padding 0 15px 0 0
   .page-content
     flex 1
+    padding 0 15px
   .page-interlude
     width 320px
+    padding 0 15px
 </style>

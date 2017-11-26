@@ -3,29 +3,18 @@
   template(v-if="entry.ready")
     figure
       img(:src="entry.image_s3_url")
-    dl.meta
-      dt article
-      dd
-        a(:href="entry.url" target="_blank") {{ entry.title }}
-      dt description
-      dd.desc {{ entry.description }}
-      dt site_name
-      dd {{ entry.site_name }}
-      dt tags
-      dd {{ Object.keys(entry.tags) }}
-      dt archived
-      dd {{ entry.archived }}
-      dt fqdn
-      dd {{ entry.fqdn }}
-      dt added
-      dd {{ entry.added }}
-      dt updated
-      dd {{ entry.updated }}
-      dt send
-      dd
-        button(@click="archive(entry.eid)") archive
-  template(v-else)
-    p Loading...
+    .title
+      a(:href="entry.url" target="_blank") {{ entry.title }}
+    .meta
+      div.desc {{ entry.description }}
+      div {{ entry.site_name }}
+      div {{ Object.keys(entry.tags) }}
+      div {{ entry.archived }}
+      div {{ entry.fqdn }}
+      div {{ entry.added }} 追加
+      div {{ entry.updated }} 更新
+      div
+        button(@click="archive(entry.eid)") 既読
 </template>
 
 <script>
@@ -47,6 +36,10 @@ export default {
 
 <style lang="stylus" scoped>
 .interlude
-  .desc
+  figure
+    margin 0
+    img
+      width 100%
+  .meta
     font-size 0.75em
 </style>

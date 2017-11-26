@@ -1,32 +1,22 @@
 <template lang="pug">
-.entry
+.entry(:data-eid="obj.eid" :class="{ archived: obj.archived }")
   template(v-if="obj.ready")
-    dl.meta
-      dt eid
-      dd {{ obj.eid }}
-      dt ready
-      dd {{ obj.ready }}
-      dt archived
-      dd {{ obj.archived }}
-      dt fqdn
-      dd {{ obj.fqdn }}
-      dt send
-      dd
-        button(@click="archive(obj.eid)") archive
-      dt
-      dd
-        button(@click="activate(obj.eid)") activate
-    dl
-      dt article
-      dd
-        a(:href="obj.url" target="_blank") {{ obj.title }}
-      dt site_name
-      dd {{ obj.site_name }}
-      img.thumb(:src="imgSrc" @error="onLoadImageError")
-      dt excerpt
-      dd.excerpt {{ obj.excerpt }}
-      dt tags
-      dd {{ Object.keys(obj.tags) }}
+    .pnl
+      .pnl-thumb
+        figure
+          img.thumb(:src="imgSrc" @error="onLoadImageError")
+      .pnl-body
+        .link
+          a(:href="obj.url" target="_blank") {{ obj.title }}
+        .excerpt {{ obj.excerpt }}
+        .meta
+          span.site {{ obj.site_name }}
+          span.fqdn {{ obj.fqdn }}
+        .tags
+          span(v-for="tag in Object.keys(obj.tags)") {{ tag }}
+      .pnl-action
+        button(@click="archive(obj.eid)") 既読
+        button(@click="activate(obj.eid)") 詳細
   template(v-else)
     p Loading...
 </template>
@@ -57,22 +47,30 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.pnl
+  display flex
+  .pnl-thumb
+    figure
+      margin 0 15px 0 0
+  .pnl-body
+    flex 1
+  .pnl-action
+    width 60px
+    display flex
+    flex-direction column
+    align-items center
+    justify-content space-around
+
 .entry
-  dl
-    dt
-      font-size 12px
-  dl.meta
-    dt, dd
-      display inline-block
-      padding 0 8px
-    dt
-      background-color black
-      color white
-    dd
-      margin 0 1em 0 0
+  &.archived
+    background-color #ddd
   .thumb
     width 100px
     height 80px
   .excerpt
     font-size 0.75em
+  .meta
+    font-size 0.75em
+    span
+      margin-right 1em
 </style>
