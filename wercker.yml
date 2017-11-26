@@ -1,0 +1,16 @@
+box: node
+
+build:
+  steps:
+    - npm-install
+    - script:
+        name: SPA
+        code: |
+          cd spa
+          npm run build
+
+deploy:
+  steps:
+    - lukevivier/gh-pages:
+        token: $GH_TOKEN
+        basedir: spa/dist
