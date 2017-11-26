@@ -48,6 +48,23 @@ async function get(accessToken) {
     .catch(err => debug(err));
 }
 
+async function getFavorites(accessToken) {
+  return fetch(`${LAMBDA_ENDPOINT}/pocket/get`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      access_token: accessToken,
+      favorite: 1,
+      count: 20,
+      detailType: 'complete',
+    }),
+  })
+    .then(res => res.json())
+    .catch(err => debug(err));
+}
+
 async function archive(accessToken, itemId) {
   debug('[archive]>>>>', accessToken, itemId);
   const q = new URLSearchParams();
@@ -67,5 +84,6 @@ export default {
   getRequestToken,
   getAccessToken,
   get,
+  getFavorites,
   archive,
 };

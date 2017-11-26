@@ -17,6 +17,8 @@
   button(@click="getGet") Get
   hr
   button(@click="doIncrement") Increment
+  hr
+  button(@click="fetchFavorites") fetchFavorites
 </template>
 
 <script>
@@ -36,6 +38,7 @@ export default {
   methods: {
     ...mapActions({
       doIncrement: 'increment',
+      fetchFavorites: 'fetchFavorites',
     }),
     getRequestToken() {
       this.$store.dispatch('getRequestToken');
