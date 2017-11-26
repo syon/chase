@@ -9,7 +9,6 @@ build:
     - script:
         name: SPA
         code: |
-          cd spa
           npm run build
 
 deploy:
