@@ -12,6 +12,9 @@
       dd {{ obj.sortId }}
       dt date
       dd {{ obj.date }}
+      dt send
+      dd
+        button(@click="archive(obj.eid)") archive
     dl
       dt title
       dd {{ obj.title }}
@@ -35,6 +38,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
   props: ['obj'],
   data() {
@@ -43,6 +48,9 @@ export default {
     };
   },
   methods: {
+    ...mapActions([
+      'archive',
+    ]),
     onLoadImageError() {
       this.$store.dispatch('fetchLibraThumb', this.obj)
         .then((ETag) => {

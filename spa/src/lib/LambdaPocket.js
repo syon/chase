@@ -1,4 +1,5 @@
 import Debug from 'debug';
+import URLSearchParams from 'url-search-params';
 
 const debug = Debug('chase:lambda-pocket');
 const LAMBDA_ENDPOINT = 'https://ua5uhzf79d.execute-api.us-east-1.amazonaws.com/dev';
@@ -47,8 +48,24 @@ async function get(accessToken) {
     .catch(err => debug(err));
 }
 
+async function archive(accessToken, itemId) {
+  debug('[archive]>>>>', accessToken, itemId);
+  const q = new URLSearchParams();
+  q.append('access_token', accessToken);
+  q.append('item_id', itemId);
+  const url = `${LAMBDA_ENDPOINT}/pocket/send/archive?${q.toString()}`;
+  const result = await fetch(url, {
+    method: 'GET',
+  })
+    .then(res => res.json())
+    .catch(err => debug(err));
+  debug('[archive]<<<<', result);
+  return result;
+}
+
 export default {
   getRequestToken,
   getAccessToken,
   get,
+  archive,
 };

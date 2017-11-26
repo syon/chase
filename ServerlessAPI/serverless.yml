@@ -36,6 +36,13 @@ functions:
           path: pocket/get
           method: post
           cors: true
+  pocketsendarchive:
+    handler: handler.pocketSendArchive
+    events:
+      - http:
+          path: pocket/send/archive
+          method: get
+          cors: true
   librainfo:
     handler: handler.libraInfo
     events:

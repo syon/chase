@@ -91,6 +91,12 @@ export default new Vuex.Store({
       const json = await LambdaPocket.get(at);
       dispatch('updateEntries', json);
     },
+    async archive({ state, dispatch }, eid) {
+      const at = state.login.accessToken;
+      const json = await LambdaPocket.archive(at, eid);
+      debug(json.status === 1);
+      // TODO: disable it
+    },
     async fetchLibraInfo(context, payload) {
       const { eid, url } = payload;
       const pageinfo = await LambdaLibra.info({ eid, url });

@@ -26,6 +26,10 @@ module.exports.pocketGet = (event, context, callback) => {
   return PocketAPI.pocketGet(event, context, callback);
 };
 
+module.exports.pocketSendArchive = (event, context, callback) => {
+  return PocketAPI.pocketSendArchive(event, context, callback);
+};
+
 module.exports.libraInfo = (event, context, callback) => {
   return LibraAdaptor.libraInfo(event, context, callback);
 };
