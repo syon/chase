@@ -2,6 +2,9 @@ box: node
 
 build:
   steps:
+    - script:
+        code: |
+          export WERCKER_SOURCE_DIR="$WERCKER_SOURCE_DIR/spa"
     - npm-install
     - script:
         name: SPA
