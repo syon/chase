@@ -17,6 +17,7 @@ function moldRawItem(pocketRawItem) {
   const s3path = `items/thumbs/${itemId3}/${item10Id}.jpg`;
   return {
     eid: m.item_id,
+    ready: false,
     url,
     image_suggested: (m.has_image === '1') ? m.image.src : '',
     image_s3_url: `${CHASE_S3_BASE_URL}/${s3path}`,

@@ -27,7 +27,9 @@ export default new Vuex.Store({
       const list = state.entries;
       const arr = Object.keys(list).map((key) => {
         const info = state.libraInfo[key];
-        return { ...list[key], ...info };
+        const entry = list[key];
+        entry.ready = !!info;
+        return { ...entry, ...info };
       });
       return arr.sort((a, b) => {
         if (a.sortId > b.sortId) return 1;

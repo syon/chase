@@ -1,32 +1,37 @@
 <template lang="pug">
 .entry
-  dl.meta
-    dt eid
-    dd {{ obj.eid }}
-    dt fqdn
-    dd {{ obj.fqdn }}
-    dt sortId
-    dd {{ obj.sortId }}
-    dt date
-    dd {{ obj.date }}
-  dl
-    dt title
-    dd {{ obj.title }}
-    dt site_name
-    dd {{ obj.site_name }}
-    dt url
-    dd {{ obj.url }}
-    dt image_suggested
-    dd {{ obj.image_suggested }}
-    dt image_s3_url
-    dd {{ obj.image_s3_url }}
-    img(:src="imgSrc" @error="onLoadImageError")
-    dt excerpt
-    dd {{ obj.excerpt }}
-    dt description
-    dd {{ obj.description }}
-    dt tags
-    dd {{ obj.tags }}
+  template(v-if="obj.ready")
+    dl.meta
+      dt eid
+      dd {{ obj.eid }}
+      dt ready
+      dd {{ obj.ready }}
+      dt fqdn
+      dd {{ obj.fqdn }}
+      dt sortId
+      dd {{ obj.sortId }}
+      dt date
+      dd {{ obj.date }}
+    dl
+      dt title
+      dd {{ obj.title }}
+      dt site_name
+      dd {{ obj.site_name }}
+      dt url
+      dd {{ obj.url }}
+      dt image_suggested
+      dd {{ obj.image_suggested }}
+      dt image_s3_url
+      dd {{ obj.image_s3_url }}
+      img(:src="imgSrc" @error="onLoadImageError")
+      dt excerpt
+      dd {{ obj.excerpt }}
+      dt description
+      dd {{ obj.description }}
+      dt tags
+      dd {{ obj.tags }}
+  template(v-else)
+    p Loading...
 </template>
 
 <script>
