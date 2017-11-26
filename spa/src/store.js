@@ -16,6 +16,8 @@ export default new Vuex.Store({
     login: {
       requestToken: '',
       authUri: '',
+      accessToken: '',
+      username: '',
     },
     entries: {},
     libraInfo: {},
@@ -48,6 +50,10 @@ export default new Vuex.Store({
       state.login.requestToken = payload.request_token;
       state.login.authUri = payload.auth_uri;
     },
+    setAccessToken(state, payload) {
+      state.login.accessToken = payload.access_token;
+      state.login.username = payload.username;
+    },
     addLibraInfo(state, { eid, pageinfo }) {
       state.libraInfo = { ...state.libraInfo, [eid]: pageinfo };
     },
@@ -63,9 +69,15 @@ export default new Vuex.Store({
         context.dispatch('fetchLibraInfo', newEntries[key]);
       });
     },
-    async fetchRequestToken(context) {
-      const json = await LambdaPocket.requestToken();
-      context.commit('setRequestToken', json);
+    async getRequestToken({ commit }) {
+      const json = await LambdaPocket.getRequestToken();
+      commit('setRequestToken', json);
+    },
+    async getAccessToken({ commit, state }) {
+      const rt = state.login.requestToken;
+      const json = await LambdaPocket.getAccessToken(rt);
+      commit('setAccessToken', json);
+      return json;
     },
     async fetchLibraInfo(context, payload) {
       const { eid, url } = payload;

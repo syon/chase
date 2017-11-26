@@ -43,24 +43,13 @@ export default {
       doIncrement: 'increment',
     }),
     getRequestToken() {
-      this.$store.dispatch('fetchRequestToken');
+      this.$store.dispatch('getRequestToken');
     },
     getAccessToken() {
-      fetch(`${LAMBDA_ENDPOINT}/pocket/oauth/authorize`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          code: this.$store.state.login.requestToken,
-        }),
-      })
-        .then(res => res.json()).then((json) => {
+      this.$store.dispatch('getAccessToken')
+        .then((json) => {
           this.$cookie.set('pocket_access_token', json.access_token, { expires: '3M' });
           this.$cookie.set('pocket_username', json.username, { expires: '3M' });
-        }).catch((ex) => {
-          // eslint-disable-next-line
-          console.log(ex);
         });
     },
     getGet() {
