@@ -19,10 +19,12 @@
   button(@click="doIncrement") Increment
   hr
   button(@click="fetchFavorites") fetchFavorites
+  hr
+  em {{ catalogCount }}
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'Sidebar',
@@ -31,6 +33,9 @@ export default {
       countAlias: 'count',
       login: 'login',
     }),
+    ...mapGetters([
+      'catalogCount',
+    ]),
   },
   mounted() {
     this.$store.dispatch('restoreLogin', this.$cookie);

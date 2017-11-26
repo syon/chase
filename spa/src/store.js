@@ -37,6 +37,9 @@ export default new Vuex.Store({
         return 0;
       });
     },
+    catalogCount(state, getters) {
+      return getters.catalog.length;
+    },
   },
   mutations: {
     increment(state) {
