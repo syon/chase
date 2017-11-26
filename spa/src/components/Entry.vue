@@ -12,8 +12,10 @@
       dd {{ obj.fqdn }}
       dt sortId
       dd {{ obj.sortId }}
-      dt date
-      dd {{ obj.date }}
+      dt added
+      dd {{ obj.added }}
+      dt updated
+      dd {{ obj.updated }}
       dt send
       dd
         button(@click="archive(obj.eid)") archive
