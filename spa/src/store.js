@@ -2,8 +2,8 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import Debug from 'debug';
 
-import Libra from '@/adaptors/LibraAdaptor';
 import ChaseUtil from '@/lib/ChaseUtil';
+import LambdaLibra from '@/lib/LambdaLibra';
 import LambdaPocket from '@/lib/LambdaPocket';
 
 const debug = Debug('chase:store');
@@ -91,13 +91,13 @@ export default new Vuex.Store({
     },
     async fetchLibraInfo(context, payload) {
       const { eid, url } = payload;
-      const pageinfo = await Libra.info({ eid, url });
+      const pageinfo = await LambdaLibra.info({ eid, url });
       context.commit('addLibraInfo', { eid, pageinfo });
     },
     async fetchLibraThumb(context, payload) {
       const { eid, url, image_suggested } = payload;
       debug('[fetchLibraThumb]>>>>');
-      return Libra.thumb({ eid, url, image_suggested })
+      return LambdaLibra.thumb({ eid, url, image_suggested })
         .then((r) => {
           debug('[fetchLibraThumb]<<<<', r);
           return r.ETag;
