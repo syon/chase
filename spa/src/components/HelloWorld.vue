@@ -1,7 +1,7 @@
 <template lang="pug">
 .screen
   .entries
-    .entry(v-for="e in catalog")
+    .entry(v-for="e in catalog" :key="e.eid")
       entry(:obj="e")
 </template>
 
