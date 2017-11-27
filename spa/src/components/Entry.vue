@@ -1,29 +1,27 @@
 <template lang="pug">
-.compo(:data-eid="obj.eid" :class="{ archived: obj.archived }")
+.compo(:data-eid="obj.eid" :class="{ archived: obj.archived, active: obj.eid === activeEid }")
   template(v-if="obj.ready")
-    .pnl
+    .pnl(@click="activate(obj.eid)")
       .pnl-thumb
         figure
           img.thumb(:src="imgSrc" @error="onLoadImageError")
       .pnl-body
         .link
           a(:href="obj.url" target="_blank") {{ linkTitle }}
-        .excerpt {{ obj.excerpt }}
         .meta
           span.site(v-if="obj.site_name") {{ obj.site_name }}
-          span.fqdn {{ obj.fqdn }}
+        .excerpt {{ obj.excerpt }}
         template(v-if="obj.tags[0]")
           .tags
             span(v-for="tag in Object.keys(obj.tags)") {{ tag }}
       .pnl-action
         button(@click="archive(obj.eid)") 既読
-        button(@click="activate(obj.eid)") 詳細
   template(v-else)
     p Loading...
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   props: ['obj'],
@@ -33,6 +31,9 @@ export default {
     };
   },
   computed: {
+    ...mapState([
+      'activeEid',
+    ]),
     linkTitle() {
       return this.obj.title ? this.obj.title : this.obj.url;
     },
@@ -47,6 +48,9 @@ export default {
         .then((ETag) => {
           this.imgSrc = `${this.imgSrc}?etag=${ETag}`;
         });
+    },
+    pnlClicked() {
+      console.log('pnlClicked');
     },
   },
 };
@@ -76,29 +80,34 @@ export default {
     justify-content space-around
 
 .compo
-  min-height 80px
-  padding 5px 0
+  min-height 111px
+  padding 15px 0
   color #757575
+  border-bottom 1px solid #f5f5f5
+  &.active
+    background-color lemonchiffon
   &.archived
-    background-color #ddd
+    background-color #eee
   .thumb
     width 100px
     height 80px
   .link
     margin 0 0 .25em
+    font-size 1rem
     line-height 1.3
     word-break break-word
     a
       font-weight bold
       text-decoration none
+  .meta
+    margin 0 0 .5em
+    font-size 0.67em
+    span
+      margin-right 1em
   .excerpt
     font-size 0.67em
     -webkit-line-clamp 2
     display -webkit-box
     -webkit-box-orient vertical
     overflow hidden
-  .meta
-    font-size 0.75em
-    span
-      margin-right 1em
 </style>

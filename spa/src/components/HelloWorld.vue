@@ -3,7 +3,6 @@
   .entries
     .entry(v-for="e in catalog" :data-eid="e.eid" :key="e.eid")
       entry(:obj="e")
-      hr
 </template>
 
 <script>

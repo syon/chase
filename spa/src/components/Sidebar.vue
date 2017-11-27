@@ -22,8 +22,6 @@
       li タグ付与
       li chase ３シーン
       li はてブカウント
-      li パネルハイライト
-      li リスト縦幅固定
       li /etc/hosts
 
   section.userinfo
