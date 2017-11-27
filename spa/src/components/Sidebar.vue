@@ -4,12 +4,13 @@
     h1.logo Chase
 
   section(v-if="login.accessToken")
-    button(@click="getGet") リストを表示
+    button(@click="getGet") Inbox
     hr
     button(@click="fetchFavorites") お気に入り
     hr
     em {{ catalogCount }}
     hr
+    em Tags:
     ul
       li(v-for="tag in recentTags")
         button(@click="fetchByTag(tag)") {{ tag }}
@@ -20,9 +21,12 @@
     ul
       li ★
       li タグ付与
+      li Inbox (Un-Tagged)
       li chase ３シーン
       li はてブカウント
       li /etc/hosts
+      li 消化進捗
+      li Count → Since
 
   section.userinfo
     template(v-if="login.accessToken")

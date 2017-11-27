@@ -11,9 +11,9 @@
         .meta
           span.site(v-if="obj.site_name") {{ obj.site_name }}
         .excerpt {{ obj.excerpt }}
-        template(v-if="obj.tags[0]")
+        template(v-if="Object.keys(obj.tags).length > 0")
           .tags
-            span(v-for="tag in Object.keys(obj.tags)") {{ tag }}
+            span.tag(v-for="tag in Object.keys(obj.tags)") {{ tag }}
       .pnl-action
         button(@click="archive(obj.eid)") 既読
   template(v-else)
@@ -110,4 +110,13 @@ export default {
     display -webkit-box
     -webkit-box-orient vertical
     overflow hidden
+  .tags
+    .tag
+      margin-right .5em
+      padding 0 .5em
+      color #fff
+      font-weight bold
+      font-size .75em
+      background-color #bdbdbd
+      border-radius 2px
 </style>
