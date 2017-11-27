@@ -1,33 +1,20 @@
 <template lang="pug">
 .sidebar
-  h1.logo Chase
+  section
+    h1.logo Chase
 
-  template(v-if="login.accessToken")
-    .username {{ login.username }}
-    button(@click="logout") logout
-  template(v-else)
-    button(@click="getRequestToken") Request Token
+  section(v-if="login.accessToken")
+    button(@click="getGet") リストを表示
     hr
-    em Request Token
-    pre
-      code {{ login.requestToken }}
+    button(@click="fetchFavorites") お気に入り
     hr
-    template(v-if="login.authUri")
-      a(:href="login.authUri" target="_blank") クリックして認証…
-      hr
-      button(@click="getAccessToken") アクセストークンを入手
+    em {{ catalogCount }}
+    hr
+    ul
+      li(v-for="tag in recentTags")
+        button(@click="fetchByTag(tag)") {{ tag }}
 
-  hr
-  button(@click="getGet") リストを表示
-  hr
-  button(@click="fetchFavorites") お気に入り
-  hr
-  em {{ catalogCount }}
-  hr
-  ul
-    li(v-for="tag in recentTags")
-      button(@click="fetchByTag(tag)") {{ tag }}
-  hr
+  section
   .todo
     em ToDo:
     ul
@@ -38,6 +25,13 @@
       li パネルハイライト
       li リスト縦幅固定
       li /etc/hosts
+
+  section.userinfo
+    template(v-if="login.accessToken")
+      .username {{ login.username }}
+      button(@click="logout") logout
+    template(v-else)
+      button(@click="getRequestToken") Connect to Pocket
 </template>
 
 <script>
@@ -85,7 +79,11 @@ export default {
 .sidebar
   position fixed
   width inherit
-  padding 0 15px 0 0
+  height 100vh
+  display flex
+  flex-direction column
+  justify-content space-between
+  padding 15px
 
 .logo
   margin 0
