@@ -9,19 +9,21 @@ import LambdaPocket from '@/lib/LambdaPocket';
 const debug = Debug('chase:store');
 Vue.use(Vuex);
 
+const initialState = {
+  login: {
+    requestToken: '',
+    authUri: '',
+    accessToken: '',
+    username: '',
+  },
+  entries: {},
+  libraInfo: {},
+  activeEid: '',
+};
+
 /* eslint-disable operator-assignment, no-param-reassign */
 export default new Vuex.Store({
-  state: {
-    login: {
-      requestToken: '',
-      authUri: '',
-      accessToken: '',
-      username: '',
-    },
-    entries: {},
-    libraInfo: {},
-    activeEid: '',
-  },
+  state: JSON.parse(JSON.stringify(initialState)),
   getters: {
     catalog(state) {
       const list = state.entries;
@@ -75,6 +77,11 @@ export default new Vuex.Store({
       state.login.accessToken = payload.access_token;
       state.login.username = payload.username;
     },
+    logout(state) {
+      Object.keys(initialState).forEach((key) => {
+        state[key] = initialState[key];
+      });
+    },
     addLibraInfo(state, { eid, pageinfo }) {
       state.libraInfo = { ...state.libraInfo, [eid]: pageinfo };
     },
@@ -97,6 +104,11 @@ export default new Vuex.Store({
       const at = $cookie.get('pocket_access_token');
       const un = $cookie.get('pocket_username');
       commit('setLogin', { access_token: at, username: un });
+    },
+    logout({ commit }, $cookie) {
+      $cookie.delete('pocket_access_token');
+      $cookie.delete('pocket_username');
+      commit('logout');
     },
     updateEntries(context, payload) {
       const newEntries = ChaseUtil.makeEntries(payload.list);

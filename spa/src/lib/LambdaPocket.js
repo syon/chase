@@ -33,7 +33,9 @@ async function getAccessToken(requestToken) {
 }
 
 async function get(accessToken) {
-  return fetch(`${LAMBDA_ENDPOINT}/pocket/get`, {
+  debug('[get]>>>>', accessToken);
+  if (!accessToken) return { list: {} };
+  const result = await fetch(`${LAMBDA_ENDPOINT}/pocket/get`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -46,6 +48,8 @@ async function get(accessToken) {
   })
     .then(res => res.json())
     .catch(err => debug(err));
+  debug('[get]<<<<', result);
+  return result;
 }
 
 async function getFavorites(accessToken) {

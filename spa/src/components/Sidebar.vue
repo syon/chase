@@ -2,17 +2,20 @@
 .sidebar
   h1.logo Chase
 
-  template(v-if="login")
+  template(v-if="login.accessToken")
     .username {{ login.username }}
+    button(@click="logout") logout
   template(v-else)
     button(@click="getRequestToken") Request Token
     hr
+    em Request Token
     pre
       code {{ login.requestToken }}
     hr
-    a(:href="login.authUri" target="_blank") クリックして認証…
-    hr
-    button(@click="getAccessToken") アクセストークンを入手
+    template(v-if="login.authUri")
+      a(:href="login.authUri" target="_blank") クリックして認証…
+      hr
+      button(@click="getAccessToken") アクセストークンを入手
 
   hr
   button(@click="getGet") リストを表示
@@ -62,6 +65,9 @@ export default {
     getGet() {
       this.$store.dispatch('fetchEntries');
     },
+    logout() {
+      this.$store.dispatch('logout', this.$cookie);
+    },
   },
 };
 </script>
@@ -76,5 +82,7 @@ export default {
   margin 0
   font-size 100%
 .username
+  font-size 0.75em
+.todo
   font-size 0.75em
 </style>
