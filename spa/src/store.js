@@ -11,8 +11,6 @@ Vue.use(Vuex);
 
 const initialState = {
   login: {
-    requestToken: '',
-    authUri: '',
     accessToken: '',
     username: '',
   },
@@ -69,10 +67,6 @@ export default new Vuex.Store({
     mergeEntries(state, newEntries) {
       state.entries = { ...state.entries, ...newEntries };
     },
-    setRequestToken(state, payload) {
-      state.login.requestToken = payload.request_token;
-      state.login.authUri = payload.auth_uri;
-    },
     setLogin(state, payload) {
       state.login.accessToken = payload.access_token;
       state.login.username = payload.username;
@@ -106,6 +100,7 @@ export default new Vuex.Store({
       commit('setLogin', { access_token: at, username: un });
     },
     logout({ commit }, $cookie) {
+      $cookie.delete('phase');
       $cookie.delete('pocket_access_token');
       $cookie.delete('pocket_username');
       commit('logout');
@@ -120,15 +115,34 @@ export default new Vuex.Store({
         }
       });
     },
-    async getRequestToken({ commit }) {
-      const json = await LambdaPocket.getRequestToken();
-      commit('setRequestToken', json);
+    async actByPhase({ commit, dispatch }, $cookie) {
+      const ph = $cookie.get('phase');
+      const at = $cookie.get('pocket_access_token');
+      debug('[actByPhase]', ph);
+      if (ph === 'READY' && at) {
+        dispatch('restoreLogin', $cookie);
+        dispatch('fetchEntries');
+      } else if (ph === 'WAITING_ACCESSTOKEN') {
+        dispatch('getAccessToken', $cookie);
+      } else {
+        dispatch('logout', $cookie);
+      }
     },
-    async getAccessToken({ commit, state }) {
-      const rt = state.login.requestToken;
+    async getRequestToken({ commit }, $cookie) {
+      const json = await LambdaPocket.getRequestToken();
+      // commit('setRequestToken', json);
+      $cookie.set('pocket_request_token', json.request_token, { expires: '3M' });
+      $cookie.set('phase', 'WAITING_ACCESSTOKEN', { expires: '3M' });
+      return json.auth_uri;
+    },
+    async getAccessToken({ commit, state }, $cookie) {
+      const rt = $cookie.get('pocket_request_token');
       const json = await LambdaPocket.getAccessToken(rt);
       commit('setLogin', json);
-      return json;
+      $cookie.delete('pocket_request_token');
+      $cookie.set('phase', 'READY', { expires: '3M' });
+      $cookie.set('pocket_access_token', json.access_token, { expires: '3M' });
+      $cookie.set('pocket_username', json.username, { expires: '3M' });
     },
     async fetchEntries({ state, dispatch }) {
       const at = state.login.accessToken;

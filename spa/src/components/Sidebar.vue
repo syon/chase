@@ -27,6 +27,17 @@
   ul
     li(v-for="tag in recentTags")
       button(@click="fetchByTag(tag)") {{ tag }}
+  hr
+  .todo
+    em ToDo:
+    ul
+      li ★
+      li タグ付与
+      li chase ３シーン
+      li はてブカウント
+      li パネルハイライト
+      li リスト縦幅固定
+      li /etc/hosts
 </template>
 
 <script>
@@ -44,8 +55,7 @@ export default {
     ]),
   },
   mounted() {
-    this.$store.dispatch('restoreLogin', this.$cookie);
-    this.$store.dispatch('fetchEntries');
+    this.$store.dispatch('actByPhase', this.$cookie);
   },
   methods: {
     ...mapActions({
@@ -53,14 +63,13 @@ export default {
       fetchByTag: 'fetchByTag',
     }),
     getRequestToken() {
-      this.$store.dispatch('getRequestToken');
+      this.$store.dispatch('getRequestToken', this.$cookie)
+        .then((authUri) => {
+          window.location = authUri;
+        });
     },
     getAccessToken() {
-      this.$store.dispatch('getAccessToken')
-        .then((json) => {
-          this.$cookie.set('pocket_access_token', json.access_token, { expires: '3M' });
-          this.$cookie.set('pocket_username', json.username, { expires: '3M' });
-        });
+      this.$store.dispatch('getAccessToken', this.$cookie);
     },
     getGet() {
       this.$store.dispatch('fetchEntries');

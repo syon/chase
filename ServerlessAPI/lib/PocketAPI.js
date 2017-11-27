@@ -2,7 +2,7 @@ require('dotenv').config();
 const axios = require('axios');
 const URLSearchParams = require('url-search-params');
 
-const redirectUri = 'https://syon-chase.herokuapp.com?authorizationFinished';
+const redirectUri = 'https://syon.github.io/chase/';
 
 const HTTP_GET_CONFIG = {
   headers: {

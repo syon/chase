@@ -5,7 +5,8 @@ const debug = Debug('chase:lambda-pocket');
 const LAMBDA_ENDPOINT = 'https://ua5uhzf79d.execute-api.us-east-1.amazonaws.com/dev';
 
 async function getRequestToken() {
-  return fetch(`${LAMBDA_ENDPOINT}/pocket/oauth/request`, {
+  debug('[getAccessToken]>>>>');
+  const result = await fetch(`${LAMBDA_ENDPOINT}/pocket/oauth/request`, {
     method: 'POST',
   })
     /* eslint-disable arrow-body-style */
@@ -16,10 +17,13 @@ async function getRequestToken() {
       };
     })
     .catch(err => debug(err));
+  debug('[getAccessToken]<<<<', result);
+  return result;
 }
 
 async function getAccessToken(requestToken) {
-  return fetch(`${LAMBDA_ENDPOINT}/pocket/oauth/authorize`, {
+  debug('[getAccessToken]>>>>', requestToken);
+  const result = await fetch(`${LAMBDA_ENDPOINT}/pocket/oauth/authorize`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -30,6 +34,8 @@ async function getAccessToken(requestToken) {
   })
     .then(res => res.json())
     .catch(err => debug(err));
+  debug('[getAccessToken]<<<<', result);
+  return result;
 }
 
 async function get(accessToken) {
