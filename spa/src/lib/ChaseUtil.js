@@ -25,6 +25,7 @@ function moldRawItem(pocketRawItem) {
     excerpt: m.excerpt,
     fqdn: `${url}/`.match(/\/\/(.*?)\//)[1],
     sortId: m.sort_id,
+    favorite: m.favorite === '1',
     tags: m.tags || {},
     added: getDate(m.time_added),
     updated: getDate(m.time_updated),

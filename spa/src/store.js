@@ -89,6 +89,18 @@ export default new Vuex.Store({
       entry.archived = true;
       state.entries = { ...state.entries, [eid]: entry };
     },
+    favorite(state, payload) {
+      const { eid } = payload;
+      const entry = state.entries[eid];
+      entry.favorite = true;
+      state.entries = { ...state.entries, [eid]: entry };
+    },
+    unfavorite(state, payload) {
+      const { eid } = payload;
+      const entry = state.entries[eid];
+      entry.favorite = false;
+      state.entries = { ...state.entries, [eid]: entry };
+    },
   },
   actions: {
     increment(context) {
@@ -167,6 +179,18 @@ export default new Vuex.Store({
       const json = await LambdaPocket.archive(at, eid);
       debug(json.status === 1);
       commit('archive', { eid });
+    },
+    async favorite({ commit, state, dispatch }, eid) {
+      const at = state.login.accessToken;
+      const json = await LambdaPocket.favorite(at, eid);
+      debug('[favorite]', json);
+      commit('favorite', { eid });
+    },
+    async unfavorite({ commit, state, dispatch }, eid) {
+      const at = state.login.accessToken;
+      const json = await LambdaPocket.unfavorite(at, eid);
+      debug('[unfavorite]', json);
+      commit('unfavorite', { eid });
     },
     async fetchLibraInfo(context, payload) {
       const { eid, url } = payload;

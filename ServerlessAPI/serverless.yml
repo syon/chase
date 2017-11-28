@@ -43,6 +43,20 @@ functions:
           path: pocket/send/archive
           method: get
           cors: true
+  pocketsendfavorite:
+    handler: handler.pocketSendFavorite
+    events:
+      - http:
+          path: pocket/send/favorite
+          method: get
+          cors: true
+  pocketsendunfavorite:
+    handler: handler.pocketSendUnfavorite
+    events:
+      - http:
+          path: pocket/send/unfavorite
+          method: get
+          cors: true
   librainfo:
     handler: handler.libraInfo
     events:

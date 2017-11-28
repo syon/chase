@@ -30,6 +30,14 @@ module.exports.pocketSendArchive = (event, context, callback) => {
   return PocketAPI.pocketSendArchive(event, context, callback);
 };
 
+module.exports.pocketSendFavorite = (event, context, callback) => {
+  return PocketAPI.pocketSendFavorite(event, context, callback);
+};
+
+module.exports.pocketSendUnfavorite = (event, context, callback) => {
+  return PocketAPI.pocketSendUnfavorite(event, context, callback);
+};
+
 module.exports.libraInfo = (event, context, callback) => {
   return LibraAdaptor.libraInfo(event, context, callback);
 };

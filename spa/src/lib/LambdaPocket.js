@@ -110,6 +110,36 @@ async function archive(accessToken, itemId) {
   return result;
 }
 
+async function favorite(accessToken, itemId) {
+  debug('[favorite]>>>>', accessToken, itemId);
+  const q = new URLSearchParams();
+  q.append('access_token', accessToken);
+  q.append('item_id', itemId);
+  const url = `${LAMBDA_ENDPOINT}/pocket/send/favorite?${q.toString()}`;
+  const result = await fetch(url, {
+    method: 'GET',
+  })
+    .then(res => res.json())
+    .catch(err => debug(err));
+  debug('[favorite]<<<<', result);
+  return result;
+}
+
+async function unfavorite(accessToken, itemId) {
+  debug('[unfavorite]>>>>', accessToken, itemId);
+  const q = new URLSearchParams();
+  q.append('access_token', accessToken);
+  q.append('item_id', itemId);
+  const url = `${LAMBDA_ENDPOINT}/pocket/send/unfavorite?${q.toString()}`;
+  const result = await fetch(url, {
+    method: 'GET',
+  })
+    .then(res => res.json())
+    .catch(err => debug(err));
+  debug('[unfavorite]<<<<', result);
+  return result;
+}
+
 export default {
   getRequestToken,
   getAccessToken,
@@ -117,4 +147,6 @@ export default {
   getFavorites,
   getByTag,
   archive,
+  favorite,
+  unfavorite,
 };

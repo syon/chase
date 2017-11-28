@@ -15,6 +15,9 @@
           .tags
             span.tag(v-for="tag in Object.keys(obj.tags)") {{ tag }}
       .pnl-action
+        .fav
+          span(v-if="obj.favorite" @click="unfavorite(obj.eid)" style="color:orange;") ★
+          span(v-else @click="favorite(obj.eid)" style="color:#eee;") ★
         button(@click="archive(obj.eid)") 既読
   template(v-else)
     p Loading...
@@ -42,6 +45,8 @@ export default {
     ...mapActions([
       'activate',
       'archive',
+      'favorite',
+      'unfavorite',
     ]),
     onLoadImageError() {
       this.$store.dispatch('fetchLibraThumb', this.obj)
@@ -119,4 +124,7 @@ export default {
       font-size .75em
       background-color #bdbdbd
       border-radius 2px
+  .fav
+    font-size 1.25rem
+    cursor pointer
 </style>
