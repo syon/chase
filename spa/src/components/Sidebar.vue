@@ -3,36 +3,36 @@
   section
     h1.logo Chase
 
-  section(v-if="login.accessToken")
-    button(@click="getGet") Inbox
-    hr
-    button(@click="fetchFavorites") お気に入り
-    hr
+  section.menu(v-if="login.accessToken")
     em {{ catalogCount }}
-    hr
+    .link-item(@click="getGet") Inbox
+    .link-item(@click="fetchFavorites") お気に入り
+
+  section.tags
     em Tags:
-    ul
-      li(v-for="tag in recentTags")
-        button(@click="fetchByTag(tag)") {{ tag }}
+    template(v-for="tag in recentTags")
+      .link-item(@click="fetchByTag(tag)") {{ tag }}
 
   section.myscenes
     em My Scenes:
-    ul
-      li(v-for="sce in myscenes") {{ sce }}
-    em Edit:
-    button(@click="doSceneEdit") OK
-    hr
-    label
-      span chase:a
-      input(v-model="chaseA")
-    hr
-    label
-      span chase:b
-      input(v-model="chaseB")
-    hr
-    label
-      span chase:c
-      input(v-model="chaseC")
+    template(v-if="editing")
+      button(@click="doSceneEdit") OK
+      hr
+      label
+        span chase:a
+        input(v-model="chaseA")
+      hr
+      label
+        span chase:b
+        input(v-model="chaseB")
+      hr
+      label
+        span chase:c
+        input(v-model="chaseC")
+    template(v-else)
+      button(@click="showScenesEditor") edit
+      ul
+        li(v-for="sce in myscenes") {{ sce }}
 
   section.mytags
     em My Tags:
@@ -43,10 +43,8 @@
     .todo
       em ToDo:
       ul
-        li ★
-        li タグ付与
+        li タグ編集
         li Inbox (Un-Tagged)
-        li chase ３シーン
         li はてブカウント
         li /etc/hosts
         li 消化進捗
@@ -54,8 +52,8 @@
 
   section.userinfo
     template(v-if="login.accessToken")
-      .username {{ login.username }}
-      button(@click="logout") logout
+      span.username {{ login.username }}
+      a(href="#" @click="logout") ✕
     template(v-else)
       button(@click="getRequestToken") Connect to Pocket
 </template>
@@ -67,6 +65,7 @@ export default {
   name: 'Sidebar',
   data() {
     return {
+      editing: false,
       chaseA: null,
       chaseB: null,
       chaseC: null,
@@ -108,9 +107,13 @@ export default {
     getGet() {
       this.$store.dispatch('fetchEntries');
     },
+    showScenesEditor() {
+      this.editing = true;
+    },
     doSceneEdit() {
       const scenes = { a: this.chaseA, b: this.chaseB, c: this.chaseC };
       this.$store.dispatch('doSceneEdit', { $cookie: this.$cookie, scenes });
+      this.editing = false;
     },
     logout() {
       this.$store.dispatch('logout', this.$cookie);
@@ -130,7 +133,26 @@ export default {
   padding 15px
   font-size 0.75rem
 
+.menu
+  margin 1rem 0
+
+.link-item
+  height 2rem
+  display flex
+  align-items center
+  font-size 1rem
+  color #0366d6
+  cursor pointer
+  border-top 1px solid #f5f5f5
+  &:last-child
+    border-bottom 1px solid #f5f5f5
+
 .logo
   margin 0
   font-size 100%
+
+.userinfo
+  padding 15px 0
+  .username
+    margin-right 1em
 </style>
