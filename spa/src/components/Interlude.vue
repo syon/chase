@@ -19,8 +19,8 @@
     .addscenes
       button(v-for="sce in scenes" @click="addTag({ eid: entry.eid, tag: sce.tag })") {{ sce.label }}
     hr
-    .addtags
-      button(v-for="tag in mytags" @click="addTag({ eid: entry.eid, tag })") {{ tag }}
+    .tags
+      .tag(v-for="tag in recentTags" @click="addTag({ eid: entry.eid, tag })" :class="{ applied: Object.keys(entry.tags).includes(tag) }") {{ tag }}
 </template>
 
 <script>
@@ -34,6 +34,7 @@ export default {
     ...mapGetters({
       entry: 'activeEntry',
       scenes: 'myScenesTags',
+      recentTags: 'recentTags',
     }),
   },
   methods: {
@@ -56,4 +57,21 @@ export default {
       width 100%
   .meta
     font-size 0.75em
+
+.tags
+  .tag
+    display inline-flex
+    margin 0 .5em .5em 0
+    padding 0 .5em
+    font-weight bold
+    font-size .75em
+    border-radius 2px
+    align-items center
+    line-height 1.5
+    color #9ea8b3
+    background-color transparent
+    border 1px solid #9ea8b3
+    &.applied
+      color #fff
+      background-color #9ea8b3
 </style>

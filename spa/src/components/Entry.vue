@@ -115,13 +115,17 @@ export default {
     overflow hidden
   .tags
     .tag
-      margin-right .5em
+      display inline-flex
+      margin 0 .5em 0 0
       padding 0 .5em
-      color #fff
       font-weight bold
       font-size .75em
-      background-color #bdbdbd
       border-radius 2px
+      align-items center
+      line-height 1.5
+      border 1px solid #9ea8b3
+      color #fff
+      background-color #9ea8b3
   .fav
     font-size 1.25rem
     cursor pointer

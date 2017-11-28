@@ -15,7 +15,7 @@
 
   section.myscenes
     em My Scenes:
-    template(v-if="editing")
+    template(v-if="sceneEditing")
       button(@click="doSceneEdit") OK
       hr
       label
@@ -33,11 +33,6 @@
       button(@click="showScenesEditor") edit
       ul
         li(v-for="sce in myscenes") {{ sce }}
-
-  section.mytags
-    em My Tags:
-    ul
-      li(v-for="tag in mytags") {{ tag }}
 
   section
     .todo
@@ -65,7 +60,7 @@ export default {
   name: 'Sidebar',
   data() {
     return {
-      editing: false,
+      sceneEditing: false,
       chaseA: null,
       chaseB: null,
       chaseC: null,
@@ -84,7 +79,6 @@ export default {
     ]),
   },
   mounted() {
-    this.$cookie.set('mytags', JSON.stringify(['りんご', 'ばなな', 'めろん']));
     this.$store.dispatch('actByPhase', this.$cookie);
     this.chaseA = this.myScenesTags[0].label;
     this.chaseB = this.myScenesTags[1].label;
@@ -108,12 +102,12 @@ export default {
       this.$store.dispatch('fetchEntries');
     },
     showScenesEditor() {
-      this.editing = true;
+      this.sceneEditing = true;
     },
     doSceneEdit() {
       const scenes = { a: this.chaseA, b: this.chaseB, c: this.chaseC };
       this.$store.dispatch('doSceneEdit', { $cookie: this.$cookie, scenes });
-      this.editing = false;
+      this.sceneEditing = false;
     },
     logout() {
       this.$store.dispatch('logout', this.$cookie);
@@ -152,7 +146,6 @@ export default {
   font-size 100%
 
 .userinfo
-  padding 15px 0
   .username
     margin-right 1em
 </style>

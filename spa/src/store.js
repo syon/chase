@@ -17,7 +17,6 @@ const initialState = {
   entries: {},
   libraInfo: {},
   activeEid: '',
-  mytags: [],
   myscenes: {},
 };
 
@@ -85,9 +84,6 @@ export default new Vuex.Store({
         state[key] = initialState[key];
       });
     },
-    mytags(state, mytags) {
-      state.mytags = mytags;
-    },
     myscenes(state, myscenes) {
       state.myscenes = myscenes;
     },
@@ -147,13 +143,9 @@ export default new Vuex.Store({
       $cookie.set('chase:a', scenes.a);
       $cookie.set('chase:b', scenes.b);
       $cookie.set('chase:c', scenes.c);
-      dispatch('restoreMyTags', $cookie);
+      dispatch('restoreScenes', $cookie);
     },
-    restoreMyTags({ commit, dispatch }, $cookie) {
-      const tags = JSON.parse($cookie.get('mytags'));
-      debug('restoreMyTags', tags);
-      commit('mytags', tags);
-      // 3 Scenes
+    restoreScenes({ commit, dispatch }, $cookie) {
       commit('myscenes', {
         a: $cookie.get('chase:a'),
         b: $cookie.get('chase:b'),
@@ -167,7 +159,7 @@ export default new Vuex.Store({
       if (ph === 'READY' && at) {
         dispatch('restoreLogin', $cookie);
         dispatch('fetchEntries');
-        dispatch('restoreMyTags', $cookie);
+        dispatch('restoreScenes', $cookie);
       } else if (ph === 'WAITING_ACCESSTOKEN') {
         dispatch('getAccessToken', $cookie);
       } else {
