@@ -15,10 +15,26 @@
       li(v-for="tag in recentTags")
         button(@click="fetchByTag(tag)") {{ tag }}
 
-  section.mytags
+  section.myscenes
     em My Scenes:
     ul
       li(v-for="sce in myscenes") {{ sce }}
+    em Edit:
+    button(@click="doSceneEdit") OK
+    hr
+    label
+      span chase:a
+      input(v-model="chaseA")
+    hr
+    label
+      span chase:b
+      input(v-model="chaseB")
+    hr
+    label
+      span chase:c
+      input(v-model="chaseC")
+
+  section.mytags
     em My Tags:
     ul
       li(v-for="tag in mytags") {{ tag }}
@@ -49,6 +65,13 @@ import { mapState, mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'Sidebar',
+  data() {
+    return {
+      chaseA: null,
+      chaseB: null,
+      chaseC: null,
+    };
+  },
   computed: {
     ...mapState({
       login: 'login',
@@ -58,11 +81,15 @@ export default {
     ...mapGetters([
       'catalogCount',
       'recentTags',
+      'myScenesTags',
     ]),
   },
   mounted() {
     this.$cookie.set('mytags', JSON.stringify(['りんご', 'ばなな', 'めろん']));
     this.$store.dispatch('actByPhase', this.$cookie);
+    this.chaseA = this.myScenesTags[0].label;
+    this.chaseB = this.myScenesTags[1].label;
+    this.chaseC = this.myScenesTags[2].label;
   },
   methods: {
     ...mapActions({
@@ -80,6 +107,10 @@ export default {
     },
     getGet() {
       this.$store.dispatch('fetchEntries');
+    },
+    doSceneEdit() {
+      const scenes = { a: this.chaseA, b: this.chaseB, c: this.chaseC };
+      this.$store.dispatch('doSceneEdit', { $cookie: this.$cookie, scenes });
     },
     logout() {
       this.$store.dispatch('logout', this.$cookie);

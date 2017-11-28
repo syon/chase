@@ -142,6 +142,13 @@ export default new Vuex.Store({
         }
       });
     },
+    doSceneEdit({ commit, dispatch }, { $cookie, scenes }) {
+      debug('doSceneEdit', $cookie, scenes);
+      $cookie.set('chase:a', scenes.a);
+      $cookie.set('chase:b', scenes.b);
+      $cookie.set('chase:c', scenes.c);
+      dispatch('restoreMyTags', $cookie);
+    },
     restoreMyTags({ commit, dispatch }, $cookie) {
       const tags = JSON.parse($cookie.get('mytags'));
       debug('restoreMyTags', tags);
