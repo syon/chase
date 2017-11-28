@@ -15,18 +15,23 @@
       li(v-for="tag in recentTags")
         button(@click="fetchByTag(tag)") {{ tag }}
 
-  section
-  .todo
-    em ToDo:
+  section.mytags
+    em My Tags:
     ul
-      li ★
-      li タグ付与
-      li Inbox (Un-Tagged)
-      li chase ３シーン
-      li はてブカウント
-      li /etc/hosts
-      li 消化進捗
-      li Count → Since
+      li(v-for="tag in mytags") {{ tag }}
+
+  section
+    .todo
+      em ToDo:
+      ul
+        li ★
+        li タグ付与
+        li Inbox (Un-Tagged)
+        li chase ３シーン
+        li はてブカウント
+        li /etc/hosts
+        li 消化進捗
+        li Count → Since
 
   section.userinfo
     template(v-if="login.accessToken")
@@ -44,6 +49,7 @@ export default {
   computed: {
     ...mapState({
       login: 'login',
+      mytags: 'mytags',
     }),
     ...mapGetters([
       'catalogCount',
@@ -51,6 +57,7 @@ export default {
     ]),
   },
   mounted() {
+    this.$cookie.set('mytags', JSON.stringify(['りんご', 'ばなな', 'めろん']));
     this.$store.dispatch('actByPhase', this.$cookie);
   },
   methods: {
@@ -86,12 +93,9 @@ export default {
   flex-direction column
   justify-content space-between
   padding 15px
+  font-size 0.75rem
 
 .logo
   margin 0
   font-size 100%
-.username
-  font-size 0.75em
-.todo
-  font-size 0.75em
 </style>

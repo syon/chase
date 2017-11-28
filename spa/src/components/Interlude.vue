@@ -15,13 +15,18 @@
       div {{ entry.updated }} 更新
       div
         button(@click="archive(entry.eid)") 既読
+    .tools
+      button(v-for="tag in mytags" @click="addTag({ eid: entry.eid, tag })") {{ tag }}
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapState, mapGetters, mapActions } from 'vuex';
 
 export default {
   computed: {
+    ...mapState({
+      mytags: 'mytags',
+    }),
     ...mapGetters({
       entry: 'activeEntry',
     }),
@@ -29,6 +34,7 @@ export default {
   methods: {
     ...mapActions([
       'archive',
+      'addTag',
     ]),
   },
 };

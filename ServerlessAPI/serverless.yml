@@ -57,6 +57,13 @@ functions:
           path: pocket/send/unfavorite
           method: get
           cors: true
+  pocketsendtagsadd:
+    handler: handler.pocketSendTagsAdd
+    events:
+      - http:
+          path: pocket/send/tags/add
+          method: get
+          cors: true
   librainfo:
     handler: handler.libraInfo
     events:

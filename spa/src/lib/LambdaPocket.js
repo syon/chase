@@ -140,6 +140,22 @@ async function unfavorite(accessToken, itemId) {
   return result;
 }
 
+async function addTag(accessToken, itemId, tag) {
+  debug('[addTag]>>>>', accessToken, itemId);
+  const q = new URLSearchParams();
+  q.append('access_token', accessToken);
+  q.append('item_id', itemId);
+  q.append('tag', tag);
+  const url = `${LAMBDA_ENDPOINT}/pocket/send/tags/add?${q.toString()}`;
+  const result = await fetch(url, {
+    method: 'GET',
+  })
+    .then(res => res.json())
+    .catch(err => debug(err));
+  debug('[addTag]<<<<', result);
+  return result;
+}
+
 export default {
   getRequestToken,
   getAccessToken,
@@ -149,4 +165,5 @@ export default {
   archive,
   favorite,
   unfavorite,
+  addTag,
 };

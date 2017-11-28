@@ -17,6 +17,7 @@ const initialState = {
   entries: {},
   libraInfo: {},
   activeEid: '',
+  mytags: [],
 };
 
 /* eslint-disable operator-assignment, no-param-reassign */
@@ -76,6 +77,9 @@ export default new Vuex.Store({
         state[key] = initialState[key];
       });
     },
+    mytags(state, mytags) {
+      state.mytags = mytags;
+    },
     addLibraInfo(state, { eid, pageinfo }) {
       state.libraInfo = { ...state.libraInfo, [eid]: pageinfo };
     },
@@ -127,6 +131,11 @@ export default new Vuex.Store({
         }
       });
     },
+    restoreMyTags({ commit, dispatch }, $cookie) {
+      const tags = JSON.parse($cookie.get('mytags'));
+      debug('restoreMyTags', tags);
+      commit('mytags', tags);
+    },
     async actByPhase({ commit, dispatch }, $cookie) {
       const ph = $cookie.get('phase');
       const at = $cookie.get('pocket_access_token');
@@ -134,6 +143,7 @@ export default new Vuex.Store({
       if (ph === 'READY' && at) {
         dispatch('restoreLogin', $cookie);
         dispatch('fetchEntries');
+        dispatch('restoreMyTags', $cookie);
       } else if (ph === 'WAITING_ACCESSTOKEN') {
         dispatch('getAccessToken', $cookie);
       } else {
@@ -179,6 +189,10 @@ export default new Vuex.Store({
       const json = await LambdaPocket.archive(at, eid);
       debug(json.status === 1);
       commit('archive', { eid });
+    },
+    async addTag({ commit, state, dispatch }, { eid, tag }) {
+      const at = state.login.accessToken;
+      await LambdaPocket.addTag(at, eid, tag);
     },
     async favorite({ commit, state, dispatch }, eid) {
       const at = state.login.accessToken;

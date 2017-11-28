@@ -55,9 +55,6 @@ export default {
           this.imgSrc = `${this.imgSrc}?etag=${ETag}`;
         });
     },
-    pnlClicked() {
-      console.log('pnlClicked');
-    },
   },
 };
 </script>

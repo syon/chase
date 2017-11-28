@@ -193,3 +193,26 @@ module.exports.pocketSendUnfavorite = (event, context, callback) => {
       callback(null, errorResponseBuilder(error));
     });
 };
+
+module.exports.pocketSendTagsAdd = (event, context, callback) => {
+  const params = event.queryStringParameters;
+  const q = new URLSearchParams();
+  q.append('consumer_key', process.env.POCKET_CONSUMER_KEY);
+  q.append('access_token', params.access_token);
+  q.append('actions', `[{"action":"tags_add","item_id":${params.item_id},"tags":"${params.tag}"}]`);
+  axios.get(`https://getpocket.com/v3/send?${q.toString()}`, HTTP_GET_CONFIG)
+    .then(function (res) {
+      const response = {
+        statusCode: 200,
+        headers: {
+          "Access-Control-Allow-Origin" : "*",
+        },
+        body: JSON.stringify(res.data),
+      };
+      callback(null, response);
+    })
+    .catch(function (error) {
+      console.log(error);
+      callback(null, errorResponseBuilder(error));
+    });
+};
