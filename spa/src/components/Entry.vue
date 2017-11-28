@@ -18,7 +18,8 @@
         .fav
           span(v-if="obj.favorite" @click="unfavorite(obj.eid)" style="color:orange;") ★
           span(v-else @click="favorite(obj.eid)" style="color:#eee;") ★
-        button(@click="archive(obj.eid)") 既読
+        .archive
+          span(@click="archive(obj.eid)") ✓
   template(v-else)
     p Loading...
 </template>
@@ -127,4 +128,8 @@ export default {
   .fav
     font-size 1.25rem
     cursor pointer
+  .archive
+    font-size 1.25rem
+    cursor pointer
+    color #9ea8b3
 </style>
