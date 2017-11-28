@@ -15,7 +15,11 @@
       div {{ entry.updated }} 更新
       div
         button(@click="archive(entry.eid)") 既読
-    .tools
+    hr
+    .addscenes
+      button(v-for="sce in scenes" @click="addTag({ eid: entry.eid, tag: sce.tag })") {{ sce.label }}
+    hr
+    .addtags
       button(v-for="tag in mytags" @click="addTag({ eid: entry.eid, tag })") {{ tag }}
 </template>
 
@@ -29,6 +33,7 @@ export default {
     }),
     ...mapGetters({
       entry: 'activeEntry',
+      scenes: 'myScenesTags',
     }),
   },
   methods: {

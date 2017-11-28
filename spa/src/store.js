@@ -18,6 +18,7 @@ const initialState = {
   libraInfo: {},
   activeEid: '',
   mytags: [],
+  myscenes: {},
 };
 
 /* eslint-disable operator-assignment, no-param-reassign */
@@ -57,6 +58,13 @@ export default new Vuex.Store({
       });
       return [...new Set(tags)];
     },
+    myScenesTags(state) {
+      return [
+        { tag: 'chase:a', label: state.myscenes.a },
+        { tag: 'chase:b', label: state.myscenes.b },
+        { tag: 'chase:c', label: state.myscenes.c },
+      ];
+    },
   },
   mutations: {
     increment(state) {
@@ -79,6 +87,9 @@ export default new Vuex.Store({
     },
     mytags(state, mytags) {
       state.mytags = mytags;
+    },
+    myscenes(state, myscenes) {
+      state.myscenes = myscenes;
     },
     addLibraInfo(state, { eid, pageinfo }) {
       state.libraInfo = { ...state.libraInfo, [eid]: pageinfo };
@@ -135,6 +146,12 @@ export default new Vuex.Store({
       const tags = JSON.parse($cookie.get('mytags'));
       debug('restoreMyTags', tags);
       commit('mytags', tags);
+      // 3 Scenes
+      commit('myscenes', {
+        a: $cookie.get('chase:a'),
+        b: $cookie.get('chase:b'),
+        c: $cookie.get('chase:c'),
+      });
     },
     async actByPhase({ commit, dispatch }, $cookie) {
       const ph = $cookie.get('phase');

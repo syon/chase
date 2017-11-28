@@ -16,6 +16,9 @@
         button(@click="fetchByTag(tag)") {{ tag }}
 
   section.mytags
+    em My Scenes:
+    ul
+      li(v-for="sce in myscenes") {{ sce }}
     em My Tags:
     ul
       li(v-for="tag in mytags") {{ tag }}
@@ -50,6 +53,7 @@ export default {
     ...mapState({
       login: 'login',
       mytags: 'mytags',
+      myscenes: 'myscenes',
     }),
     ...mapGetters([
       'catalogCount',
