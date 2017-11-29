@@ -16,10 +16,12 @@
             span.tag(v-for="tag in Object.keys(obj.tags)") {{ tag }}
       .pnl-action
         .fav
-          span(v-if="obj.favorite" @click="unfavorite(obj.eid)" style="color:orange;") ★
-          span(v-else @click="favorite(obj.eid)" style="color:#eee;") ★
+          button(v-if="obj.favorite" @click="unfavorite(obj.eid)" style="color:orange;")
+            span ★
+          button(v-else @click="favorite(obj.eid)" style="color:#eee;")
+            span ★
         .archive
-          span(@click="archive(obj.eid)") ✓
+          button(@click="archive(obj.eid)") ✓
   template(v-else)
     p Loading...
 </template>
@@ -96,12 +98,14 @@ export default {
     height 80px
   .link
     margin 0 0 .25em
-    font-size 1rem
     line-height 1.3
     word-break break-word
     a
       font-weight bold
       text-decoration none
+      color #24292e
+      &:hover
+        text-decoration underline
   .meta
     margin 0 0 .5em
     font-size 0.67em
@@ -119,17 +123,30 @@ export default {
       margin 0 .5em 0 0
       padding 0 .5em
       font-weight bold
-      font-size .75em
+      font-size .67em
       border-radius 2px
       align-items center
       line-height 1.5
       border 1px solid #9ea8b3
       color #fff
       background-color #9ea8b3
-  .fav
+  .pnl-action
+    button
+      color inherit
+      font inherit
+      margin 0
+      padding 0
+      text-align inherit
+      line-height inherit
+      display inline
+      background none
+      overflow visible
+      border none
+      cursor pointer
+  .fav span
     font-size 1.25rem
     cursor pointer
-  .archive
+  .archive span
     font-size 1.25rem
     cursor pointer
     color #9ea8b3
