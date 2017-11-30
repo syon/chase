@@ -1,4 +1,4 @@
-'use strict';
+/* eslint-disable arrow-body-style */
 
 // Pocket API
 // https://getpocket.com/developer/docs/overview

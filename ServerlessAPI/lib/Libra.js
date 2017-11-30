@@ -64,25 +64,25 @@ module.exports = class Libra {
   }
 
   static resolveSiteName(metaProps) {
-    const ogSiteName = Libra.getMetaPropContent(metaProps, 'og:site_name')
+    const ogSiteName = Libra.getMetaPropContent(metaProps, 'og:site_name');
     if (ogSiteName) return ogSiteName;
     return '';
   }
 
   static resolveTitle(standardProps, metaProps) {
-    const ogTitle = Libra.getMetaPropContent(metaProps, 'og:title')
+    const ogTitle = Libra.getMetaPropContent(metaProps, 'og:title');
     if (ogTitle) return ogTitle;
     return standardProps.title;
   }
 
   static resolveDesc(standardProps, metaProps) {
-    const ogDesc = Libra.getMetaPropContent(metaProps, 'og:description')
+    const ogDesc = Libra.getMetaPropContent(metaProps, 'og:description');
     if (ogDesc) return ogDesc;
     return standardProps.description;
   }
 
   static resolveImageUrl(metaProps) {
-    const ogImage = Libra.getMetaPropContent(metaProps, 'og:image')
+    const ogImage = Libra.getMetaPropContent(metaProps, 'og:image');
     if (ogImage) return ogImage;
     return '';
   }
