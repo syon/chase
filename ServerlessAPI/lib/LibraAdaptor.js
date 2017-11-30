@@ -17,7 +17,7 @@ function successResponseBuilder(bodyObj) {
 }
 
 function errorResponseBuilder(error) {
-  console.log(error);
+  debug(error);
   const res = error.response || { headers: {} };
   const response = {
     statusCode: res.status,
@@ -52,22 +52,41 @@ module.exports.libraThumb = (event, context, callback) => {
   const item10Id = `0000000000${itemId}`.substr(-10, 10);
   const itemId3 = item10Id.slice(0, 3);
   const s3path = `items/thumbs/${itemId3}/${item10Id}.jpg`;
-  console.log('S3 Path --', s3path);
+  debug('[libraThumb] S3 Path --', s3path);
   try {
-    if (isValidSuggestedUrl(suggestedImgUrl)) {
-      fetchAndConvertAndPut(s3path, suggestedImgUrl, callback);
-    } else {
-      const libra = new Libra(params.url);
-      libra.getInfo().then(info => {
-        console.log(info);
-        fetchAndConvertAndPut(s3path, info.image, callback);
-      });
-    }
+    getImgUrl(suggestedImgUrl).then((imgUrl) => {
+      debug('[libraThumb] Detected image URL --', imgUrl);
+      return fetchImageBuffer(imgUrl);
+    }).then((buf) => {
+      return convertImage(buf);
+    }).then((img) => {
+      return putImage(s3path, img).promise();
+    }).then((v) => {
+      callback(null, successResponseBuilder(v));
+    }).catch((error) => {
+      debug('[libraThumb:catch]', error)
+      putBlankImage(s3path);
+      callback(null, errorResponseBuilder(error));
+    });
   } catch (error) {
     putBlankImage(s3path);
     callback(null, errorResponseBuilder(error));
   }
 };
+
+function getImgUrl(suggestedImgUrl) {
+  return new Promise((rv, rj) => {
+    if (isValidSuggestedUrl(suggestedImgUrl)) {
+      rv(suggestedImgUrl);
+    } else {
+      const libra = new Libra(params.url);
+      libra.getInfo().then(info => {
+        debug(info);
+        rv(info.image);
+      });
+    }
+  });
+}
 
 function isValidSuggestedUrl(suggestedImgUrl) {
   if (typeof suggestedImgUrl === 'undefined') {
@@ -76,49 +95,53 @@ function isValidSuggestedUrl(suggestedImgUrl) {
   return true;
 }
 
-function fetchAndConvertAndPut(s3path, imageUrl, callback) {
-  console.log('Detected image URL --', imageUrl);
-  axios(imageUrl, {
-    responseType: 'arraybuffer'
-  })
-    .then(res => res.data)
-    .then(buffer => {
-      return new Promise((rv, rj) => {
-        gm(buffer)
-          .resize(420)
-          .background('#fff')
-          .flatten()
-          .toBuffer('jpg', (err, buf) => {
-            if (err) { throw err; }
-            rv(buf);
-          });
+function fetchImageBuffer(imageUrl) {
+  return new Promise((rv, rj) => {
+    axios(imageUrl, {
+      responseType: 'arraybuffer'
+    })
+      .then(res => res.data)
+      .then(buffer => {
+        rv(buffer);
+      }).catch(error => {
+        debug('[fetchImageBuffer:catch] Error');
+        rj(error);
       });
-    }).then(buf => {
-      putImage(s3path, buf)
-        .promise()
-        .then(v => callback(null, successResponseBuilder(v)));
-    }).catch(error => {
-      putBlankImage(s3path);
-      callback(null, errorResponseBuilder(error));
-    });
+  });
+}
+
+function convertImage(buf) {
+  return new Promise((rv, rj) => {
+    gm(buf)
+      .resize(420)
+      .background('#fff')
+      .flatten()
+      .toBuffer('jpg', (err, buf) => {
+        if (err) { rj(err); }
+        rv(buf);
+      });
+  }).catch((error) => {
+    debug('[convertImage:catch] Error');
+    throw error;
+  });
 }
 
 function putBlankImage(s3path) {
-  console.log('Fetch failed. Using blank image.');
+  debug('Fetch failed. Using blank image.');
   gm('./blank.jpg').toBuffer('jpg', (err, buf) => {
-    console.log('Blank image Buffer --', buf);
+    debug('Blank image Buffer --', buf);
     putImage(s3path, buf);
   });
 }
 
 function putImage(s3path, buffer) {
-  console.log(`Putting image on S3 (${s3path}):`, buffer);
+  debug(`Putting image on S3 (${s3path}):`, buffer);
   return s3.putObject({
     Bucket: process.env.BUCKET,
     Key: s3path,
     Body: buffer,
   }, (err, data) => {
-    if (err) { console.log('Error:', err); }
-    if (data) { console.log('Success:', data); }
+    if (err) { debug('Error:', err); }
+    if (data) { debug('Success:', data); }
   });
 }
