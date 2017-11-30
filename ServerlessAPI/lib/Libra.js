@@ -32,8 +32,14 @@ module.exports = class Libra {
         const image = this.resolveImageUrl(metaProps)
         return { site_name, title, description, image }
       }).catch(error => {
-        debug('Error on axios in Libra.getInfo', error)
-        throw error
+        debug('Error on axios in Libra.getInfo')
+        debug(error)
+        return {
+          site_name: '',
+          title: '',
+          description: '',
+          image: '',
+        }
       })
   }
 
