@@ -34,17 +34,6 @@
       ul
         li(v-for="sce in myscenes") {{ sce }}
 
-  section
-    .todo
-      em ToDo:
-      ul
-        li タグ編集
-        li Inbox (Un-Tagged)
-        li はてブカウント
-        li /etc/hosts
-        li 消化進捗
-        li Count → Since
-
   section.userinfo
     template(v-if="login.accessToken")
       span.username {{ login.username }}

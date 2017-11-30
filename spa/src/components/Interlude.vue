@@ -21,6 +21,22 @@
     hr
     .tags
       .tag(v-for="tag in recentTags" @click="addTag({ eid: entry.eid, tag })" :class="{ applied: Object.keys(entry.tags).includes(tag) }") {{ tag }}
+
+  hr
+
+  section
+    .todo
+      em ToDo:
+      ul
+        li Count → Since
+        li Inbox (Un-Tagged)
+        li Libra Info on S3
+        li vue-router
+        li IE11 fetch
+        li はてブカウント
+        li タグ編集
+        li 消化進捗
+        li /etc/hosts
 </template>
 
 <script>
@@ -74,4 +90,7 @@ export default {
     &.applied
       color #fff
       background-color #9ea8b3
+
+.todo
+  font-size 0.75rem
 </style>
