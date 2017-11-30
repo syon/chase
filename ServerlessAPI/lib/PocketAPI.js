@@ -1,6 +1,7 @@
 require('dotenv').config();
 const axios = require('axios');
 const URLSearchParams = require('url-search-params');
+const debug = require('debug')('chase:film');
 
 const redirectUri = 'https://syon.github.io/chase/';
 
@@ -21,7 +22,7 @@ function successResponseBuilder(bodyObj) {
   return {
     statusCode: 200,
     headers: {
-      "Access-Control-Allow-Origin" : "*",
+      'Access-Control-Allow-Origin': '*',
     },
     body: JSON.stringify(bodyObj),
   };
@@ -29,11 +30,11 @@ function successResponseBuilder(bodyObj) {
 
 function errorResponseBuilder(error) {
   const res = error.response || { headers: {} };
-  console.log(res);
+  debug(res);
   const response = {
     statusCode: res.status,
     headers: {
-      "Access-Control-Allow-Origin" : "*",
+      'Access-Control-Allow-Origin': '*',
       'x-error-code': res.headers['x-error-code'],
       'x-error': res.headers['x-error'],
     },
@@ -46,28 +47,22 @@ function errorResponseBuilder(error) {
 
 module.exports.pocketOauthRequest = (event, context, callback) => {
   const reqd = {
-    'consumer_key': process.env.POCKET_CONSUMER_KEY,
-    'redirect_uri': 'https://syon-chase.herokuapp.com?redirected',
+    consumer_key: process.env.POCKET_CONSUMER_KEY,
+    redirect_uri: 'https://syon-chase.herokuapp.com?redirected',
   };
   const data = JSON.stringify(reqd);
   axios.post('https://getpocket.com/v3/oauth/request', data, HTTP_POST_CONFIG)
-    .then(function (res) {
+    .then((res) => {
       const requestToken = res.data.code;
-      const authUri = `https://getpocket.com/auth/authorize?request_token=${requestToken}&redirect_uri=${redirectUri}`
-      const response = {
-        statusCode: 200,
-        headers: {
-          "Access-Control-Allow-Origin" : "*",
-        },
-        body: JSON.stringify({
-          request_token: requestToken,
-          auth_uri: authUri,
-        }),
+      const authUri = `https://getpocket.com/auth/authorize?request_token=${requestToken}&redirect_uri=${redirectUri}`;
+      const bodyObj = {
+        request_token: requestToken,
+        auth_uri: authUri,
       };
-      callback(null, response);
+      callback(null, successResponseBuilder(bodyObj));
     })
-    .catch(function (error) {
-      console.log(error);
+    .catch((error) => {
+      debug(error);
       callback(null, errorResponseBuilder(error));
     });
 };
@@ -75,28 +70,20 @@ module.exports.pocketOauthRequest = (event, context, callback) => {
 module.exports.pocketOauthAuthorize = (event, context, callback) => {
   const params = JSON.parse(event.body);
   const reqd = {
-    'consumer_key': process.env.POCKET_CONSUMER_KEY,
-    'code': params.code,
+    consumer_key: process.env.POCKET_CONSUMER_KEY,
+    code: params.code,
   };
   const data = JSON.stringify(reqd);
   axios.post('https://getpocket.com/v3/oauth/authorize', data, HTTP_POST_CONFIG)
-    .then(function (res) {
-      const at = res.data.access_token;
-      const un = res.data.username;
-      const response = {
-        statusCode: 200,
-        headers: {
-          "Access-Control-Allow-Origin" : "*",
-        },
-        body: JSON.stringify({
-          access_token: at,
-          username: un,
-        }),
+    .then((res) => {
+      const bodyObj = {
+        access_token: res.data.access_token,
+        username: res.data.username,
       };
-      callback(null, response);
+      callback(null, successResponseBuilder(bodyObj));
     })
-    .catch(function (error) {
-      console.log(error);
+    .catch((error) => {
+      debug(error);
       callback(null, errorResponseBuilder(error));
     });
 };
@@ -104,23 +91,17 @@ module.exports.pocketOauthAuthorize = (event, context, callback) => {
 module.exports.pocketGet = (event, context, callback) => {
   const params = JSON.parse(event.body);
   const reqd = {
-    'consumer_key': process.env.POCKET_CONSUMER_KEY,
-    'access_token': params.access_token,
+    consumer_key: process.env.POCKET_CONSUMER_KEY,
+    access_token: params.access_token,
   };
   const data = JSON.stringify(Object.assign(reqd, params));
   axios.post('https://getpocket.com/v3/get', data, HTTP_POST_CONFIG)
-    .then(function (res) {
-      const response = {
-        statusCode: 200,
-        headers: {
-          "Access-Control-Allow-Origin" : "*",
-        },
-        body: JSON.stringify(res.data),
-      };
-      callback(null, response);
+    .then((res) => {
+      const bodyObj = res.data;
+      callback(null, successResponseBuilder(bodyObj));
     })
-    .catch(function (error) {
-      console.log(error);
+    .catch((error) => {
+      debug(error);
       callback(null, errorResponseBuilder(error));
     });
 };
@@ -132,18 +113,12 @@ module.exports.pocketSendArchive = (event, context, callback) => {
   q.append('access_token', params.access_token);
   q.append('actions', `[{"action":"archive","item_id":${params.item_id}}]`);
   axios.get(`https://getpocket.com/v3/send?${q.toString()}`, HTTP_GET_CONFIG)
-    .then(function (res) {
-      const response = {
-        statusCode: 200,
-        headers: {
-          "Access-Control-Allow-Origin" : "*",
-        },
-        body: JSON.stringify(res.data),
-      };
-      callback(null, response);
+    .then((res) => {
+      const bodyObj = res.data;
+      callback(null, successResponseBuilder(bodyObj));
     })
-    .catch(function (error) {
-      console.log(error);
+    .catch((error) => {
+      debug(error);
       callback(null, errorResponseBuilder(error));
     });
 };
@@ -155,18 +130,12 @@ module.exports.pocketSendFavorite = (event, context, callback) => {
   q.append('access_token', params.access_token);
   q.append('actions', `[{"action":"favorite","item_id":${params.item_id}}]`);
   axios.get(`https://getpocket.com/v3/send?${q.toString()}`, HTTP_GET_CONFIG)
-    .then(function (res) {
-      const response = {
-        statusCode: 200,
-        headers: {
-          "Access-Control-Allow-Origin" : "*",
-        },
-        body: JSON.stringify(res.data),
-      };
-      callback(null, response);
+    .then((res) => {
+      const bodyObj = res.data;
+      callback(null, successResponseBuilder(bodyObj));
     })
-    .catch(function (error) {
-      console.log(error);
+    .catch((error) => {
+      debug(error);
       callback(null, errorResponseBuilder(error));
     });
 };
@@ -178,18 +147,12 @@ module.exports.pocketSendUnfavorite = (event, context, callback) => {
   q.append('access_token', params.access_token);
   q.append('actions', `[{"action":"unfavorite","item_id":${params.item_id}}]`);
   axios.get(`https://getpocket.com/v3/send?${q.toString()}`, HTTP_GET_CONFIG)
-    .then(function (res) {
-      const response = {
-        statusCode: 200,
-        headers: {
-          "Access-Control-Allow-Origin" : "*",
-        },
-        body: JSON.stringify(res.data),
-      };
-      callback(null, response);
+    .then((res) => {
+      const bodyObj = res.data;
+      callback(null, successResponseBuilder(bodyObj));
     })
-    .catch(function (error) {
-      console.log(error);
+    .catch((error) => {
+      debug(error);
       callback(null, errorResponseBuilder(error));
     });
 };
@@ -201,18 +164,12 @@ module.exports.pocketSendTagsAdd = (event, context, callback) => {
   q.append('access_token', params.access_token);
   q.append('actions', `[{"action":"tags_add","item_id":${params.item_id},"tags":"${params.tag}"}]`);
   axios.get(`https://getpocket.com/v3/send?${q.toString()}`, HTTP_GET_CONFIG)
-    .then(function (res) {
-      const response = {
-        statusCode: 200,
-        headers: {
-          "Access-Control-Allow-Origin" : "*",
-        },
-        body: JSON.stringify(res.data),
-      };
-      callback(null, response);
+    .then((res) => {
+      const bodyObj = res.data;
+      callback(null, successResponseBuilder(bodyObj));
     })
-    .catch(function (error) {
-      console.log(error);
+    .catch((error) => {
+      debug(error);
       callback(null, errorResponseBuilder(error));
     });
 };
