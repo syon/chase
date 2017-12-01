@@ -132,8 +132,8 @@ export default {
   display flex
   align-items center
   font-size 1rem
-  color #0366d6
-  cursor pointer
+  // color #0366d6
+  // cursor pointer
   border-top 1px solid #f5f5f5
   &:last-child
     border-bottom 1px solid #f5f5f5

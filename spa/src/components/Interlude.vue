@@ -28,11 +28,14 @@
     .todo
       em ToDo:
       ul
-        li 切替は表示ON/OFFで(matched)
+        li Update button
+        li Compo each Route
         li More 100
         li IE11 fetch
         li Google Analytics
         li はてブカウント
+        li Capture
+        li はてブ パネル
         li タグ編集
         li 消化進捗
         li /etc/hosts

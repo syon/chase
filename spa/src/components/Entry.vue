@@ -1,5 +1,5 @@
 <template lang="pug">
-.compo(:data-eid="obj.eid" :class="{ archived: obj.archived, active: obj.eid === activeEid }")
+.compo(:data-eid="obj.eid" :class="compoClasses")
   template(v-if="obj.ready")
     .pnl(@click="activate(obj.eid)")
       .pnl-thumb
@@ -40,6 +40,12 @@ export default {
     ...mapState([
       'activeEid',
     ]),
+    compoClasses() {
+      return {
+        archived: this.obj.archived,
+        active: this.obj.eid === this.activeEid,
+      };
+    },
     linkTitle() {
       return this.obj.title ? this.obj.title : this.obj.url;
     },
