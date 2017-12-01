@@ -3,10 +3,22 @@ const cheerio = require('cheerio');
 const fs = require('fs');
 const { execSync } = require('child_process');
 const debug = require('debug')('chase:libra');
+const AWS = require('aws-sdk');
+
+const s3 = new AWS.S3();
 
 module.exports = class Libra {
-  constructor(url) {
+  constructor({ url, pocketId }) {
     this.url = encodeURI(url);
+    this.s3Path = Libra.makeS3Path(pocketId);
+    debug(this);
+  }
+
+  static makeS3Path(pocketId) {
+    if (!pocketId) return null;
+    const item10Id = `0000000000${pocketId}`.substr(-10, 10);
+    const itemId3 = item10Id.slice(0, 3);
+    return `items/libra/${itemId3}/${item10Id}.json`;
   }
 
   getInfo() {
@@ -31,8 +43,12 @@ module.exports = class Libra {
         const description = Libra.resolveDesc(standardProps, metaProps);
         const image = Libra.resolveImageUrl(metaProps);
         return {
-          site_name: siteName, title, description, image,
+          site_name: siteName, title, description, image, s3_path: this.s3Path,
         };
+      })
+      .then((info) => {
+        this.putInfoS3(info);
+        return info;
       })
       .catch((error) => {
         debug('Error on axios in Libra.getInfo');
@@ -44,6 +60,21 @@ module.exports = class Libra {
           image: '',
         };
       });
+  }
+
+  putInfoS3(info) {
+    debug('[putInfoS3]', this.s3Path);
+    if (this.s3Path) {
+      const obj = {
+        Bucket: process.env.BUCKET,
+        Key: this.s3Path,
+        Body: JSON.stringify(info, null, 2),
+      };
+      s3.putObject(obj, (err, data) => {
+        if (err) { debug('Error:', err); }
+        if (data) { debug('Success:', data); }
+      });
+    }
   }
 
   static detectEncoding(html) {

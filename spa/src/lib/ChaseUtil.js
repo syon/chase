@@ -1,3 +1,6 @@
+import Debug from 'debug';
+
+const debug = Debug('chase:util');
 const CHASE_S3_BASE_URL = 'https://s3.amazonaws.com/syon-chase';
 
 function getDate(time10) {
@@ -40,6 +43,33 @@ function makeEntries(listFromPocket) {
   return newEntries;
 }
 
+function makeS3Path(pocketId) {
+  if (!pocketId) return null;
+  const item10Id = `0000000000${pocketId}`.substr(-10, 10);
+  const itemId3 = item10Id.slice(0, 3);
+  return `items/libra/${itemId3}/${item10Id}.json`;
+}
+
+async function fetchLibraS3(pocketId) {
+  debug('[fetchLibraS3]>>>>');
+  const s3Path = makeS3Path(pocketId);
+  const result = await fetch(`${CHASE_S3_BASE_URL}/${s3Path}`, {
+    method: 'GET',
+  })
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      throw response;
+    }).catch((e) => {
+      debug(pocketId, e);
+      throw e;
+    });
+  debug('[fetchLibraS3]<<<<', result);
+  return result;
+}
+
 export default {
   makeEntries,
+  fetchLibraS3,
 };

@@ -134,7 +134,7 @@ export default new Vuex.Store({
       Object.keys(newEntries).forEach((key) => {
         const entry = newEntries[key];
         if (!entry.ready) {
-          context.dispatch('fetchLibraInfo', entry);
+          context.dispatch('fetchLibraS3', entry);
         }
       });
     },
@@ -221,6 +221,17 @@ export default new Vuex.Store({
       const json = await LambdaPocket.unfavorite(at, eid);
       debug('[unfavorite]', json);
       commit('unfavorite', { eid });
+    },
+    async fetchLibraS3(context, entry) {
+      const { eid } = entry;
+      ChaseUtil.fetchLibraS3(eid)
+        .then((pageinfo) => {
+          context.commit('addLibraInfo', { eid, pageinfo });
+        })
+        .catch((error) => {
+          debug(error);
+          context.dispatch('fetchLibraInfo', entry);
+        });
     },
     async fetchLibraInfo(context, payload) {
       const { eid, url } = payload;

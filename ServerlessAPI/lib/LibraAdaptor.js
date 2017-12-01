@@ -29,7 +29,7 @@ function errorResponseBuilder(error) {
 module.exports.libraInfo = (event, context, callback) => {
   const params = event.queryStringParameters;
   debug('[libraInfo]>>>>', params);
-  const libra = new Libra(params.url);
+  const libra = new Libra({ url: params.url, pocketId: params.pocket_id });
   libra.getInfo()
     .then((info) => {
       debug('[libraInfo]<<<<', info);

@@ -71,6 +71,8 @@ functions:
           path: libra/info
           method: get
           cors: true
+    environment:
+      BUCKET: ${self:custom.bucket}
   librathumb:
     handler: handler.libraThumb
     events:

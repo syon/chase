@@ -1,3 +1,4 @@
+import URLSearchParams from 'url-search-params';
 import Debug from 'debug';
 
 const debug = Debug('chase:libra-adaptor');
@@ -5,7 +6,10 @@ const LAMBDA_ENDPOINT = 'https://ua5uhzf79d.execute-api.us-east-1.amazonaws.com/
 
 async function info(arg) {
   const { eid, url } = arg;
-  const pageinfo = await fetch(`${LAMBDA_ENDPOINT}/libra/info?url=${url}`, {
+  const q = new URLSearchParams();
+  q.append('url', url);
+  q.append('pocket_id', eid);
+  const pageinfo = await fetch(`${LAMBDA_ENDPOINT}/libra/info?${q.toString()}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
