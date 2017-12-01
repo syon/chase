@@ -4,8 +4,16 @@
     h1.logo Chase
 
   section.menu(v-if="login.accessToken")
-    em {{ catalogCount }}
-    .link-item(@click="getGet") Inbox
+    em Recent {{ catalogCount }}
+    .link-item(@click="getGet")
+      router-link(to="/") Recent 100
+    .link-item
+      router-link(:to="{ name: 'Inbox' }") Inbox
+    .link-item
+      router-link(:to="{ name: 'Favorite' }") Favorite
+
+  section.all
+    em All
     .link-item(@click="fetchFavorites") お気に入り
 
   section.tags

@@ -28,9 +28,8 @@
     .todo
       em ToDo:
       ul
-        li Count → Since
-        li Inbox (Un-Tagged)
-        li vue-router
+        li 切替は表示ON/OFFで(matched)
+        li More 100
         li IE11 fetch
         li Google Analytics
         li はてブカウント

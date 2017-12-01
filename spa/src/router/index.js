@@ -10,7 +10,17 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'HelloWorld',
+      name: 'Recent',
+      component: HelloWorld,
+    },
+    {
+      path: '/inbox',
+      name: 'Inbox',
+      component: HelloWorld,
+    },
+    {
+      path: '/favorite',
+      name: 'Favorite',
       component: HelloWorld,
     },
   ],

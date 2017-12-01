@@ -67,7 +67,7 @@ async function getFavorites(accessToken) {
     body: JSON.stringify({
       access_token: accessToken,
       favorite: 1,
-      count: 20,
+      // count: 20,
       detailType: 'complete',
     }),
   })
