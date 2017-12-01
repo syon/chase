@@ -228,8 +228,8 @@ export default new Vuex.Store({
         .then((pageinfo) => {
           context.commit('addLibraInfo', { eid, pageinfo });
         })
-        .catch((error) => {
-          debug(error);
+        .catch(() => {
+          debug('First scraping for S3...', eid);
           context.dispatch('fetchLibraInfo', entry);
         });
     },

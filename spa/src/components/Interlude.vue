@@ -30,13 +30,14 @@
       ul
         li Count → Since
         li Inbox (Un-Tagged)
-        li Libra Info on S3
         li vue-router
         li IE11 fetch
+        li Google Analytics
         li はてブカウント
         li タグ編集
         li 消化進捗
         li /etc/hosts
+        li Dark Theme
 </template>
 
 <script>

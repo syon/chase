@@ -26,7 +26,8 @@ module.exports = class Libra {
     return axios.get(this.url, config)
       .then(res => res.data)
       .then((html) => {
-        const encoding = Libra.detectEncoding(html);
+        let encoding = Libra.detectEncoding(html);
+        encoding = encoding.replace(/x-sjis/i, 'shift_jis');
         debug('Detected Encoding:', encoding);
         if (encoding && encoding.toUpperCase() !== 'UTF-8') {
           fs.writeFileSync('/tmp/doc.html', html);
@@ -43,7 +44,7 @@ module.exports = class Libra {
         const description = Libra.resolveDesc(standardProps, metaProps);
         const image = Libra.resolveImageUrl(metaProps);
         return {
-          site_name: siteName, title, description, image, s3_path: this.s3Path,
+          site_name: siteName, title, description, image,
         };
       })
       .then((info) => {
