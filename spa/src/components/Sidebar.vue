@@ -17,12 +17,6 @@
     em All
     .link-item(@click="fetchFavorites") お気に入り
 
-  section.tags
-    em Tags:
-    template(v-for="tag in recentTags")
-      .link-item
-        router-link(:to="{ name: 'Tag', params: { tag } }") {{ tag }}
-
   section.myscenes
     em My Scenes:
     template(v-if="sceneEditing")
@@ -41,8 +35,14 @@
         input(v-model="chaseC")
     template(v-else)
       button(@click="showScenesEditor") edit
-      ul
-        li(v-for="sce in myscenes") {{ sce }}
+      .link-item(v-for="sce in myScenesTags")
+        router-link(:to="{ name: 'Tag', params: { tag: sce.tag } }") {{ sce.label }}
+
+  section.tags
+    em Tags:
+    template(v-for="tag in recentTags")
+      .link-item
+        router-link(:to="{ name: 'Tag', params: { tag } }") {{ tag }}
 
   section.userinfo
     template(v-if="login.accessToken")

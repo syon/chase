@@ -68,6 +68,7 @@ export default new Vuex.Store({
         const entry = list[key];
         tags = tags.concat(Object.keys(entry.tags));
       });
+      tags = tags.filter(t => !t.match(/^chase:/));
       return [...new Set(tags)];
     },
     myScenesTags(state) {
