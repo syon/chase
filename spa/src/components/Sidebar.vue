@@ -2,10 +2,11 @@
 .sidebar
   section
     h1.logo Chase
+    button(@click="fetchEntries") 更新
 
   section.menu(v-if="login.accessToken")
     em Recent {{ catalogCount }}
-    .link-item(@click="getGet")
+    .link-item
       router-link(to="/") Recent 100
     .link-item
       router-link(:to="{ name: 'Inbox' }") Inbox
@@ -83,6 +84,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      fetchEntries: 'fetchEntries',
       fetchFavorites: 'fetchFavorites',
       fetchByTag: 'fetchByTag',
     }),
@@ -94,9 +96,6 @@ export default {
     },
     getAccessToken() {
       this.$store.dispatch('getAccessToken', this.$cookie);
-    },
-    getGet() {
-      this.$store.dispatch('fetchEntries');
     },
     showScenesEditor() {
       this.sceneEditing = true;

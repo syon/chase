@@ -28,7 +28,6 @@
     .todo
       em ToDo:
       ul
-        li Update button
         li Compo each Route
         li More 100
         li IE11 fetch
