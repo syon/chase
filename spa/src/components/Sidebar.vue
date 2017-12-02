@@ -7,8 +7,8 @@
   section.menu(v-if="login.accessToken")
     .flex-aic-jcsb
       em Recent {{ catalogCount }}
-      a.refresh(href="#" @click="fetchEntries")
-        span.ion-ios-refresh-empty
+      clickable.refresh(@click.native="fetchEntries")
+        i.ion-ios-refresh-empty
     .link-item
       router-link(to="/") Recent 100
     .link-item
@@ -16,9 +16,12 @@
     .link-item
       router-link(:to="{ name: 'Favorite' }") Favorite
 
-  section.all
+  section.menu.all
     em All
-    .link-item(@click="fetchFavorites") お気に入り
+    .link-item
+      clickable(@click.native="fetchFavorites")
+        i.ion-ios-star-outline
+        span お気に入り
 
   section.myscenes
     em My Scenes:
@@ -42,24 +45,31 @@
         router-link(:to="{ name: 'Tag', params: { tag: sce.tag } }") {{ sce.label }}
 
   section.tags
-    em Tags:
     template(v-for="tag in recentTags")
       .link-item
-        router-link(:to="{ name: 'Tag', params: { tag } }") {{ tag }}
+        router-link(:to="{ name: 'Tag', params: { tag } }")
+          clickable
+            i.ion-ios-pricetags-outline
+            span {{ tag }}
 
   section.userinfo
     template(v-if="login.accessToken")
       span.username {{ login.username }}
-      a(href="#" @click="logout") ✕
+      clickable.disconnect(@click.native="logout")
+        i.ion-ios-close-empty
     template(v-else)
       button(@click="getRequestToken") Connect to Pocket
 </template>
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex';
+import Clickable from '@/components/Clickable';
 
 export default {
   name: 'Sidebar',
+  components: {
+    Clickable,
+  },
   data() {
     return {
       sceneEditing: false,
@@ -131,7 +141,7 @@ export default {
   align-items center
   justify-content space-between
 
-.refresh
+.refresh i
   font-size 1.5rem
 
 .menu
@@ -142,17 +152,27 @@ export default {
   display flex
   align-items center
   font-size 1rem
-  // color #0366d6
-  // cursor pointer
-  border-top 1px solid #f5f5f5
-  &:last-child
-    border-bottom 1px solid #f5f5f5
+  i
+    margin-right .5em
+  > a
+    flex 1
+    height inherit
+    display flex
 
 .logo
   margin 0
   font-size 100%
 
+.tags
+  .link-item
+    height 1.5rem
+    font-size 0.75rem
+
 .userinfo
+  display flex
+  align-items center
   .username
     margin-right 1em
+  .disconnect
+    font-size 1.5rem
 </style>
