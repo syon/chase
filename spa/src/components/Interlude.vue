@@ -28,7 +28,6 @@
     .todo
       em ToDo:
       ul
-        li Compo each Route
         li More 100
         li IE11 fetch
         li Google Analytics

@@ -20,7 +20,8 @@
   section.tags
     em Tags:
     template(v-for="tag in recentTags")
-      .link-item(@click="fetchByTag(tag)") {{ tag }}
+      .link-item
+        router-link(:to="{ name: 'Tag', params: { tag } }") {{ tag }}
 
   section.myscenes
     em My Scenes:
@@ -86,7 +87,6 @@ export default {
     ...mapActions({
       fetchEntries: 'fetchEntries',
       fetchFavorites: 'fetchFavorites',
-      fetchByTag: 'fetchByTag',
     }),
     getRequestToken() {
       this.$store.dispatch('getRequestToken', this.$cookie)

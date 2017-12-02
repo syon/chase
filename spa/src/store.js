@@ -38,6 +38,19 @@ export default new Vuex.Store({
         return 0;
       });
     },
+    filteredCatalog: (state, getters) => (route, tag) => {
+      const arr = getters.catalog;
+      let result = arr;
+      if (route === 'Inbox') {
+        result = arr.filter(d => Object.keys(d.tags).length === 0);
+      } else if (route === 'Favorite') {
+        result = arr.filter(d => d.favorite);
+      } else if (route === 'Tag') {
+        const tagged = arr.filter(d => Object.keys(d.tags).length > 0);
+        result = tagged.filter(d => Object.keys(d.tags).includes(tag));
+      }
+      return result;
+    },
     catalogCount(state, getters) {
       return getters.catalog.length;
     },
@@ -190,11 +203,6 @@ export default new Vuex.Store({
     async fetchFavorites({ state, dispatch }) {
       const at = state.login.accessToken;
       const json = await LambdaPocket.getFavorites(at);
-      dispatch('updateEntries', json);
-    },
-    async fetchByTag({ state, dispatch }, tag) {
-      const at = state.login.accessToken;
-      const json = await LambdaPocket.getByTag(at, tag);
       dispatch('updateEntries', json);
     },
     async activate({ commit }, eid) {

@@ -23,5 +23,10 @@ export default new Router({
       name: 'Favorite',
       component: HelloWorld,
     },
+    {
+      path: '/tag/:tag',
+      name: 'Tag',
+      component: HelloWorld,
+    },
   ],
 });
