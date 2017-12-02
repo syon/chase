@@ -4,6 +4,7 @@ import Vue from 'vue';
 import VueCookie from 'vue-cookie';
 import { sync } from 'vuex-router-sync';
 import 'babel-polyfill';
+import 'whatwg-fetch';
 import App from './App';
 import router from './router';
 import store from './store';
