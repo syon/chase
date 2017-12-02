@@ -21,6 +21,7 @@ export default {
   font-size inherit
   text-align left
   outline none
+  background-color transparent
   &:hover
     text-decoration underline
 </style>
