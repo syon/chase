@@ -1,11 +1,14 @@
 <template lang="pug">
 .sidebar
   section
-    h1.logo Chase
-    button(@click="fetchEntries") 更新
+    h1.logo
+      span Chase
 
   section.menu(v-if="login.accessToken")
-    em Recent {{ catalogCount }}
+    .flex-aic-jcsb
+      em Recent {{ catalogCount }}
+      a.refresh(href="#" @click="fetchEntries")
+        span.ion-ios-refresh-empty
     .link-item
       router-link(to="/") Recent 100
     .link-item
@@ -122,6 +125,14 @@ export default {
   justify-content space-between
   padding 15px
   font-size 0.75rem
+
+.flex-aic-jcsb
+  display flex
+  align-items center
+  justify-content space-between
+
+.refresh
+  font-size 1.5rem
 
 .menu
   margin 1rem 0
