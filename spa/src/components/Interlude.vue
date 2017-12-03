@@ -11,8 +11,8 @@
       div {{ Object.keys(entry.tags) }}
       div {{ entry.archived }}
       div {{ entry.fqdn }}
-      div {{ entry.added }} 追加
-      div {{ entry.updated }} 更新
+      div {{ entry.added }} 追加 ({{ entry.time_added }})
+      div {{ entry.updated }} 更新 ({{ entry.time_updated }})
       div
         button(@click="archive(entry.eid)") 既読
     hr
@@ -28,8 +28,9 @@
     .todo
       em ToDo:
       ul
-        li More 100
+        li link to getpocket.com
         li Google Analytics
+        li merge master
         li Capture
         li はてブ パネル
         li タグ編集

@@ -1,6 +1,7 @@
 <template lang="pug">
 .sidebar
   section
+    button(@click="fetchMoreEntries") fetchMoreEntries
     h1.logo
       a(href="/chase/")
         img(src="../assets/logo.png" alt="Chase")
@@ -100,6 +101,7 @@ export default {
   methods: {
     ...mapActions({
       fetchEntries: 'fetchEntries',
+      fetchMoreEntries: 'fetchMoreEntries',
       fetchFavorites: 'fetchFavorites',
     }),
     getRequestToken() {

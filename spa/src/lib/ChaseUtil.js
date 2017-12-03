@@ -33,6 +33,8 @@ function moldRawItem(pocketRawItem) {
     tags: m.tags || {},
     added: getDate(m.time_added),
     updated: getDate(m.time_updated),
+    time_added: m.time_added,
+    time_updated: m.time_updated,
   };
 }
 

@@ -48,13 +48,34 @@ async function get(accessToken) {
     },
     body: JSON.stringify({
       access_token: accessToken,
-      count: 100,
+      count: 50,
       detailType: 'complete',
     }),
   })
     .then(res => res.json())
     .catch(err => debug(err));
   debug('[get]<<<<', result);
+  return result;
+}
+
+async function getMore(accessToken, offset) {
+  debug('[getMore]>>>>', accessToken);
+  if (!accessToken) return { list: {} };
+  const result = await fetch(`${LAMBDA_ENDPOINT}/pocket/get`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      access_token: accessToken,
+      count: 50,
+      offset,
+      detailType: 'complete',
+    }),
+  })
+    .then(res => res.json())
+    .catch(err => debug(err));
+  debug('[getMore]<<<<', result);
   return result;
 }
 
@@ -160,6 +181,7 @@ export default {
   getRequestToken,
   getAccessToken,
   get,
+  getMore,
   getFavorites,
   getByTag,
   archive,

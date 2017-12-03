@@ -36,8 +36,8 @@ export default new Vuex.Store({
         return { ...entry, ...info };
       });
       return arr.sort((a, b) => {
-        if (a.sortId > b.sortId) return 1;
-        if (a.sortId < b.sortId) return -1;
+        if (a.time_added < b.time_added) return 1;
+        if (a.time_added > b.time_added) return -1;
         return 0;
       });
     },
@@ -150,7 +150,7 @@ export default new Vuex.Store({
     },
     updateEntries(context, payload) {
       const newEntries = ChaseUtil.makeEntries(payload.list);
-      context.commit('updateEntries', newEntries);
+      context.commit('mergeEntries', newEntries);
       Object.keys(newEntries).forEach((key) => {
         const entry = newEntries[key];
         if (!entry.ready) {
@@ -206,6 +206,12 @@ export default new Vuex.Store({
     async fetchEntries({ state, dispatch }) {
       const at = state.login.accessToken;
       const json = await LambdaPocket.get(at);
+      dispatch('updateEntries', json);
+    },
+    async fetchMoreEntries({ state, dispatch }) {
+      const at = state.login.accessToken;
+      const cnt = Object.keys(state.entries).length;
+      const json = await LambdaPocket.getMore(at, cnt);
       dispatch('updateEntries', json);
     },
     async fetchFavorites({ state, dispatch }) {
