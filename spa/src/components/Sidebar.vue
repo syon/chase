@@ -3,7 +3,7 @@
   section
     h1.logo
       a(href="/chase/")
-        img(src="/chase/static/chase256.png" alt="Chase")
+        img(src="../assets/logo.png" alt="Chase")
 
   section.menu(v-if="login.accessToken")
     .flex-aic-jcsb
