@@ -72,7 +72,12 @@ async function fetchLibraS3(pocketId) {
 
 async function fetchHatebuCnt(url) {
   const encodedUrl = encodeURI(url);
-  const apiHost = 'http://api.b.st-hatena.com'; // https://b.hatena.ne.jp
+  let apiHost;
+  if (window.location.protocol === 'https:') {
+    apiHost = 'https://b.hatena.ne.jp';
+  } else {
+    apiHost = 'http://api.b.st-hatena.com';
+  }
   const apiUrl = `${apiHost}/entry.count?url=${encodedUrl}`;
   const cnt = await fetchJsonp(apiUrl).then(r => r.json());
   return cnt;
