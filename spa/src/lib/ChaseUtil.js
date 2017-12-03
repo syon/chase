@@ -1,4 +1,5 @@
 import Debug from 'debug';
+import fetchJsonp from 'fetch-jsonp';
 
 const debug = Debug('chase:util');
 const CHASE_S3_BASE_URL = 'https://s3.amazonaws.com/syon-chase';
@@ -69,7 +70,16 @@ async function fetchLibraS3(pocketId) {
   return result;
 }
 
+async function fetchHatebuCnt(url) {
+  const encodedUrl = encodeURI(url);
+  const apiHost = 'http://api.b.st-hatena.com'; // https://b.hatena.ne.jp
+  const apiUrl = `${apiHost}/entry.count?url=${encodedUrl}`;
+  const cnt = await fetchJsonp(apiUrl).then(r => r.json());
+  return cnt;
+}
+
 export default {
   makeEntries,
   fetchLibraS3,
+  fetchHatebuCnt,
 };

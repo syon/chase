@@ -15,6 +15,8 @@
           .tags
             span.tag(v-for="tag in Object.keys(obj.tags)") {{ tag }}
       .pnl-action
+        .hatebu
+          .hatebu-cnt(:style="hatebuCntStyle") {{ obj.hatebuCnt }}
         .fav
           button(v-if="obj.favorite" @click="unfavorite(obj.eid)" style="color:orange;")
             span ★
@@ -48,6 +50,24 @@ export default {
     },
     linkTitle() {
       return this.obj.title ? this.obj.title : this.obj.url;
+    },
+    hatebuCntStyle() {
+      const cnt = this.obj.hatebuCnt;
+      let style;
+      switch (true) {
+        case cnt > 500:
+          style = { color: '#F50057', fontWeight: 600 };
+          break;
+        case cnt > 100:
+          style = { color: '#FF4081', fontWeight: 400 };
+          break;
+        case cnt > 10:
+          style = { color: '#FF4081', fontWeight: 100 };
+          break;
+        default:
+          style = { color: '#9E9E9E' };
+      }
+      return style;
     },
   },
   methods: {
@@ -149,6 +169,11 @@ export default {
       overflow visible
       border none
       cursor pointer
+  .hatebu
+    .hatebu-cnt
+      line-height 1
+      font-size 0.75rem
+      letter-spacing -0.05em
   .fav span
     font-size 1.25rem
     cursor pointer

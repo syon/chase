@@ -29,9 +29,7 @@
       em ToDo:
       ul
         li More 100
-        li IE11 fetch
         li Google Analytics
-        li はてブカウント
         li Capture
         li はてブ パネル
         li タグ編集

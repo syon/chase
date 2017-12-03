@@ -16,6 +16,7 @@ const initialState = {
   },
   entries: {},
   libraInfo: {},
+  hatebuCntSet: {},
   activeEid: '',
   myscenes: {},
 };
@@ -30,6 +31,8 @@ export default new Vuex.Store({
         const info = state.libraInfo[key];
         const entry = list[key];
         entry.ready = !!info;
+        const hatebuCnt = state.hatebuCntSet[key];
+        entry.hatebuCnt = hatebuCnt > 0 ? hatebuCnt : '';
         return { ...entry, ...info };
       });
       return arr.sort((a, b) => {
@@ -104,6 +107,9 @@ export default new Vuex.Store({
     addLibraInfo(state, { eid, pageinfo }) {
       state.libraInfo = { ...state.libraInfo, [eid]: pageinfo };
     },
+    addHatebuCnt(state, { eid, hatebuCnt }) {
+      state.hatebuCntSet = { ...state.hatebuCntSet, [eid]: hatebuCnt };
+    },
     activate(state, payload) {
       const { eid } = payload;
       state.activeEid = eid;
@@ -149,6 +155,7 @@ export default new Vuex.Store({
         const entry = newEntries[key];
         if (!entry.ready) {
           context.dispatch('fetchLibraS3', entry);
+          context.dispatch('fetchHatebuCnt', entry);
         }
       });
     },
@@ -255,6 +262,11 @@ export default new Vuex.Store({
           debug('[fetchLibraThumb]<<<<', r);
           return r.ETag;
         });
+    },
+    async fetchHatebuCnt(context, entry) {
+      const { eid, url } = entry;
+      const hatebuCnt = await ChaseUtil.fetchHatebuCnt(url);
+      context.commit('addHatebuCnt', { eid, hatebuCnt });
     },
   },
 });
