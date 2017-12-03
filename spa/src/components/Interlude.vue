@@ -28,6 +28,7 @@
     .todo
       em ToDo:
       ul
+        li Bug: Infinite More
         li link to getpocket.com
         li Google Analytics
         li merge master

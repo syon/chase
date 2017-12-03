@@ -42,11 +42,10 @@ export default {
 
 <style lang="stylus" scoped>
 .page-container
-  // width 1140px
   width 100%
   display flex
   .page-nav
-    width 240px
+    width 180px
   .page-content
     flex 1
     padding 0 15px

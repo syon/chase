@@ -11,11 +11,14 @@
       clickable.refresh(@click.native="fetchEntries")
         i.ion-ios-refresh-empty
     .link-item
-      router-link(to="/") Recent
+      router-link(to="/")
+        clickable Recent
     .link-item
-      router-link(:to="{ name: 'Inbox' }") Inbox
+      router-link(:to="{ name: 'Inbox' }")
+        clickable Inbox
     .link-item
-      router-link(:to="{ name: 'Favorite' }") Favorite
+      router-link(:to="{ name: 'Favorite' }")
+        clickable Favorite
 
   section.myscenes
     em My Scenes:
@@ -170,7 +173,9 @@ export default {
   display flex
   align-items center
   .username
-    margin-right 1em
+    margin-right .5em
+    font-size .5rem
   .disconnect
+    padding 0 .5rem
     font-size 1.5rem
 </style>
