@@ -2,7 +2,8 @@
 .sidebar
   section
     h1.logo
-      span Chase
+      router-link(to="/")
+        img(src="/static/chase256.png" alt="Chase")
 
   section.menu(v-if="login.accessToken")
     .flex-aic-jcsb
@@ -160,8 +161,13 @@ export default {
     display flex
 
 .logo
+  display flex
+  align-items center
   margin 0
   font-size 100%
+  img
+    width 32px
+    height 32px
 
 .tags
   .link-item
