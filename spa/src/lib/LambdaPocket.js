@@ -79,23 +79,6 @@ async function getMore(accessToken, offset) {
   return result;
 }
 
-async function getFavorites(accessToken) {
-  return fetch(`${LAMBDA_ENDPOINT}/pocket/get`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      access_token: accessToken,
-      favorite: 1,
-      // count: 20,
-      detailType: 'complete',
-    }),
-  })
-    .then(res => res.json())
-    .catch(err => debug(err));
-}
-
 async function getByTag(accessToken, tag) {
   debug('[getByTag]>>>>', accessToken, tag);
   const result = await fetch(`${LAMBDA_ENDPOINT}/pocket/get`, {
@@ -182,7 +165,6 @@ export default {
   getAccessToken,
   get,
   getMore,
-  getFavorites,
   getByTag,
   archive,
   favorite,

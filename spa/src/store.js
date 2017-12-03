@@ -214,11 +214,6 @@ export default new Vuex.Store({
       const json = await LambdaPocket.getMore(at, cnt);
       dispatch('updateEntries', json);
     },
-    async fetchFavorites({ state, dispatch }) {
-      const at = state.login.accessToken;
-      const json = await LambdaPocket.getFavorites(at);
-      dispatch('updateEntries', json);
-    },
     async activate({ commit }, eid) {
       commit('activate', { eid });
     },

@@ -1,7 +1,6 @@
 <template lang="pug">
 .sidebar
   section
-    button(@click="fetchMoreEntries") fetchMoreEntries
     h1.logo
       a(href="/chase/")
         img(src="../assets/logo.png" alt="Chase")
@@ -12,18 +11,11 @@
       clickable.refresh(@click.native="fetchEntries")
         i.ion-ios-refresh-empty
     .link-item
-      router-link(to="/") Recent 100
+      router-link(to="/") Recent
     .link-item
       router-link(:to="{ name: 'Inbox' }") Inbox
     .link-item
       router-link(:to="{ name: 'Favorite' }") Favorite
-
-  section.menu.all
-    em All
-    .link-item
-      clickable(@click.native="fetchFavorites")
-        i.ion-ios-star-outline
-        span お気に入り
 
   section.myscenes
     em My Scenes:
@@ -101,8 +93,6 @@ export default {
   methods: {
     ...mapActions({
       fetchEntries: 'fetchEntries',
-      fetchMoreEntries: 'fetchMoreEntries',
-      fetchFavorites: 'fetchFavorites',
     }),
     getRequestToken() {
       this.$store.dispatch('getRequestToken', this.$cookie)
