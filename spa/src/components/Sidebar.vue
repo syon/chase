@@ -2,7 +2,7 @@
 .sidebar
   section
     h1.logo
-      router-link(to="/")
+      a(href="/chase/")
         img(src="/static/chase256.png" alt="Chase")
 
   section.menu(v-if="login.accessToken")
