@@ -55,13 +55,13 @@ export default {
       const cnt = this.obj.hatebuCnt;
       let style;
       switch (true) {
-        case cnt > 500:
-          style = { color: '#F50057', fontWeight: 600 };
+        case cnt >= 500:
+          style = { color: '#F50057', fontWeight: 900 };
           break;
-        case cnt > 100:
-          style = { color: '#FF4081', fontWeight: 400 };
+        case cnt >= 100:
+          style = { color: '#FF4081', fontWeight: 600 };
           break;
-        case cnt > 10:
+        case cnt >= 10:
           style = { color: '#FF4081', fontWeight: 100 };
           break;
         default:
