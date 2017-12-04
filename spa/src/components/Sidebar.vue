@@ -17,28 +17,9 @@
     .link-item
       router-link(:to="{ name: 'Favorite' }")
         clickable Favorite
-
-  section.myscenes
-    em My Scenes:
-    template(v-if="sceneEditing")
-      button(@click="doSceneEdit") OK
-      hr
-      label
-        span chase:a
-        input(v-model="chaseA")
-      hr
-      label
-        span chase:b
-        input(v-model="chaseB")
-      hr
-      label
-        span chase:c
-        input(v-model="chaseC")
-    template(v-else)
-      button(@click="showScenesEditor") edit
-      .link-item(v-for="sce in myScenesTags")
-        router-link(:to="{ name: 'Tag', params: { tag: sce.tag } }")
-          clickable {{ sce.label }}
+    .link-item(v-for="sce in myScenesTags")
+      router-link(:to="{ name: 'Tag', params: { tag: sce.tag } }")
+        clickable {{ sce.label }}
 
   section.tags
     template(v-for="tag in recentTags")
@@ -54,6 +35,11 @@
         a(href="https://getpocket.com/" target="_blank")
           i.ion-ios-world-outline
           span Pocket
+    .config
+      .link-item.font-smaller
+        router-link(:to="{ name: 'Config' }")
+          i.ion-ios-settings
+          span Config
     .userinfo
       template(v-if="login.accessToken")
         span.username {{ login.username }}
@@ -72,14 +58,6 @@ export default {
   components: {
     Clickable,
   },
-  data() {
-    return {
-      sceneEditing: false,
-      chaseA: null,
-      chaseB: null,
-      chaseC: null,
-    };
-  },
   computed: {
     ...mapState({
       login: 'login',
@@ -94,9 +72,6 @@ export default {
   },
   mounted() {
     this.$store.dispatch('actByPhase', this.$cookie);
-    this.chaseA = this.myScenesTags[0].label;
-    this.chaseB = this.myScenesTags[1].label;
-    this.chaseC = this.myScenesTags[2].label;
   },
   methods: {
     getRequestToken() {
@@ -110,11 +85,6 @@ export default {
     },
     showScenesEditor() {
       this.sceneEditing = true;
-    },
-    doSceneEdit() {
-      const scenes = { a: this.chaseA, b: this.chaseB, c: this.chaseC };
-      this.$store.dispatch('doSceneEdit', { $cookie: this.$cookie, scenes });
-      this.sceneEditing = false;
     },
     logout() {
       this.$store.dispatch('logout', this.$cookie);
