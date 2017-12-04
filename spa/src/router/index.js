@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Welcome from '@/screens/Welcome';
-import HelloWorld from '@/screens/HelloWorld';
+import Catalog from '@/screens/Catalog';
 import Config from '@/screens/Config';
 
 import '@/assets/app.stylus';
@@ -18,17 +18,17 @@ export default new Router({
     {
       path: '/',
       name: 'Inbox',
-      component: HelloWorld,
+      component: Catalog,
     },
     {
       path: '/favorite',
       name: 'Favorite',
-      component: HelloWorld,
+      component: Catalog,
     },
     {
       path: '/tag/:tag',
       name: 'Tag',
-      component: HelloWorld,
+      component: Catalog,
     },
     {
       path: '/config',
