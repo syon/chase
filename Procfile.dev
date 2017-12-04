@@ -1,2 +1,0 @@
-web: bundle exec unicorn -p 4567 -c ./unicorn.rb
-dev: gulp
