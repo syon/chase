@@ -3,8 +3,6 @@ const axios = require('axios');
 const URLSearchParams = require('url-search-params');
 const debug = require('debug')('chase:film');
 
-const redirectUri = 'https://syon.github.io/chase/';
-
 const HTTP_GET_CONFIG = {
   headers: {
     'X-Accept': 'application/json',
@@ -46,15 +44,16 @@ function errorResponseBuilder(error) {
 }
 
 module.exports.pocketOauthRequest = (event, context, callback) => {
+  const params = JSON.parse(event.body);
   const reqd = {
     consumer_key: process.env.POCKET_CONSUMER_KEY,
-    redirect_uri: 'https://syon-chase.herokuapp.com?redirected',
+    redirect_uri: params.redirect_uri,
   };
   const data = JSON.stringify(reqd);
   axios.post('https://getpocket.com/v3/oauth/request', data, HTTP_POST_CONFIG)
     .then((res) => {
       const requestToken = res.data.code;
-      const authUri = `https://getpocket.com/auth/authorize?request_token=${requestToken}&redirect_uri=${redirectUri}`;
+      const authUri = `https://getpocket.com/auth/authorize?request_token=${requestToken}&redirect_uri=${params.redirect_uri}`;
       const bodyObj = {
         request_token: requestToken,
         auth_uri: authUri,

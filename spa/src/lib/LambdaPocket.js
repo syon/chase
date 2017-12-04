@@ -2,12 +2,19 @@ import Debug from 'debug';
 import URLSearchParams from 'url-search-params';
 
 const debug = Debug('chase:lambda-pocket');
+const REDIRECT_URI = process.env.NODE_ENV === 'development' ? 'http://localhost:8080/chase/' : 'https://syon.github.io/chase/';
 const LAMBDA_ENDPOINT = 'https://ua5uhzf79d.execute-api.us-east-1.amazonaws.com/dev';
 
 async function getRequestToken() {
   debug('[getAccessToken]>>>>');
   const result = await fetch(`${LAMBDA_ENDPOINT}/pocket/oauth/request`, {
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      redirect_uri: REDIRECT_URI,
+    }),
   })
     /* eslint-disable arrow-body-style */
     .then(res => res.json()).then((json) => {
