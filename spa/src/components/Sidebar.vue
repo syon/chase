@@ -8,8 +8,6 @@
   section.menu(v-if="login.accessToken")
     .flex-aic-jcsb
       em Recent {{ catalogCount }}
-      clickable.refresh(@click.native="fetchEntries")
-        i.ion-ios-refresh-empty
     .link-item
       router-link(to="/")
         clickable Recent
@@ -59,7 +57,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import Clickable from '@/components/Clickable';
 
 export default {
@@ -94,9 +92,6 @@ export default {
     this.chaseC = this.myScenesTags[2].label;
   },
   methods: {
-    ...mapActions({
-      fetchEntries: 'fetchEntries',
-    }),
     getRequestToken() {
       this.$store.dispatch('getRequestToken', this.$cookie)
         .then((authUri) => {
