@@ -193,9 +193,9 @@ export default new Vuex.Store({
       const json = await LambdaPocket.getRequestToken();
       $cookie.set('pocket_request_token', json.request_token, { expires: '3M' });
       $cookie.set('phase', 'WAITING_ACCESSTOKEN', { expires: '3M' });
-      $cookie.set('chase:a', 'シーン A');
-      $cookie.set('chase:b', 'シーン B');
-      $cookie.set('chase:c', 'シーン C');
+      $cookie.set('chase:a', 'Scene A');
+      $cookie.set('chase:b', 'Scene B');
+      $cookie.set('chase:c', 'Scene C');
       return json.auth_uri;
     },
     async getAccessToken({ commit, state }, $cookie) {
