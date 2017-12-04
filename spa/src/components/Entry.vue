@@ -25,7 +25,8 @@
         .archive
           button(@click="archive(obj.eid)") ✓
   template(v-else)
-    p Loading...
+    span.loading
+      i.ion-load-d
 </template>
 
 <script>
@@ -119,6 +120,8 @@ export default {
     background-color lemonchiffon
   &.archived
     background-color #eee
+  .loading
+    font-size 1.5rem
   .thumb
     width 100px
     height 80px
