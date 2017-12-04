@@ -170,5 +170,5 @@ export default {
     font-size .6rem
   .disconnect
     padding 0 .5rem
-    font-size 1.5rem
+    font-size 1.25rem
 </style>

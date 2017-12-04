@@ -25,13 +25,11 @@
     .todo
       em ToDo:
       ul
-        li Google Analytics
-        li merge master
+        li Login Screen
         li Capture
         li はてブ パネル
         li タグ編集
         li 消化進捗
-        li /etc/hosts
 </template>
 
 <script>

@@ -183,16 +183,19 @@ export default new Vuex.Store({
         dispatch('restoreScenes', $cookie);
       } else if (ph === 'WAITING_ACCESSTOKEN') {
         await dispatch('getAccessToken', $cookie);
-        dispatch('fetchEntries');
+        await dispatch('fetchEntries');
+        dispatch('restoreScenes', $cookie);
       } else {
         dispatch('logout', $cookie);
       }
     },
     async getRequestToken({ commit }, $cookie) {
       const json = await LambdaPocket.getRequestToken();
-      // commit('setRequestToken', json);
       $cookie.set('pocket_request_token', json.request_token, { expires: '3M' });
       $cookie.set('phase', 'WAITING_ACCESSTOKEN', { expires: '3M' });
+      $cookie.set('chase:a', 'シーン A');
+      $cookie.set('chase:b', 'シーン B');
+      $cookie.set('chase:c', 'シーン C');
       return json.auth_uri;
     },
     async getAccessToken({ commit, state }, $cookie) {
