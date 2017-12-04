@@ -11,7 +11,6 @@ export default {
 
 <style lang="stylus" scoped>
 .compo
-  color #0366d6
   display inline
   border 0
   border-radius initial

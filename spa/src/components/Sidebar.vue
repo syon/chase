@@ -37,7 +37,8 @@
     template(v-else)
       button(@click="showScenesEditor") edit
       .link-item(v-for="sce in myScenesTags")
-        router-link(:to="{ name: 'Tag', params: { tag: sce.tag } }") {{ sce.label }}
+        router-link(:to="{ name: 'Tag', params: { tag: sce.tag } }")
+          clickable {{ sce.label }}
 
   section.tags
     template(v-for="tag in recentTags")
