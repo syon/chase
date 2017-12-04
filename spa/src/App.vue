@@ -18,25 +18,6 @@ export default {
     Sidebar,
     Interlude,
   },
-  data() {
-    return {
-      loading: false,
-    };
-  },
-  created() {
-    window.addEventListener('scroll', this.handleScroll);
-  },
-  methods: {
-    handleScroll() {
-      const crr = window.scrollY + window.innerHeight;
-      const max = document.body.scrollHeight;
-      if (!this.loading && (crr / max) > 0.7) {
-        this.loading = true;
-        this.$store.dispatch('fetchMoreEntries')
-          .then(() => { this.loading = false; });
-      }
-    },
-  },
 };
 </script>
 

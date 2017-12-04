@@ -208,12 +208,6 @@ export default new Vuex.Store({
       const json = await LambdaPocket.get(at);
       dispatch('updateEntries', json);
     },
-    async fetchMoreEntries({ state, dispatch }) {
-      const at = state.login.accessToken;
-      const cnt = Object.keys(state.entries).length;
-      const json = await LambdaPocket.getMore(at, cnt);
-      dispatch('updateEntries', json);
-    },
     async activate({ commit }, eid) {
       commit('activate', { eid });
     },
