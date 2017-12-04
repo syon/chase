@@ -3,6 +3,7 @@
 import Vue from 'vue';
 import VueCookie from 'vue-cookie';
 import { sync } from 'vuex-router-sync';
+import VueAnalytics from 'vue-analytics';
 import 'babel-polyfill';
 import 'whatwg-fetch';
 import App from './App';
@@ -13,6 +14,10 @@ sync(store, router);
 
 Vue.config.productionTip = false;
 Vue.use(VueCookie);
+Vue.use(VueAnalytics, {
+  id: 'UA-37634759-14',
+  router,
+});
 
 /* eslint-disable no-new */
 new Vue({
