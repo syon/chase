@@ -12,16 +12,19 @@
         clickable
           i.ion-ios-filing-outline
           span Inbox
+        .cnt {{ filteredCatalog('Inbox').length }}
     .link-item
       router-link(:to="{ name: 'Favorite' }")
         clickable
           i.ion-ios-star-outline
           span Favorite
+        .cnt {{ filteredCatalog('Favorite').length }}
     .link-item(v-for="sce in myScenesTags")
       router-link(:to="{ name: 'Tag', params: { tag: sce.tag } }")
         clickable
           i.ion-ios-arrow-right
           span {{ sce.label }}
+        .cnt {{ filteredCatalog('Tag', sce.tag).length }}
 
   section.tags
     template(v-for="tag in recentTags")
@@ -35,13 +38,15 @@
     .misc
       .link-item.font-smaller
         a(href="https://getpocket.com/" target="_blank")
-          i.ion-ios-world-outline
-          span Pocket
+          span
+            i.ion-ios-world-outline
+            span Pocket
     .config
       .link-item.font-smaller
         router-link(:to="{ name: 'Config' }")
-          i.ion-ios-settings
-          span Config
+          span
+            i.ion-ios-settings
+            span Config
     .userinfo
       template(v-if="login.accessToken")
         span.username {{ login.username }}
@@ -68,6 +73,7 @@ export default {
     }),
     ...mapGetters([
       'catalogCount',
+      'filteredCatalog',
       'recentTags',
       'myScenesTags',
     ]),
@@ -136,12 +142,15 @@ export default {
     flex 1
     height inherit
     display flex
+    align-items center
+    justify-content space-between
+  .cnt
+    font-size .75rem
 
 .logo
   display flex
   align-items center
   margin 0
-  font-size 100%
   img
     width 32px
     height 32px
