@@ -3,21 +3,18 @@
   template(v-if="entry.ready")
     figure
       img(:src="entry.image_s3_url")
-    .title
-      a(:href="entry.url" target="_blank") {{ entry.title }}
+    .link
+      a(:href="entry.url" target="_blank") {{ linkTitle }}
     .meta
-      div.desc {{ entry.description }}
-      div {{ entry.site_name }}
-      div {{ Object.keys(entry.tags) }}
-      div {{ entry.archived }}
-      div {{ entry.fqdn }}
-      div {{ entry.added }} 追加 ({{ entry.time_added }})
-      div {{ entry.updated }} 更新 ({{ entry.time_updated }})
-      div
-        button(@click="archive(entry.eid)") 既読
+      div {{ entry.site_name }} ({{ entry.fqdn }})
+    .desc {{ entry.description }}
+    hr
+    .action
+      button(@click="archive(entry.eid)") 既読
+      div {{ entry.added }}
     hr
     .addscenes
-      button(v-for="sce in scenes" @click="addTag({ eid: entry.eid, tag: sce.tag })") {{ sce.label }}
+      button.scene(v-for="sce in scenes" @click="addTag({ eid: entry.eid, tag: sce.tag })") {{ sce.label }}
     hr
     .tags
       .tag(v-for="tag in recentTags" @click="addTag({ eid: entry.eid, tag })" :class="{ applied: Object.keys(entry.tags).includes(tag) }") {{ tag }}
@@ -50,6 +47,9 @@ export default {
       scenes: 'myScenesTags',
       recentTags: 'recentTags',
     }),
+    linkTitle() {
+      return this.entry.title ? this.entry.title : this.entry.url;
+    },
   },
   methods: {
     ...mapActions([
@@ -67,10 +67,44 @@ export default {
   padding 0 15px
   figure
     margin 0
+    display flex
+    align-items center
+    justify-content center
+    overflow hidden
     img
-      width 100%
+      height 280px
+  .link
+    margin .5em 0
+    line-height 1.3
+    word-break break-word
+    a
+      font-weight bold
+      text-decoration none
+      color #24292e
+      &:hover
+        text-decoration underline
+  .desc
+    margin 1em 0 .5em
+    display -webkit-box
+    -webkit-line-clamp 5
+    -webkit-box-orient vertical
+    overflow hidden
+    font-size .75em
   .meta
-    font-size 0.75em
+    font-size .75em
+    color #757575
+  .action
+    display flex
+    align-items center
+    justify-content space-between
+    font-size .75em
+    color #757575
+  .addscenes
+    display flex
+    align-items center
+    justify-content space-between
+    .scene
+      flex 1
 
 .tags
   .tag
