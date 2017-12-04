@@ -79,15 +79,14 @@ export default {
     ]),
   },
   mounted() {
-    this.$store.dispatch('actByPhase', this.$cookie);
+    const ph = this.$cookie.get('phase');
+    if (!ph) {
+      this.$router.push('welcome');
+    } else {
+      this.$store.dispatch('actByPhase', this.$cookie);
+    }
   },
   methods: {
-    getRequestToken() {
-      this.$store.dispatch('getRequestToken', this.$cookie)
-        .then((authUri) => {
-          window.location = authUri;
-        });
-    },
     getAccessToken() {
       this.$store.dispatch('getAccessToken', this.$cookie);
     },
@@ -96,6 +95,7 @@ export default {
     },
     logout() {
       this.$store.dispatch('logout', this.$cookie);
+      this.$router.push('welcome');
     },
   },
 };
