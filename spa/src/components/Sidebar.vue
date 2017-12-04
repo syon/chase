@@ -41,19 +41,25 @@
 
   section.tags
     template(v-for="tag in recentTags")
-      .link-item
+      .link-item.font-smaller
         router-link(:to="{ name: 'Tag', params: { tag } }")
           clickable
             i.ion-ios-pricetags-outline
             span {{ tag }}
 
-  section.userinfo
-    template(v-if="login.accessToken")
-      span.username {{ login.username }}
-      clickable.disconnect(@click.native="logout")
-        i.ion-ios-close-empty
-    template(v-else)
-      button(@click="getRequestToken") Connect to Pocket
+  section
+    .misc
+      .link-item.font-smaller
+        a(href="https://getpocket.com/" target="_blank")
+          i.ion-ios-world-outline
+          span Pocket
+    .userinfo
+      template(v-if="login.accessToken")
+        span.username {{ login.username }}
+        clickable.disconnect(@click.native="logout")
+          i.ion-ios-close-empty
+      template(v-else)
+        button(@click="getRequestToken") Connect to Pocket
 </template>
 
 <script>
@@ -162,14 +168,16 @@ export default {
 .tags
   .link-item
     height 1.5rem
-    font-size 0.75rem
+
+.font-smaller
+  font-size 0.8rem
 
 .userinfo
   display flex
   align-items center
   .username
     margin-right .5em
-    font-size .5rem
+    font-size .6rem
   .disconnect
     padding 0 .5rem
     font-size 1.5rem

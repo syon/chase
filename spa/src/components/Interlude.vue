@@ -28,7 +28,6 @@
     .todo
       em ToDo:
       ul
-        li link to getpocket.com
         li Google Analytics
         li merge master
         li Capture
@@ -36,7 +35,6 @@
         li タグ編集
         li 消化進捗
         li /etc/hosts
-        li Dark Theme
 </template>
 
 <script>
