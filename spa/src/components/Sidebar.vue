@@ -6,20 +6,22 @@
         img(src="../assets/logo.png" alt="Chase")
 
   section.menu(v-if="login.accessToken")
-    .flex-aic-jcsb
-      em Recent {{ catalogCount }}
-    .link-item
-      router-link(to="/")
-        clickable Recent
+    .menu-title Recent {{ catalogCount }}
     .link-item
       router-link(:to="{ name: 'Inbox' }")
-        clickable Inbox
+        clickable
+          i.ion-ios-filing-outline
+          span Inbox
     .link-item
       router-link(:to="{ name: 'Favorite' }")
-        clickable Favorite
+        clickable
+          i.ion-ios-star-outline
+          span Favorite
     .link-item(v-for="sce in myScenesTags")
       router-link(:to="{ name: 'Tag', params: { tag: sce.tag } }")
-        clickable {{ sce.label }}
+        clickable
+          i.ion-ios-arrow-right
+          span {{ sce.label }}
 
   section.tags
     template(v-for="tag in recentTags")
@@ -114,6 +116,11 @@ export default {
 
 .menu
   margin 1rem 0
+  .menu-title
+    font-size .6rem
+    font-style italic
+    color #757575
+    margin .5em 0
 
 .link-item
   height 2rem
@@ -121,7 +128,10 @@ export default {
   align-items center
   font-size 1rem
   i
+    width 1em
+    display inline-block
     margin-right .5em
+    text-align center
   > a
     flex 1
     height inherit
