@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Welcome from '@/components/Welcome';
-import HelloWorld from '@/components/HelloWorld';
-import Config from '@/components/Config';
+import Welcome from '@/screens/Welcome';
+import HelloWorld from '@/screens/HelloWorld';
+import Config from '@/screens/Config';
 
 import '@/assets/app.stylus';
 

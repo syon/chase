@@ -25,7 +25,6 @@
     .todo
       em ToDo:
       ul
-        li Login Screen
         li Capture
         li はてブ パネル
         li タグ編集
