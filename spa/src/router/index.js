@@ -11,11 +11,6 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Recent',
-      component: HelloWorld,
-    },
-    {
-      path: '/inbox',
       name: 'Inbox',
       component: HelloWorld,
     },
