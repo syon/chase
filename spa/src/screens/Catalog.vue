@@ -3,6 +3,7 @@
   nav.page-nav
     sidebar
   article.page-content
+    h2 {{ mode }}
     .entries
       .entry(v-for="e in catalog" :data-eid="e.eid" :key="e.eid")
         entry(:obj="e")
@@ -27,7 +28,11 @@ export default {
       filteredCatalog: 'filteredCatalog',
     }),
     mode() {
-      return this.$route.name;
+      let mode = this.$route.name;
+      if (this.$route.name === 'Tag') {
+        mode = this.$cookie.get(this.$route.params.tag);
+      }
+      return mode;
     },
     catalog() {
       const route = this.$route;
