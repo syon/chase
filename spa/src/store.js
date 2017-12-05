@@ -132,6 +132,11 @@ export default new Vuex.Store({
       entry.favorite = false;
       state.entries = { ...state.entries, [eid]: entry };
     },
+    addTag(state, payload) {
+      const { eid, tag } = payload;
+      const entry = state.entries[eid];
+      entry.tags = { ...entry.tags, [tag]: { item_id: eid, tag } };
+    },
   },
   actions: {
     increment(context) {
@@ -224,6 +229,7 @@ export default new Vuex.Store({
     async addTag({ commit, state, dispatch }, { eid, tag }) {
       const at = state.login.accessToken;
       await LambdaPocket.addTag(at, eid, tag);
+      commit('addTag', { eid, tag });
     },
     async favorite({ commit, state, dispatch }, eid) {
       const at = state.login.accessToken;

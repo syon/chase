@@ -17,7 +17,7 @@
       button.scene(v-for="sce in scenes" @click="addTag({ eid: entry.eid, tag: sce.tag })") {{ sce.label }}
     hr
     .tags
-      .tag(v-for="tag in recentTags" @click="addTag({ eid: entry.eid, tag })" :class="{ applied: Object.keys(entry.tags).includes(tag) }") {{ tag }}
+      clickable.tag(v-for="tag in recentTags" @click.native="handleTagClick(tag)" :class="{ applied: Object.keys(entry.tags).includes(tag) }") {{ tag }}
 
   hr
 
@@ -25,6 +25,7 @@
     .todo
       em ToDo:
       ul
+        li OGP
         li Capture
         li はてブ パネル
         li タグ編集
@@ -33,8 +34,12 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex';
+import Clickable from '@/components/Clickable';
 
 export default {
+  components: {
+    Clickable,
+  },
   computed: {
     ...mapState({
       mytags: 'mytags',
@@ -53,6 +58,16 @@ export default {
       'archive',
       'addTag',
     ]),
+    handleTagClick(tag) {
+      if (Object.keys(this.entry.tags).includes(tag)) {
+        return;
+      }
+      const eid = this.entry.eid;
+      this.$store.dispatch('addTag', { eid, tag })
+        .then(() => {
+          this.entry.tags[tag] = { item_id: eid, tag };
+        });
+    },
   },
 };
 </script>
@@ -119,6 +134,8 @@ export default {
     &.applied
       color #fff
       background-color #9ea8b3
+      cursor auto
+      text-decoration none
 
 .todo
   font-size 0.75rem
