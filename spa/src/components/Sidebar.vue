@@ -52,8 +52,6 @@
         span.username {{ login.username }}
         clickable.disconnect(@click.native="logout")
           i.ion-ios-close-empty
-      template(v-else)
-        button(@click="getRequestToken") Connect to Pocket
 </template>
 
 <script>
