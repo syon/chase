@@ -1,8 +1,7 @@
 <template lang="pug">
 .interlude
   template(v-if="entry.ready")
-    figure
-      img(:src="entry.image_s3_url")
+    fit-image(:src="entry.image_s3_url" w="290" h="193" size="cover")
     .link
       a(:href="entry.url" target="_blank") {{ linkTitle }}
     .meta
@@ -37,10 +36,12 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex';
 import Clickable from '@/components/Clickable';
+import FitImage from '@/components/FitImage';
 
 export default {
   components: {
     Clickable,
+    FitImage,
   },
   data() {
     return {
@@ -87,14 +88,15 @@ export default {
   position fixed
   width inherit
   padding 0 15px
-  figure
-    margin 0
-    display flex
-    align-items center
-    justify-content center
-    overflow hidden
-    img
-      height 280px
+  // figure
+  //   margin 0
+  //   display flex
+  //   align-items center
+  //   justify-content center
+  //   overflow hidden
+  //   img
+  //     min-height 193px
+  //     max-height 193px
   .link
     margin .5em 0
     line-height 1.3

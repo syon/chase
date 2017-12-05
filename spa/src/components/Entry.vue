@@ -3,8 +3,7 @@
   template(v-if="obj.ready")
     .pnl(@click="activate(obj.eid)")
       .pnl-thumb
-        figure
-          img.thumb(:src="imgSrc" @error="onLoadImageError")
+        fit-image(:src="imgSrc" w="100" h="80" size="cover")
       .pnl-body
         .link
           a(:href="obj.url" target="_blank") {{ linkTitle }}
@@ -31,9 +30,13 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
+import FitImage from '@/components/FitImage';
 
 export default {
   props: ['obj'],
+  components: {
+    FitImage,
+  },
   data() {
     return {
       imgSrc: this.obj.image_s3_url,
