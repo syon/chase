@@ -26,20 +26,10 @@ export default new Vuex.Store({
   state: JSON.parse(JSON.stringify(initialState)),
   getters: {
     catalog(state) {
-      const list = state.entries;
-      const arr = Object.keys(list).map((key) => {
-        const info = state.libraInfo[key];
-        const entry = list[key];
-        entry.ready = !!info;
-        const hatebuCnt = state.hatebuCntSet[key];
-        entry.hatebuCnt = hatebuCnt > 0 ? hatebuCnt : '';
-        return { ...entry, ...info };
-      });
-      return arr.sort((a, b) => {
-        if (a.time_added < b.time_added) return 1;
-        if (a.time_added > b.time_added) return -1;
-        return 0;
-      });
+      const p = state.entries;
+      const l = state.libraInfo;
+      const h = state.hatebuCntSet;
+      return ChaseUtil.makeCatalog(p, l, h);
     },
     filteredCatalog: (state, getters) => (route, tag) => {
       const arr = getters.catalog;

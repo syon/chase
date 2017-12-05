@@ -4,6 +4,36 @@ import fetchJsonp from 'fetch-jsonp';
 const debug = Debug('chase:util');
 const CHASE_S3_BASE_URL = 'https://s3.amazonaws.com/syon-chase';
 
+function pickFallback(a, b, c) {
+  if (a) { return a; }
+  if (b) { return b; }
+  if (c) { return c; }
+  return null;
+}
+
+function makeCatalog(pocketItemSet, libraSet, hatebuCntSet) {
+  const arr = Object.keys(pocketItemSet).map((eid) => {
+    const item = pocketItemSet[eid];
+    const libra = libraSet[eid];
+    const ready = !!libra;
+    if (!ready) return item;
+    const hatebuCnt = hatebuCntSet[eid];
+    const override = {
+      ready,
+      title: pickFallback(libra.title, item.title, item.url),
+      site_name: pickFallback(libra.site_name, item.fqdn),
+      hatebuCnt: hatebuCnt > 0 ? hatebuCnt : '',
+    };
+    return { ...item, ...override };
+  });
+  const sortedItems = arr.sort((a, b) => {
+    if (a.time_added < b.time_added) return 1;
+    if (a.time_added > b.time_added) return -1;
+    return 0;
+  });
+  return sortedItems;
+}
+
 function getDate(time10) {
   const dt = new Date(time10 * 1000);
   const y = dt.getFullYear();
@@ -86,6 +116,7 @@ async function fetchHatebuCnt(url) {
 }
 
 export default {
+  makeCatalog,
   makeEntries,
   fetchLibraS3,
   fetchHatebuCnt,
