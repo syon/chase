@@ -17,7 +17,9 @@
       button.scene(v-for="sce in scenes" @click="addTag({ eid: entry.eid, tag: sce.tag })") {{ sce.label }}
     hr
     .tags
-      clickable.tag(v-for="tag in recentTags" @click.native="handleTagClick(tag)" :class="{ applied: Object.keys(entry.tags).includes(tag) }") {{ tag }}
+      clickable.tag(v-for="tag in recentTags" key="tag" @click.native="handleTagClick(tag)" :class="{ applied: Object.keys(entry.tags).includes(tag) }") {{ tag }}
+    .newtag
+      input(v-model="newtag" @keyup.enter="handleNewTag" placeholder="New Tag")
 
   hr
 
@@ -39,6 +41,11 @@ import Clickable from '@/components/Clickable';
 export default {
   components: {
     Clickable,
+  },
+  data() {
+    return {
+      newtag: '',
+    };
   },
   computed: {
     ...mapState({
@@ -67,6 +74,9 @@ export default {
         .then(() => {
           this.entry.tags[tag] = { item_id: eid, tag };
         });
+    },
+    handleNewTag() {
+      this.handleTagClick(this.newtag);
     },
   },
 };
