@@ -22,6 +22,8 @@ function makeCatalog(pocketItemSet, libraSet, hatebuCntSet) {
       ready,
       title: pickFallback(libra.title, item.title, item.url),
       site_name: pickFallback(libra.site_name, item.fqdn),
+      excerpt: pickFallback(item.excerpt, libra.description),
+      description: pickFallback(libra.description, item.excerpt),
       hatebuCnt: hatebuCnt > 0 ? hatebuCnt : '',
     };
     return { ...item, ...override };
