@@ -1,12 +1,12 @@
 <template lang="pug">
 figure(:class="figureClass" :style="figureStyle" :data-aspect="orderAsprect")
-  img(:src="src" ref="picture" :style="imgStyle" :data-aspect="naturalAsprect")
+  img(:src="src" ref="picture" :style="imgStyle" :data-aspect="naturalAsprect" @error="onLoadImageError")
 </template>
 
 <script>
 export default {
   name: 'FitImage',
-  props: ['src', 'w', 'h', 'size'],
+  props: ['src', 'w', 'h', 'size', 'onloaderror'],
   data() {
     return {
       figureClass: '',
@@ -76,6 +76,10 @@ export default {
           }
         }
       }
+    },
+    onLoadImageError() {
+      console.log('[FitImage]#onLoadImageError');
+      this.onloaderror();
     },
   },
 };

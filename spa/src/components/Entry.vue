@@ -3,7 +3,7 @@
   template(v-if="obj.ready")
     .pnl(@click="activate(obj.eid)")
       .pnl-thumb
-        fit-image(:src="imgSrc" w="100" h="80" size="cover")
+        fit-image(:src="imgSrc" w="100" h="80" size="cover" :onloaderror="handleLoadImageError")
       .pnl-body
         .link
           a(:href="obj.url" target="_blank") {{ linkTitle }}
@@ -81,7 +81,8 @@ export default {
       'favorite',
       'unfavorite',
     ]),
-    onLoadImageError() {
+    handleLoadImageError() {
+      console.log('[Entry]#handleLoadImageError');
       this.$store.dispatch('fetchLibraThumb', this.obj)
         .then((ETag) => {
           this.imgSrc = `${this.imgSrc}?etag=${ETag}`;
