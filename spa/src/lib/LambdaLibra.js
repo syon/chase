@@ -1,10 +1,11 @@
 import URLSearchParams from 'url-search-params';
 import Debug from 'debug';
 
-const debug = Debug('chase:libra-adaptor');
+const debug = Debug('chase:lambda-libra');
 const LAMBDA_ENDPOINT = 'https://ua5uhzf79d.execute-api.us-east-1.amazonaws.com/dev';
 
 async function info(arg) {
+  debug('[info]>>>>');
   const { eid, url } = arg;
   const q = new URLSearchParams();
   q.append('url', url);
@@ -24,10 +25,12 @@ async function info(arg) {
     throw e;
   });
   debug(pageinfo);
+  debug('[info]<<<<', pageinfo);
   return pageinfo;
 }
 
 async function thumb(arg) {
+  debug('[thumb]>>>>');
   const { eid, url, image_suggested } = arg;
   const result = await fetch(`${LAMBDA_ENDPOINT}/libra/thumb`, {
     method: 'POST',
@@ -47,6 +50,7 @@ async function thumb(arg) {
       debug(arg, error);
       throw error;
     });
+  debug('[thumb]<<<<', result);
   return result;
 }
 
