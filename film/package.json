@@ -12,7 +12,8 @@
   },
   "dependencies": {
     "puppeteer": "^0.10.2",
-    "tar": "^4.1.1"
+    "tar": "^4.1.1",
+    "useragent-generator": "^1.0.3"
   },
   "devDependencies": {
     "aws-sdk": "^2.166.0",
