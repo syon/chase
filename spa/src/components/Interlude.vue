@@ -21,6 +21,10 @@
       input(v-model="newtag" @keyup.enter="handleNewTag" placeholder="New Tag")
 
   hr
+  .showcase
+    fit-image(:src="filmDesktopSrc" w="193" h="145" size="cover" :onloadsuccess="() => onFilmSuccess(entry)" :onloaderror="() => onFilmError(entry)")
+    fit-image(:src="filmMobileSrc" w="82" h="145" size="cover" :onloaderror="() => onFilmError(entry)")
+  hr
 
   section
     .todo
@@ -60,6 +64,16 @@ export default {
     linkTitle() {
       return this.entry.title ? this.entry.title : this.entry.url;
     },
+    filmDesktopSrc() {
+      if (!this.entry) return '';
+      const { eid } = this.entry;
+      return `https://s3.amazonaws.com/syon-chase/films/${eid}/desktop.png`;
+    },
+    filmMobileSrc() {
+      if (!this.entry) return '';
+      const { eid } = this.entry;
+      return `https://s3.amazonaws.com/syon-chase/films/${eid}/mobile.png`;
+    },
   },
   methods: {
     ...mapActions([
@@ -79,6 +93,13 @@ export default {
     handleNewTag() {
       this.handleTagClick(this.newtag);
     },
+    onFilmSuccess() {
+      // console.log(entry.eid);
+    },
+    onFilmError(entry) {
+      if (entry.filmOrdered) return;
+      this.$store.dispatch('fetchFilm', entry);
+    },
   },
 };
 </script>
@@ -88,15 +109,6 @@ export default {
   position fixed
   width inherit
   padding 0 15px
-  // figure
-  //   margin 0
-  //   display flex
-  //   align-items center
-  //   justify-content center
-  //   overflow hidden
-  //   img
-  //     min-height 193px
-  //     max-height 193px
   .link
     margin .5em 0
     line-height 1.3
@@ -151,4 +163,10 @@ export default {
 
 .todo
   font-size 0.75rem
+
+.showcase
+  display flex
+  justify-content space-between
+  background-color #eee
+  border 4px solid #eee
 </style>

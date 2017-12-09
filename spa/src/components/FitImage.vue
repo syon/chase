@@ -36,9 +36,11 @@ export default {
     checkLoaded() {
       const pic = this.$refs.picture;
       if (pic.complete) {
+        this.onLoadImageComplete();
         this.judgeOrientation(pic);
       } else {
         pic.addEventListener('load', () => {
+          this.onLoadImageComplete();
           this.judgeOrientation(pic);
         });
       }
@@ -77,8 +79,12 @@ export default {
         }
       }
     },
+    onLoadImageComplete() {
+      if (!this.onloadsuccess) return;
+      this.onloadsuccess();
+    },
     onLoadImageError() {
-      console.log('[FitImage]#onLoadImageError');
+      if (!this.onloaderror) return;
       this.onloaderror();
     },
   },

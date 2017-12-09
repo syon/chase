@@ -11,10 +11,11 @@ function pickFallback(a, b, c) {
   return null;
 }
 
-function makeCatalog(pocketItemSet, libraSet, hatebuCntSet) {
+function makeCatalog(pocketItemSet, libraSet, hatebuCntSet, filmSet) {
   const arr = Object.keys(pocketItemSet).map((eid) => {
     const item = pocketItemSet[eid];
     const libra = libraSet[eid];
+    const film = filmSet[eid];
     const ready = !!libra;
     if (!ready) return item;
     const hatebuCnt = hatebuCntSet[eid];
@@ -25,6 +26,7 @@ function makeCatalog(pocketItemSet, libraSet, hatebuCntSet) {
       excerpt: pickFallback(item.excerpt, libra.description),
       description: pickFallback(libra.description, item.excerpt),
       hatebuCnt: hatebuCnt > 0 ? hatebuCnt : '',
+      filmOrdered: film === 'ordered',
     };
     return { ...item, ...override };
   });

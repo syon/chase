@@ -82,7 +82,6 @@ export default {
       'unfavorite',
     ]),
     handleLoadImageError() {
-      console.log('[Entry]#handleLoadImageError');
       this.$store.dispatch('fetchLibraThumb', this.obj)
         .then((ETag) => {
           this.imgSrc = `${this.imgSrc}?etag=${ETag}`;
