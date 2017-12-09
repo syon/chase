@@ -85,5 +85,6 @@ jspm_packages
 
 
 # Custom
+*.zip
 */.fonts/*.ttf
 !.gitkeep
