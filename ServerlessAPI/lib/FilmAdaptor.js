@@ -38,12 +38,12 @@ function isValidSuggestedUrl(suggestedImgUrl) {
   return true;
 }
 
-function getImgUrl(url, suggestedImgUrl) {
+function getImgUrl(url, itemId, suggestedImgUrl) {
   return new Promise((rv) => {
     if (isValidSuggestedUrl(suggestedImgUrl)) {
       rv(suggestedImgUrl);
     } else {
-      const libra = new Libra(url);
+      const libra = new Libra({ url, pocketId: itemId });
       libra.getInfo().then((info) => {
         debug(info);
         rv(info.image);
@@ -111,7 +111,7 @@ module.exports.main = (event, context, callback) => {
   const s3path = `items/thumbs/${itemId3}/${item10Id}.jpg`;
   debug('[main] S3 Path --', s3path);
   try {
-    getImgUrl(url, image_suggested).then((imgUrl) => {
+    getImgUrl(url, itemId, image_suggested).then((imgUrl) => {
       debug('[main] Detected image URL --', imgUrl);
       return fetchImageBuffer(imgUrl);
     })
