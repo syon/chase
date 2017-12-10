@@ -58,5 +58,5 @@ export default {
   .page-interlude
     width 320px
   .page-hatebu
-    width 250px
+    width 320px
 </style>

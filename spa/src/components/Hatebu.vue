@@ -1,6 +1,7 @@
 <template lang="pug">
 .hatebu
   header
+    screenshot.imageframe
     h4 {{ hatebu.count }}
   .bookmarks
     .voice(v-for="b in voices")
@@ -9,8 +10,12 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import Screenshot from '@/components/Screenshot';
 
 export default {
+  components: {
+    Screenshot,
+  },
   computed: {
     ...mapGetters({
       entry: 'activeEntry',
@@ -35,6 +40,10 @@ export default {
   display flex
   flex-direction column
   padding 0 15px
+
+.imageframe
+  padding 2px
+  border 1px solid #eee
 
 .bookmarks
   flex 1

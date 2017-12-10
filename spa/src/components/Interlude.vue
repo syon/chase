@@ -1,7 +1,7 @@
 <template lang="pug">
 .interlude
   template(v-if="entry.ready")
-    fit-image(:src="entry.image_s3_url" w="290" h="193" size="cover")
+    fit-image.thumbnail(:src="entry.image_s3_url" w="290" h="193" size="cover")
     .link
       a(:href="entry.url" target="_blank") {{ linkTitle }}
     .meta
@@ -20,10 +20,6 @@
     .newtag
       input(v-model="newtag" @keyup.enter="handleNewTag" placeholder="New Tag")
 
-  hr
-  .showcase
-    fit-image(:src="filmDesktopSrc" w="193" h="145" size="cover" :onloadsuccess="() => onFilmSuccess(entry)" :onloaderror="() => onFilmError(entry)")
-    fit-image(:src="filmMobileSrc" w="82" h="145" size="cover" :onloaderror="() => onFilmError(entry)")
   hr
 
   section
@@ -107,6 +103,8 @@ export default {
   position fixed
   width inherit
   padding 0 15px
+  .thumbnail
+    border 1px solid #eee
   .link
     margin .5em 0
     line-height 1.3
