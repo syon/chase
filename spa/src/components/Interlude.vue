@@ -31,8 +31,6 @@
       em ToDo:
       ul
         li OGP
-        li Capture
-        li はてブ パネル
         li タグ編集
         li 消化進捗
 </template>

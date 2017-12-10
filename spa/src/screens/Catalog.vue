@@ -9,12 +9,15 @@
         entry(:obj="e")
   section.page-interlude
     interlude
+  section.page-hatebu
+    hatebu
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 import Sidebar from '@/components/Sidebar';
 import Interlude from '@/components/Interlude';
+import Hatebu from '@/components/Hatebu';
 import Entry from '@/components/Entry';
 
 export default {
@@ -22,6 +25,7 @@ export default {
     Sidebar,
     Entry,
     Interlude,
+    Hatebu,
   },
   computed: {
     ...mapGetters({
@@ -53,4 +57,6 @@ export default {
     padding 0 15px
   .page-interlude
     width 320px
+  .page-hatebu
+    width 250px
 </style>

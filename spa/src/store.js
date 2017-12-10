@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import Debug from 'debug';
 
 import ChaseUtil from '@/lib/ChaseUtil';
+import Hatebu from '@/lib/Hatebu';
 import LambdaFilm from '@/lib/LambdaFilm';
 import LambdaLibra from '@/lib/LambdaLibra';
 import LambdaPocket from '@/lib/LambdaPocket';
@@ -19,6 +20,7 @@ const initialState = {
   libraInfo: {},
   hatebuCntSet: {},
   filmSet: {},
+  hatebuSet: {},
   activeEid: '',
   myscenes: {},
 };
@@ -105,6 +107,9 @@ export default new Vuex.Store({
     },
     addFilm(state, { eid }) {
       state.filmSet = { ...state.filmSet, [eid]: 'ordered' };
+    },
+    addHatebu(state, { eid, hatebu }) {
+      state.hatebuSet = { ...state.hatebuSet, [eid]: hatebu };
     },
     activate(state, payload) {
       const { eid } = payload;
@@ -213,8 +218,10 @@ export default new Vuex.Store({
       const json = await LambdaPocket.get(at);
       dispatch('updateEntries', json);
     },
-    async activate({ commit }, eid) {
+    async activate({ commit, dispatch }, entry) {
+      const { eid } = entry;
       commit('activate', { eid });
+      dispatch('fetchHatebu', entry);
     },
     async archive({ commit, state, dispatch }, eid) {
       const at = state.login.accessToken;
@@ -274,6 +281,11 @@ export default new Vuex.Store({
       if (!eid) return;
       context.commit('addFilm', { eid });
       await LambdaFilm.film({ eid, url });
+    },
+    async fetchHatebu(context, payload) {
+      const { eid, url } = payload;
+      const hatebu = await Hatebu.fetch(url);
+      context.commit('addHatebu', { eid, hatebu });
     },
   },
 });
