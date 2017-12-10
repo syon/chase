@@ -21,6 +21,7 @@ const initialState = {
   hatebuCntSet: {},
   filmSet: {},
   hatebuSet: {},
+  hatebuStarSet: {},
   activeEid: '',
   myscenes: {},
 };
@@ -110,6 +111,9 @@ export default new Vuex.Store({
     },
     addHatebu(state, { eid, hatebu }) {
       state.hatebuSet = { ...state.hatebuSet, [eid]: hatebu };
+    },
+    addHatebuStar(state, { eid, starSet }) {
+      state.hatebuStarSet = { ...state.hatebuStarSet, [eid]: starSet };
     },
     activate(state, payload) {
       const { eid } = payload;
@@ -286,6 +290,14 @@ export default new Vuex.Store({
       const { eid, url } = payload;
       const hatebu = await Hatebu.fetch(url);
       context.commit('addHatebu', { eid, hatebu });
+    },
+    async makeHatebuRanking(context, payload) {
+      const { eid } = payload;
+      const hatebu = context.state.hatebuSet[eid];
+      if (hatebu) {
+        const starSet = await Hatebu.fetchStarSet(hatebu);
+        context.commit('addHatebuStar', { eid, starSet });
+      }
     },
   },
 });

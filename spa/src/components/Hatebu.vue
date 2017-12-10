@@ -2,26 +2,39 @@
 .hatebu
   header
     screenshot.imageframe
-    h4 {{ hatebu.count }}
+    h4
+      span {{ hatebu.count }}
+      button(@click="makeRanking") makeRanking
+      span(v-if="loadingRank") Loading...
   .bookmarks
     .voice(v-for="b in voices")
       .meta
-        .user
+        .meta-left
           img.avatar(:src="avatarUrl(b)")
           .username {{ b.user }}
-        .date {{ commentDate(b) }}
+        .meta-right
+          .star {{ starCount(b) }}
+          .date {{ commentDate(b) }}
       .comment {{ b.comment }}
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import Screenshot from '@/components/Screenshot';
 
 export default {
   components: {
     Screenshot,
   },
+  data() {
+    return {
+      loadingRank: false,
+    };
+  },
   computed: {
+    ...mapState([
+      'hatebuStarSet',
+    ]),
     ...mapGetters({
       entry: 'activeEntry',
     }),
@@ -41,6 +54,17 @@ export default {
     commentDate(b) {
       const ymd = b.timestamp.match(/^(20..\/..\/..)/)[1];
       return ymd.replace(/\//g, '.');
+    },
+    starCount(b) {
+      const starSet = this.hatebuStarSet[this.entry.eid];
+      if (!starSet) return '';
+      const cnt = starSet[b.user];
+      return cnt > 0 ? `★${cnt}` : '';
+    },
+    async makeRanking() {
+      this.loadingRank = true;
+      await this.$store.dispatch('makeHatebuRanking', { eid: this.entry.eid });
+      this.loadingRank = false;
     },
   },
 };
@@ -73,7 +97,7 @@ export default {
       justify-content space-between
       font-size 0.6rem
       color #757575
-      .user
+      .meta-left, .meta-right
         display flex
         align-items center
       .avatar
@@ -82,6 +106,11 @@ export default {
         border-radius 1.5px
       .username
         padding 0 0.5em
+      .star
+        padding 0 0.5em
+        color orange
+        font-size 0.8rem
+        font-weight bold
     .comment
       margin .25em 0 .5em
 </style>
