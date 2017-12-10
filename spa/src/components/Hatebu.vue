@@ -4,7 +4,7 @@
     screenshot.imageframe
     h4
       span {{ hatebu.count }}
-      button(@click="makeRanking") makeRanking
+      button(v-if="!hatebuStarSet[entry.eid] && !loadingRank" @click="makeRanking") makeRanking
       span(v-if="loadingRank") Loading...
   .bookmarks
     .voice(v-for="b in voices")
@@ -62,8 +62,9 @@ export default {
       return cnt > 0 ? `★${cnt}` : '';
     },
     async makeRanking() {
+      const eid = this.entry.eid;
       this.loadingRank = true;
-      await this.$store.dispatch('makeHatebuRanking', { eid: this.entry.eid });
+      await this.$store.dispatch('makeHatebuRanking', { eid, force: true });
       this.loadingRank = false;
     },
   },

@@ -225,7 +225,8 @@ export default new Vuex.Store({
     async activate({ commit, dispatch }, entry) {
       const { eid } = entry;
       commit('activate', { eid });
-      dispatch('fetchHatebu', entry);
+      await dispatch('fetchHatebu', entry);
+      await dispatch('makeHatebuRanking', entry);
     },
     async archive({ commit, state, dispatch }, eid) {
       const at = state.login.accessToken;
@@ -291,12 +292,24 @@ export default new Vuex.Store({
       const hatebu = await Hatebu.fetch(url);
       context.commit('addHatebu', { eid, hatebu });
     },
-    async makeHatebuRanking(context, payload) {
-      const { eid } = payload;
-      const hatebu = context.state.hatebuSet[eid];
-      if (hatebu) {
-        const starSet = await Hatebu.fetchStarSet(hatebu);
-        context.commit('addHatebuStar', { eid, starSet });
+    async makeHatebuRanking({ state, commit }, payload) {
+      debug('makeHatebuRanking', payload);
+      const { eid, force } = payload;
+      const hatebu = state.hatebuSet[eid];
+      if (!hatebu) return;
+      let needsFetch = false;
+      if (hatebu.count < 200) {
+        const starSet = state.hatebuStarSet[eid];
+        if (starSet) {
+          debug('Already fetched stars.');
+        } else {
+          needsFetch = true;
+        }
+      }
+      if (force) needsFetch = true;
+      if (needsFetch) {
+        const set = await Hatebu.fetchStarSet(hatebu);
+        commit('addHatebuStar', { eid, starSet: set });
       }
     },
   },
