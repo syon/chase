@@ -26,7 +26,6 @@
     .todo
       em ToDo:
       ul
-        li OGP
         li 消化進捗
 </template>
 
