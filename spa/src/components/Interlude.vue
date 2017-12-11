@@ -27,7 +27,6 @@
       em ToDo:
       ul
         li OGP
-        li タグ編集
         li 消化進捗
 </template>
 

@@ -8,9 +8,9 @@
       .entry(v-for="e in catalog" :data-eid="e.eid" :key="e.eid")
         entry(:obj="e")
   section.page-interlude
-    interlude
+    interlude(v-if="entry.eid")
   section.page-hatebu
-    hatebu
+    hatebu(v-if="entry.eid")
 </template>
 
 <script>
@@ -30,6 +30,7 @@ export default {
   computed: {
     ...mapGetters({
       filteredCatalog: 'filteredCatalog',
+      entry: 'activeEntry',
     }),
     mode() {
       let mode = this.$route.name;
