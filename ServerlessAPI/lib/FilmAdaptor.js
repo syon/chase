@@ -42,6 +42,7 @@ function isValidSuggestedUrl(suggestedImgUrl) {
 }
 
 function getImgUrl(url, itemId, suggestedImgUrl) {
+  debug('[getImgUrl]');
   return new Promise((rv) => {
     if (isValidSuggestedUrl(suggestedImgUrl)) {
       debug('Using suggested image...');
@@ -59,6 +60,7 @@ function getImgUrl(url, itemId, suggestedImgUrl) {
 }
 
 function fetchImageBuffer(imageUrl) {
+  debug('[fetchImageBuffer]');
   return new Promise((rv, rj) => {
     axios(imageUrl, {
       responseType: 'arraybuffer',
@@ -74,30 +76,34 @@ function fetchImageBuffer(imageUrl) {
 }
 
 function convertImage(buf) {
+  debug('[convertImage]-->>');
   return new Promise((rv, rj) => {
-    gm(buf)
-      .resize(420)
-      .background('#fff')
-      .flatten()
-      .toBuffer('jpg', (err, buffer) => {
-        if (err) { rj(err); }
-        rv(buffer);
-      });
-  }).catch((error) => {
-    debug('[convertImage:catch] Error');
-    throw error;
+    try {
+      gm(buf)
+        .resize(420)
+        .background('#fff')
+        .flatten()
+        .toBuffer('jpg', (err, buffer) => {
+          if (err) { rj(err); }
+          debug('[convertImage]<<--');
+          rv(buffer);
+        });
+    } catch (error) {
+      debug('[convertImage:catch] Error');
+      rj(error);
+    }
   });
 }
 
 function putImage(s3path, buffer) {
-  debug(`Putting image on S3 (${s3path}):`, buffer);
+  debug(`[putImage] S3 (${s3path}):`, buffer);
   return s3.putObject({
     Bucket: process.env.BUCKET,
     Key: s3path,
     Body: buffer,
   }, (err, data) => {
-    if (err) { debug('Error:', err); }
-    if (data) { debug('Success:', data); }
+    if (err) { debug('[putImage] Error:', err); }
+    if (data) { debug('[putImage] Success:', data); }
   });
 }
 
