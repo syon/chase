@@ -35,14 +35,20 @@ function isValidSuggestedUrl(suggestedImgUrl) {
   if (typeof suggestedImgUrl === 'undefined') {
     return false;
   }
+  if (suggestedImgUrl.trim() === '') {
+    return false;
+  }
   return true;
 }
 
 function getImgUrl(url, itemId, suggestedImgUrl) {
   return new Promise((rv) => {
     if (isValidSuggestedUrl(suggestedImgUrl)) {
+      debug('Using suggested image...');
       rv(suggestedImgUrl);
     } else {
+      debug('No suggested image found.');
+      debug('Fetching the site og:image...');
       const libra = new Libra({ url, pocketId: itemId });
       libra.getInfo().then((info) => {
         debug(info);
@@ -105,6 +111,7 @@ function putBlankImage(s3path) {
 
 module.exports.main = (event, context, callback) => {
   const params = JSON.parse(event.body);
+  debug('[main] params', params);
   const { url, pocket_id: itemId, image_suggested } = params;
   const item10Id = `0000000000${itemId}`.substr(-10, 10);
   const itemId3 = item10Id.slice(0, 3);
@@ -124,6 +131,7 @@ module.exports.main = (event, context, callback) => {
         callback(null, errorResponseBuilder(error));
       });
   } catch (error) {
+    debug('[main] error', event.body);
     putBlankImage(s3path);
     callback(null, errorResponseBuilder(error));
   }
