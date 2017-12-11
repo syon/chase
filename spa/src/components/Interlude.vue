@@ -26,6 +26,9 @@
     .todo
       em ToDo:
       ul
+        li ランキングまわり
+        li cVim対応
+        li 事前キャッシュ
         li 消化進捗
 </template>
 
