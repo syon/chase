@@ -43,19 +43,19 @@ function isValidSuggestedUrl(suggestedImgUrl) {
 
 function getImgUrl(url, itemId, suggestedImgUrl) {
   debug('[getImgUrl]');
-  return new Promise((rv) => {
-    if (isValidSuggestedUrl(suggestedImgUrl)) {
-      debug('Using suggested image...');
-      rv(suggestedImgUrl);
-    } else {
-      debug('No suggested image found.');
-      debug('Fetching the site og:image...');
-      const libra = new Libra({ url, pocketId: itemId });
-      libra.getInfo().then((info) => {
-        debug(info);
-        rv(info.image);
-      });
-    }
+  return new Promise((rv, rj) => {
+    debug('Fetching the site og:image...');
+    const libra = new Libra({ url, pocketId: itemId });
+    libra.getInfo().then((info) => {
+      debug(info);
+      if (info.image) rv(info.image);
+      if (isValidSuggestedUrl(suggestedImgUrl)) {
+        debug('Using suggested image...');
+        rv(suggestedImgUrl);
+      } else {
+        rj(new Error('No image found.'));
+      }
+    });
   });
 }
 
