@@ -28,7 +28,9 @@
       ul
         li ランキングまわり
         li cVim対応
+        li コード名前整理
         li 事前キャッシュ
+        li 主要サイトOGP
         li 消化進捗
 </template>
 
