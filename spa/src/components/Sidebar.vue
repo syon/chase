@@ -9,44 +9,50 @@
     .menu-title Recent {{ catalogCount }}
     .link-item
       router-link(:to="{ name: 'Inbox' }")
-        clickable
-          i.ion-ios-filing-outline
-          span Inbox
-        .cnt {{ filteredCatalog('Inbox').length }}
+        clickable.menu-item
+          .label
+            i.ion-ios-filing-outline
+            span Inbox
+          .cnt {{ filteredCatalog('Inbox').length }}
     .link-item
       router-link(:to="{ name: 'Favorite' }")
-        clickable
-          i.ion-ios-star-outline
-          span Favorite
-        .cnt {{ filteredCatalog('Favorite').length }}
+        clickable.menu-item
+          .label
+            i.ion-ios-star-outline
+            span Favorite
+          .cnt {{ filteredCatalog('Favorite').length }}
     .link-item(v-for="sce in myScenesTags")
       router-link(:to="{ name: 'Tag', params: { tag: sce.tag } }")
-        clickable
-          i.ion-ios-arrow-right
-          span {{ sce.label }}
-        .cnt {{ filteredCatalog('Tag', sce.tag).length }}
+        clickable.menu-item
+          .label
+            i.ion-ios-arrow-right
+            span {{ sce.label }}
+          .cnt {{ filteredCatalog('Tag', sce.tag).length }}
 
   section.tags
     template(v-for="tag in recentTags")
       .link-item.font-smaller
         router-link(:to="{ name: 'Tag', params: { tag } }")
-          clickable
-            i.ion-ios-pricetags-outline
-            span {{ tag }}
+          clickable.menu-item
+            .label
+              i.ion-ios-pricetags-outline
+              span {{ tag }}
 
   section
     .misc
       .link-item.font-smaller
         a(href="https://getpocket.com/" target="_blank")
-          span
-            i.ion-ios-world-outline
-            span Pocket
+          clickable.menu-item
+            .label
+              i.ion-ios-world-outline
+              span Pocket
     .config
       .link-item.font-smaller
         router-link(:to="{ name: 'Config' }")
-          span
-            i.ion-ios-settings
-            span Config
+          clickable.menu-item
+            .label
+              i.ion-ios-settings
+              span Config
     .userinfo
       template(v-if="login.accessToken")
         span.username {{ login.username }}
@@ -142,6 +148,17 @@ export default {
     display flex
     align-items center
     justify-content space-between
+    font-size .9rem
+
+.menu-item
+  flex 1
+  height 2rem
+  display flex
+  align-items center
+  justify-content space-between
+  border-radius 2px
+  padding 5px
+  margin 0 -5px
   .cnt
     font-size .75rem
 
@@ -156,6 +173,8 @@ export default {
 .tags
   .link-item
     height 1.5rem
+    a
+      font-size .8rem
 
 .font-smaller
   font-size 0.8rem

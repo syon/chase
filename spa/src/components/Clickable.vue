@@ -1,5 +1,5 @@
 <template lang="pug">
-button.compo.clickable
+.compo.clickable
   slot
 </template>
 
@@ -11,16 +11,9 @@ export default {
 
 <style lang="stylus" scoped>
 .compo
-  display inline
-  border 0
-  border-radius initial
   cursor pointer
-  padding 0
   font-family inherit
   font-size inherit
-  text-align left
-  outline none
-  background-color transparent
   &:hover
-    text-decoration underline
+    background-color rgba(36, 41, 46, 0.05)
 </style>

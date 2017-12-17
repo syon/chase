@@ -52,7 +52,7 @@ export default {
   width 100%
   display flex
   .page-nav
-    width 180px
+    width 165px
   .page-content
     flex 1
     padding 0 15px
