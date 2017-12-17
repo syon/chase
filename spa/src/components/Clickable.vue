@@ -1,5 +1,5 @@
 <template lang="pug">
-.compo.clickable
+.v-clickable
   slot
 </template>
 
@@ -10,7 +10,7 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.compo
+.v-clickable
   cursor pointer
   font-family inherit
   font-size inherit

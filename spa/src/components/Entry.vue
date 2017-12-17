@@ -1,5 +1,5 @@
 <template lang="pug">
-.compo(:data-eid="obj.eid" :class="compoClasses")
+.v-entry(:data-eid="obj.eid" :class="compoClasses")
   template(v-if="obj.ready")
     .pnl(@click="activate(obj)")
       .pnl-thumb
@@ -17,12 +17,13 @@
         .hatebu
           .hatebu-cnt(:style="hatebuCntStyle") {{ obj.hatebuCnt }}
         .fav
-          button(v-if="obj.favorite" @click="unfavorite(obj.eid)" style="color:orange;")
-            span ★
-          button(v-else @click="favorite(obj.eid)" style="color:#eee;")
-            span ★
+          clickable(v-if="obj.favorite")
+            button(@click="unfavorite(obj.eid)" style="color:orange;") ★
+          clickable(v-else)
+            button(@click="favorite(obj.eid)" style="color:#eee;") ★
         .archive
-          button(@click="archive(obj.eid)") ✓
+          clickable
+            button(@click="archive(obj.eid)") ✓
   template(v-else)
     span.loading
       i.ion-load-d
@@ -31,11 +32,13 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import FitImage from '@/components/FitImage';
+import Clickable from '@/components/Clickable';
 
 export default {
   props: ['obj'],
   components: {
     FitImage,
+    Clickable,
   },
   data() {
     return {
@@ -114,7 +117,7 @@ export default {
     align-items center
     justify-content space-around
 
-.compo
+.v-entry
   min-height 111px
   padding 15px 0
   color #757575
@@ -180,11 +183,17 @@ export default {
       line-height 1
       font-size 0.75rem
       letter-spacing -0.05em
-  .fav span
-    font-size 1.25rem
-    cursor pointer
-  .archive span
-    font-size 1.25rem
-    cursor pointer
-    color #9ea8b3
+  .fav
+    .v-clickable
+      padding 3px
+    span
+      font-size 1.25rem
+      cursor pointer
+  .archive
+    .v-clickable
+      padding 3px
+    span
+      font-size 1.25rem
+      cursor pointer
+      color #9ea8b3
 </style>
