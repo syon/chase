@@ -184,14 +184,18 @@ export default {
       font-size 0.75rem
       letter-spacing -0.05em
   .fav
-    .v-clickable
+    line-height 1
+    .v-clickable button
       padding 3px
+      line-height 1
     span
       font-size 1.25rem
       cursor pointer
   .archive
-    .v-clickable
+    line-height 1
+    .v-clickable button
       padding 3px
+      line-height 1
     span
       font-size 1.25rem
       cursor pointer
