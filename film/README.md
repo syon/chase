@@ -8,9 +8,9 @@ made with [Puppeteer Lambda Starter Kit](StarterKit.md)
 
 0. AWS Lambda
 0. make zip and upload
-  - `.fonts`
-  - `.fonts.conf`
-  - `fontcache.py`
+    - `.fonts`
+    - `.fonts.conf`
+    - `fontcache.py`
 0. run it
 0. get result file from syon-temp on S3
 
