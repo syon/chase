@@ -47,3 +47,32 @@ module.exports.register = (event, context, callback) => {
     }
   });
 };
+
+function extractAccesstokens() {
+  return new Promise((rv, rj) => {
+    const opts = {
+      Bucket: process.env.BUCKET,
+      Prefix: 'accesstokens/',
+      MaxKeys: 10,
+    };
+    s3.listObjectsV2(opts, (err, data) => {
+      if (err) {
+        rj(err.stack);
+      } else {
+        const files = data.Contents.filter(d => d.Key.match(/\.json$/));
+        debug(files);
+        const tokens = files.map(d => d.Key.match(/^accesstokens\/([a-z0-9-]+)\.json$/)[1]);
+        rv(tokens);
+      }
+    });
+  });
+}
+
+module.exports.prepare = (event, context, callback) => {
+  debug('[prepare]>>>>');
+  extractAccesstokens().then((files) => {
+    debug(files);
+  })
+    .then(() => callback(null, successResponseBuilder()))
+    .catch(err => callback(null, errorResponseBuilder(err)));
+};

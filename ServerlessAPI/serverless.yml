@@ -73,6 +73,15 @@ functions:
           cors: true
     environment:
       BUCKET: ${self:custom.bucket}
+  userprepare:
+    handler: handler.userprepare
+    events:
+      - http:
+          path: user/prepare
+          method: post
+          cors: true
+    environment:
+      BUCKET: ${self:custom.bucket}
   librainfo:
     handler: handler.libraInfo
     events:

@@ -48,6 +48,10 @@ module.exports.userregister = (event, context, callback) => {
   return UserAdaptor.register(event, context, callback);
 };
 
+module.exports.userprepare = (event, context, callback) => {
+  return UserAdaptor.prepare(event, context, callback);
+};
+
 module.exports.libraInfo = (event, context, callback) => {
   return LibraAdaptor.libraInfo(event, context, callback);
 };
