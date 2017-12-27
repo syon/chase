@@ -12,6 +12,7 @@
 // https://qiita.com/maaz118/items/e20b64f088fbead07206
 
 const PocketAPI = require('./lib/PocketAPI');
+const UserAdaptor = require('./lib/UserAdaptor');
 const FilmAdaptor = require('./lib/FilmAdaptor');
 const LibraAdaptor = require('./lib/LibraAdaptor');
 
@@ -41,6 +42,10 @@ module.exports.pocketSendUnfavorite = (event, context, callback) => {
 
 module.exports.pocketSendTagsAdd = (event, context, callback) => {
   return PocketAPI.pocketSendTagsAdd(event, context, callback);
+};
+
+module.exports.userregister = (event, context, callback) => {
+  return UserAdaptor.register(event, context, callback);
 };
 
 module.exports.libraInfo = (event, context, callback) => {
