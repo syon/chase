@@ -4,6 +4,7 @@ const AWS = require('aws-sdk');
 
 const Pocket = require('./PocketAPI');
 const LibraAdaptor = require('./LibraAdaptor');
+const FilmAdaptor = require('./FilmAdaptor');
 
 const s3 = new AWS.S3();
 
@@ -98,10 +99,8 @@ module.exports.prepare = (event, context, callback) => {
       const items = Object.keys(set).map(id => moldEntry(set[id]));
       return items;
     }).then((items) => {
-      Promise.all(items.map((params) => {
-        debug(params);
-        return LibraAdaptor.libraInfo(params);
-      }));
+      Promise.all(items.map(params => LibraAdaptor.libraInfo(params)));
+      Promise.all(items.map(params => FilmAdaptor.main(params)));
     })));
   })
     .then(() => callback(null, successResponseBuilder()))
