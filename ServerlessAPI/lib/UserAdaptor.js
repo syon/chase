@@ -3,6 +3,7 @@ const debug = require('debug')('chase:user-adaptor');
 const AWS = require('aws-sdk');
 
 const Pocket = require('./PocketAPI');
+const LibraAdaptor = require('./LibraAdaptor');
 
 const s3 = new AWS.S3();
 
@@ -70,23 +71,38 @@ function extractAccesstokens() {
   });
 }
 
-function getPocketEntries(at) {
+function getPocketEntrySet(at) {
   const ck = process.env.POCKET_CONSUMER_KEY;
-  const params = { count: 3 };
+  const params = { count: 3, detailType: 'complete' };
   return Pocket.get(ck, at, params).then((d) => {
     debug(`GET RESULT of ${at} IS:`, Object.keys(d.list).length);
-    return d;
+    return d.list;
   }).catch((err) => {
     debug('(Skipped) Failed to get with Access Token:', at);
     debug(err);
   });
 }
 
+function moldEntry(pocketRawItem) {
+  const m = pocketRawItem;
+  const url = m.resolved_url ? m.resolved_url : m.given_url;
+  const is = (m.has_image === '1') ? m.image.src : '';
+  return { pocket_id: m.item_id, url, image_suggested: is };
+}
+
 module.exports.prepare = (event, context, callback) => {
   debug('[prepare]>>>>');
   extractAccesstokens().then((tokens) => {
     debug(tokens);
-    Promise.all(tokens.map(at => getPocketEntries(at)));
+    Promise.all(tokens.map(at => getPocketEntrySet(at).then((set) => {
+      const items = Object.keys(set).map(id => moldEntry(set[id]));
+      return items;
+    }).then((items) => {
+      Promise.all(items.map((params) => {
+        debug(params);
+        return LibraAdaptor.libraInfo(params);
+      }));
+    })));
   })
     .then(() => callback(null, successResponseBuilder()))
     .catch(err => callback(null, errorResponseBuilder(err)));
