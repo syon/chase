@@ -1,5 +1,8 @@
+require('dotenv').config();
 const debug = require('debug')('chase:user-adaptor');
 const AWS = require('aws-sdk');
+
+const Pocket = require('./PocketAPI');
 
 const s3 = new AWS.S3();
 
@@ -60,7 +63,6 @@ function extractAccesstokens() {
         rj(err.stack);
       } else {
         const files = data.Contents.filter(d => d.Key.match(/\.json$/));
-        debug(files);
         const tokens = files.map(d => d.Key.match(/^accesstokens\/([a-z0-9-]+)\.json$/)[1]);
         rv(tokens);
       }
@@ -68,10 +70,23 @@ function extractAccesstokens() {
   });
 }
 
+function getPocketEntries(at) {
+  const ck = process.env.POCKET_CONSUMER_KEY;
+  const params = { count: 3 };
+  return Pocket.get(ck, at, params).then((d) => {
+    debug(`GET RESULT of ${at} IS:`, Object.keys(d.list).length);
+    return d;
+  }).catch((err) => {
+    debug('(Skipped) Failed to get with Access Token:', at);
+    debug(err);
+  });
+}
+
 module.exports.prepare = (event, context, callback) => {
   debug('[prepare]>>>>');
-  extractAccesstokens().then((files) => {
-    debug(files);
+  extractAccesstokens().then((tokens) => {
+    debug(tokens);
+    Promise.all(tokens.map(at => getPocketEntries(at)));
   })
     .then(() => callback(null, successResponseBuilder()))
     .catch(err => callback(null, errorResponseBuilder(err)));
