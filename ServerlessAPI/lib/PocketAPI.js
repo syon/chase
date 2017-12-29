@@ -3,6 +3,8 @@ const axios = require('axios');
 const URLSearchParams = require('url-search-params');
 const debug = require('debug')('chase:film');
 
+const Pocket = require('./PocketCore');
+
 const HTTP_GET_CONFIG = {
   headers: {
     'X-Accept': 'application/json',
@@ -93,11 +95,9 @@ module.exports.pocketGet = (event, context, callback) => {
     consumer_key: process.env.POCKET_CONSUMER_KEY,
     access_token: params.access_token,
   };
-  const data = JSON.stringify(Object.assign(reqd, params));
-  axios.post('https://getpocket.com/v3/get', data, HTTP_POST_CONFIG)
+  Pocket.get(reqd.consumer_key, reqd.access_token, params)
     .then((res) => {
-      const bodyObj = res.data;
-      callback(null, successResponseBuilder(bodyObj));
+      callback(null, successResponseBuilder(res));
     })
     .catch((error) => {
       debug(error);
