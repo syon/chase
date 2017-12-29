@@ -78,7 +78,9 @@ module.exports.userregister = (event, context, callback) => {
 };
 
 module.exports.userprepare = (event, context, callback) => {
-  return UserAdaptor.prepare(event, context, callback);
+  return UserAdaptor.prepare()
+    .then(r => callback(null, success(r)))
+    .catch(e => callback(null, failure(e)));
 };
 
 module.exports.libraInfo = (event, context, callback) => {

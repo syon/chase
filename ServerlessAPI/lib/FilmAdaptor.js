@@ -117,7 +117,6 @@ module.exports.main = (params) => {
   const itemId3 = item10Id.slice(0, 3);
   const s3path = `items/thumbs/${itemId3}/${item10Id}.jpg`;
   return s3Head(s3path).then((judge) => {
-    debug('[main] S3 Path --', s3path);
     if (judge) return '(Skipped) Already exists.';
     debug('[main] S3 Path --', s3path);
     try {

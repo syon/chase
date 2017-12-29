@@ -75,7 +75,7 @@ function extractAccesstokens() {
 
 function getPocketEntrySet(at) {
   const ck = process.env.POCKET_CONSUMER_KEY;
-  const params = { count: 5, detailType: 'complete' };
+  const params = { count: 50, detailType: 'complete' };
   return Pocket.get(ck, at, params).then((d) => {
     debug(`GET RESULT of ${at} IS:`, Object.keys(d.list).length);
     return d.list;
@@ -92,20 +92,14 @@ function moldEntry(pocketRawItem) {
   return { pocket_id: m.item_id, url, image_suggested: is };
 }
 
-module.exports.prepare = (event, context, callback) => {
-  debug('[prepare]>>>>');
-  extractAccesstokens().then((tokens) => {
-    debug(tokens);
-    Promise.all(tokens.map(at => getPocketEntrySet(at).then((set) => {
-      const items = Object.keys(set).map(id => moldEntry(set[id]));
-      return items;
-    }).then((items) => {
-      // Parallel and Non-Await
-      items.forEach(params => LibraAdaptor.libraInfo(params));
-      items.forEach(params => FilmAdaptor.main(params));
-      items.forEach(params => ShotAdaptor.main(params));
-    })));
-  })
-    .then(() => callback(null, successResponseBuilder()))
-    .catch(err => callback(null, errorResponseBuilder(err)));
-};
+module.exports.prepare = () => extractAccesstokens().then((tokens) => {
+  Promise.all(tokens.map(at => getPocketEntrySet(at).then((set) => {
+    const items = Object.keys(set).map(id => moldEntry(set[id]));
+    return items;
+  }).then((items) => {
+    // Parallel and Non-Await
+    items.forEach(params => LibraAdaptor.libraInfo(params));
+    items.forEach(params => FilmAdaptor.main(params));
+    items.forEach(params => ShotAdaptor.main(params));
+  })));
+});
