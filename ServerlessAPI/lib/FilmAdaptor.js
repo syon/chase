@@ -6,31 +6,6 @@ const Libra = require('./Libra');
 
 const s3 = new AWS.S3();
 
-function successResponseBuilder(bodyObj) {
-  return {
-    statusCode: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-    },
-    body: JSON.stringify(bodyObj),
-  };
-}
-
-function errorResponseBuilder(error) {
-  debug(error);
-  const res = error.response || { headers: {} };
-  const response = {
-    statusCode: res.status,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-    },
-    body: JSON.stringify({
-      message: res.statusText,
-    }),
-  };
-  return response;
-}
-
 function isValidSuggestedUrl(suggestedImgUrl) {
   if (typeof suggestedImgUrl === 'undefined') {
     return false;
@@ -115,8 +90,7 @@ function putBlankImage(s3path) {
   });
 }
 
-module.exports.main = (event, context, callback) => {
-  const params = JSON.parse(event.body);
+module.exports.main = (params) => {
   debug('[main] params', params);
   const { url, pocket_id: itemId, image_suggested } = params;
   const item10Id = `0000000000${itemId}`.substr(-10, 10);
@@ -124,21 +98,18 @@ module.exports.main = (event, context, callback) => {
   const s3path = `items/thumbs/${itemId3}/${item10Id}.jpg`;
   debug('[main] S3 Path --', s3path);
   try {
-    getImgUrl(url, itemId, image_suggested).then((imgUrl) => {
+    return getImgUrl(url, itemId, image_suggested).then((imgUrl) => {
       debug('[main] Detected image URL --', imgUrl);
       return fetchImageBuffer(imgUrl);
     })
       .then(buf => convertImage(buf))
       .then(img => putImage(s3path, img).promise())
-      .then(v => callback(null, successResponseBuilder(v)))
       .catch((error) => {
         debug('[main:catch]', error);
         putBlankImage(s3path);
-        callback(null, errorResponseBuilder(error));
       });
   } catch (error) {
-    debug('[main] error', event.body);
     putBlankImage(s3path);
-    callback(null, errorResponseBuilder(error));
+    throw new Error(error);
   }
 };

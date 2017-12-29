@@ -11,10 +11,39 @@
 // http://docs.aws.amazon.com/ja_jp/apigateway/latest/developerguide/how-to-cors.html
 // https://qiita.com/maaz118/items/e20b64f088fbead07206
 
+const debug = require('debug')('chase:sls-handler');
+
 const PocketAdaptor = require('./lib/PocketAdaptor');
 const UserAdaptor = require('./lib/UserAdaptor');
 const FilmAdaptor = require('./lib/FilmAdaptor');
 const LibraAdaptor = require('./lib/LibraAdaptor');
+
+function success(bodyObj) {
+  return {
+    statusCode: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+    },
+    body: JSON.stringify(bodyObj),
+  };
+}
+
+function failure(error) {
+  const res = error.response || { headers: {} };
+  debug(res);
+  const response = {
+    statusCode: res.status,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'x-error-code': res.headers['x-error-code'],
+      'x-error': res.headers['x-error'],
+    },
+    body: JSON.stringify({
+      message: res.statusText,
+    }),
+  };
+  return response;
+}
 
 module.exports.pocketOauthRequest = (event, context, callback) => {
   return PocketAdaptor.pocketOauthRequest(event, context, callback);
@@ -53,9 +82,15 @@ module.exports.userprepare = (event, context, callback) => {
 };
 
 module.exports.libraInfo = (event, context, callback) => {
-  return LibraAdaptor.libraInfo(event, context, callback);
+  const params = event.queryStringParameters;
+  return LibraAdaptor.libraInfo(params)
+    .then(r => callback(null, success(r)))
+    .catch(e => callback(null, failure(e)));
 };
 
 module.exports.libraThumb = (event, context, callback) => {
-  return FilmAdaptor.main(event, context, callback);
+  const params = JSON.parse(event.body);
+  return FilmAdaptor.main(params)
+    .then(r => callback(null, success(r)))
+    .catch(e => callback(null, failure(e)));
 };
