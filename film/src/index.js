@@ -22,6 +22,9 @@ exports.run = async (browser, event) => {
   console.log('_________ exports.run _________');
   console.log(`URL: ${url}`);
   console.log(`PocketID: ${pocketId}`);
+  // Check already exists
+  const judge = await s3Head(pocketId, 'desktop');
+  if (judge) return '(Skipped) Already exists.';
   const page = await browser.newPage();
   // Capture desktop
   page.setViewport({width: 1024, height: 768});
@@ -37,6 +40,25 @@ exports.run = async (browser, event) => {
   await page.close();
   return 'done.';
 };
+
+function s3Head(pocketId, kind) {
+  return new Promise((rv, rj) => {
+    const obj = {
+      Bucket: 'syon-chase',
+      Key: `films/${pocketId}/${kind}.png`,
+    };
+    s3.headObject(obj, (err, data) => {
+      if (err) {
+        // Not found
+        rv(false);
+      }
+      if (data) {
+        // Exists
+        rv(true);
+      }
+    });
+  });
+}
 
 function s3Put(pocketId, buf, kind) {
   return new Promise((rv, rj) => {
