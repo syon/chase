@@ -70,6 +70,26 @@ function convertImage(buf) {
   });
 }
 
+function s3Head(s3path) {
+  return new Promise((rv) => {
+    const obj = {
+      Bucket: process.env.BUCKET,
+      Key: s3path,
+    };
+    debug(obj);
+    s3.headObject(obj, (err, data) => {
+      if (err) {
+        debug('Not found in S3');
+        rv(false);
+      }
+      if (data) {
+        debug('Already exists in S3');
+        rv(true);
+      }
+    });
+  });
+}
+
 function putImage(s3path, buffer) {
   debug(`[putImage] S3 (${s3path}):`, buffer);
   return s3.putObject({
@@ -96,20 +116,24 @@ module.exports.main = (params) => {
   const item10Id = `0000000000${itemId}`.substr(-10, 10);
   const itemId3 = item10Id.slice(0, 3);
   const s3path = `items/thumbs/${itemId3}/${item10Id}.jpg`;
-  debug('[main] S3 Path --', s3path);
-  try {
-    return getImgUrl(url, itemId, image_suggested).then((imgUrl) => {
-      debug('[main] Detected image URL --', imgUrl);
-      return fetchImageBuffer(imgUrl);
-    })
-      .then(buf => convertImage(buf))
-      .then(img => putImage(s3path, img).promise())
-      .catch((error) => {
-        debug('[main:catch]', error);
-        putBlankImage(s3path);
-      });
-  } catch (error) {
-    putBlankImage(s3path);
-    throw new Error(error);
-  }
+  return s3Head(s3path).then((judge) => {
+    debug('[main] S3 Path --', s3path);
+    if (judge) return '(Skipped) Already exists.';
+    debug('[main] S3 Path --', s3path);
+    try {
+      return getImgUrl(url, itemId, image_suggested).then((imgUrl) => {
+        debug('[main] Detected image URL --', imgUrl);
+        return fetchImageBuffer(imgUrl);
+      })
+        .then(buf => convertImage(buf))
+        .then(img => putImage(s3path, img).promise())
+        .catch((error) => {
+          debug('[main:catch]', error);
+          putBlankImage(s3path);
+        });
+    } catch (error) {
+      putBlankImage(s3path);
+      throw new Error(error);
+    }
+  });
 };

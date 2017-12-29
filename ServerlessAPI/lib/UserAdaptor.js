@@ -5,6 +5,7 @@ const AWS = require('aws-sdk');
 const Pocket = require('./PocketAPI');
 const LibraAdaptor = require('./LibraAdaptor');
 const FilmAdaptor = require('./FilmAdaptor');
+const ShotAdaptor = require('./ShotAdaptor');
 
 const s3 = new AWS.S3();
 
@@ -74,7 +75,7 @@ function extractAccesstokens() {
 
 function getPocketEntrySet(at) {
   const ck = process.env.POCKET_CONSUMER_KEY;
-  const params = { count: 3, detailType: 'complete' };
+  const params = { count: 5, detailType: 'complete' };
   return Pocket.get(ck, at, params).then((d) => {
     debug(`GET RESULT of ${at} IS:`, Object.keys(d.list).length);
     return d.list;
@@ -99,8 +100,10 @@ module.exports.prepare = (event, context, callback) => {
       const items = Object.keys(set).map(id => moldEntry(set[id]));
       return items;
     }).then((items) => {
-      Promise.all(items.map(params => LibraAdaptor.libraInfo(params)));
-      Promise.all(items.map(params => FilmAdaptor.main(params)));
+      // Parallel and Non-Await
+      items.forEach(params => LibraAdaptor.libraInfo(params));
+      items.forEach(params => FilmAdaptor.main(params));
+      items.forEach(params => ShotAdaptor.main(params));
     })));
   })
     .then(() => callback(null, successResponseBuilder()))
