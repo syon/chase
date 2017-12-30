@@ -84,6 +84,7 @@ functions:
           path: user/prepare
           method: post
           cors: true
+    timeout: 30
     environment:
       BUCKET: ${self:custom.bucket}
       DEBUG: chase:*
@@ -94,6 +95,7 @@ functions:
           path: libra/info
           method: get
           cors: true
+    timeout: 10
     environment:
       BUCKET: ${self:custom.bucket}
       DEBUG: chase:*
@@ -104,6 +106,7 @@ functions:
           path: libra/thumb
           method: post
           cors: true
+    timeout: 10
     environment:
       BUCKET: ${self:custom.bucket}
       DEBUG: chase:*
