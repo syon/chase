@@ -75,7 +75,7 @@ function extractAccesstokens() {
 
 function getPocketEntrySet(at) {
   const ck = process.env.POCKET_CONSUMER_KEY;
-  const params = { count: 50, detailType: 'complete' };
+  const params = { count: 5, detailType: 'complete' };
   return Pocket.get(ck, at, params).then((d) => {
     debug(`GET RESULT of ${at} IS:`, Object.keys(d.list).length);
     return d.list;
@@ -93,7 +93,7 @@ function moldEntry(pocketRawItem) {
 }
 
 module.exports.prepare = () => extractAccesstokens().then((tokens) => {
-  Promise.all(tokens.map(at => getPocketEntrySet(at).then((set) => {
+  return Promise.all(tokens.map(at => getPocketEntrySet(at).then((set) => {
     const items = Object.keys(set).map(id => moldEntry(set[id]));
     return items;
   }).then((items) => {

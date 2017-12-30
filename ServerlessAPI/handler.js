@@ -11,6 +11,10 @@
 // http://docs.aws.amazon.com/ja_jp/apigateway/latest/developerguide/how-to-cors.html
 // https://qiita.com/maaz118/items/e20b64f088fbead07206
 
+if (!global._babelPolyfill) {
+  require('babel-polyfill');
+}
+
 const debug = require('debug')('chase:sls-handler');
 
 const PocketAdaptor = require('./lib/PocketAdaptor');
