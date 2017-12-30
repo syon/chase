@@ -39,6 +39,15 @@
               span {{ tag }}
 
   section
+    .todo
+      em ToDo:
+      ul(style="padding-left: 2em;")
+        li ランキングまわり
+        li コード名前整理
+        li 主要サイトOGP
+        li 消化進捗
+
+  section
     .misc
       .link-item.font-smaller
         a(href="https://getpocket.com/" target="_blank")
