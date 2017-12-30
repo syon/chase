@@ -1,8 +1,12 @@
+const Dotenv = require('dotenv-webpack');
 const slsw = require('serverless-webpack');
 
 module.exports = {
   entry: slsw.lib.entries,
   target: 'node',
+  plugins: [
+    new Dotenv(),
+  ],
   module: {
     loaders: [
       {

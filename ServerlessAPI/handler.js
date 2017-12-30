@@ -8,9 +8,7 @@
 //   ||
 //   https://<API Gateway>/pocket/oauth/request
 
-// http://docs.aws.amazon.com/ja_jp/apigateway/latest/developerguide/how-to-cors.html
-// https://qiita.com/maaz118/items/e20b64f088fbead07206
-
+/* eslint-disable no-underscore-dangle, global-require */
 if (!global._babelPolyfill) {
   require('babel-polyfill');
 }

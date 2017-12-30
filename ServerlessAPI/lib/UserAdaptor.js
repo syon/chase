@@ -92,14 +92,16 @@ function moldEntry(pocketRawItem) {
   return { pocket_id: m.item_id, url, image_suggested: is };
 }
 
-module.exports.prepare = () => extractAccesstokens().then((tokens) => {
-  return Promise.all(tokens.map(at => getPocketEntrySet(at).then((set) => {
+module.exports.prepare = async () => {
+  const tokens = await extractAccesstokens();
+  await Promise.all(tokens.map(at => getPocketEntrySet(at).then((set) => {
     const items = Object.keys(set).map(id => moldEntry(set[id]));
     return items;
-  }).then((items) => {
-    // Parallel and Non-Await
-    items.forEach(params => LibraAdaptor.libraInfo(params));
-    items.forEach(params => FilmAdaptor.main(params));
-    items.forEach(params => ShotAdaptor.main(params));
+  }).then(async (items) => {
+    await Promise.all(items.map(async (params) => {
+      LibraAdaptor.libraInfo(params);
+      FilmAdaptor.main(params);
+      ShotAdaptor.main(params);
+    }));
   })));
-});
+};
