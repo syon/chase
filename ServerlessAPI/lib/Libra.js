@@ -53,7 +53,7 @@ module.exports = class Libra {
         };
       })
       .then((info) => {
-        this.putInfoS3(this.s3Path, info);
+        Libra.putInfoS3(this.s3Path, info);
         return info;
       })
       .catch((error) => {

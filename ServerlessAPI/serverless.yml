@@ -14,8 +14,13 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action:
-        - s3:PutObject
-      Resource: "arn:aws:s3:::${self:custom.bucket}/*"
+        - s3:*
+      Resource: 
+        - "arn:aws:s3:::${self:custom.bucket}"
+        - "arn:aws:s3:::${self:custom.bucket}/*"
+  environment:
+    BUCKET: ${self:custom.bucket}
+    DEBUG: chase:*
 
 functions:
   pocketoauthrequest:
@@ -74,9 +79,6 @@ functions:
           path: user/register
           method: post
           cors: true
-    environment:
-      BUCKET: ${self:custom.bucket}
-      DEBUG: chase:*
   userprepare:
     handler: handler.userprepare
     events:
@@ -84,10 +86,9 @@ functions:
           path: user/prepare
           method: post
           cors: true
-    timeout: 30
+    timeout: 120
     environment:
-      BUCKET: ${self:custom.bucket}
-      DEBUG: chase:*
+      DEBUG: chase:*,-chase:libra-adaptor
   librainfo:
     handler: handler.libraInfo
     events:
@@ -96,9 +97,6 @@ functions:
           method: get
           cors: true
     timeout: 10
-    environment:
-      BUCKET: ${self:custom.bucket}
-      DEBUG: chase:*
   librathumb:
     handler: handler.libraThumb
     events:
@@ -107,6 +105,3 @@ functions:
           method: post
           cors: true
     timeout: 10
-    environment:
-      BUCKET: ${self:custom.bucket}
-      DEBUG: chase:*

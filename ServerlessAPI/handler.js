@@ -33,7 +33,16 @@ function success(bodyObj) {
 }
 
 function failure(error) {
-  const res = error.response || { headers: {} };
+  debug('======== Failure in handler.js ========');
+  let res;
+  if (error.response) {
+    // axios error
+    res = error.response;
+  } else {
+    // other error
+    debug(error);
+    res = { headers: {} };
+  }
   debug(res);
   const response = {
     statusCode: res.status,
