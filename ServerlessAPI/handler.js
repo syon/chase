@@ -8,6 +8,8 @@
 //   ||
 //   https://<API Gateway>/pocket/oauth/request
 
+import './assets/blank.jpg';
+
 /* eslint-disable no-underscore-dangle, global-require */
 if (!global._babelPolyfill) {
   require('babel-polyfill');

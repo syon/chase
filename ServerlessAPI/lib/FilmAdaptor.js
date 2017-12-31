@@ -104,7 +104,11 @@ function putImage(s3path, buffer) {
 
 function putBlankImage(s3path) {
   debug('Fetch failed. Using blank image.');
-  gm('./blank.jpg').toBuffer('jpg', (err, buf) => {
+  gm('./assets/blank.jpg').toBuffer('jpg', (err, buf) => {
+    if (err) {
+      debug(err);
+      return;
+    }
     debug('Blank image Buffer --', buf);
     putImage(s3path, buf);
   });
