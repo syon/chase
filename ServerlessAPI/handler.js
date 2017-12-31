@@ -59,7 +59,10 @@ function failure(error) {
 }
 
 module.exports.pocketOauthRequest = (event, context, callback) => {
-  return PocketAdaptor.pocketOauthRequest(event, context, callback);
+  const params = JSON.parse(event.body);
+  return PocketAdaptor.pocketOauthRequest(params)
+    .then(r => callback(null, success(r)))
+    .catch(e => callback(null, failure(e)));
 };
 
 module.exports.pocketOauthAuthorize = (event, context, callback) => {

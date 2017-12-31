@@ -44,27 +44,9 @@ function errorResponseBuilder(error) {
   return response;
 }
 
-module.exports.pocketOauthRequest = (event, context, callback) => {
-  const params = JSON.parse(event.body);
-  const reqd = {
-    consumer_key: process.env.POCKET_CONSUMER_KEY,
-    redirect_uri: params.redirect_uri,
-  };
-  const data = JSON.stringify(reqd);
-  axios.post('https://getpocket.com/v3/oauth/request', data, HTTP_POST_CONFIG)
-    .then((res) => {
-      const requestToken = res.data.code;
-      const authUri = `https://getpocket.com/auth/authorize?request_token=${requestToken}&redirect_uri=${params.redirect_uri}`;
-      const bodyObj = {
-        request_token: requestToken,
-        auth_uri: authUri,
-      };
-      callback(null, successResponseBuilder(bodyObj));
-    })
-    .catch((error) => {
-      debug(error);
-      callback(null, errorResponseBuilder(error));
-    });
+/* eslint-disable arrow-body-style */
+module.exports.pocketOauthRequest = (params) => {
+  return Pocket.oauth.request(params.redirect_uri);
 };
 
 module.exports.pocketOauthAuthorize = (event, context, callback) => {
