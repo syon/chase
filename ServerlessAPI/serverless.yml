@@ -44,6 +44,14 @@ functions:
           path: pocket/get
           method: post
           cors: true
+  pocketprogress:
+    handler: handler.pocketProgress
+    events:
+      - http:
+          path: pocket/progress
+          method: post
+          cors: true
+    timeout: 10
   pocketsendarchive:
     handler: handler.pocketSendArchive
     events:

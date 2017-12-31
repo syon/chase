@@ -1,5 +1,7 @@
 const axios = require('axios');
 
+const CONSUMER_KEY = process.env.POCKET_CONSUMER_KEY;
+
 const HTTP_POST_CONFIG = {
   headers: {
     'Content-Type': 'application/json; charset=UTF-8',
@@ -7,9 +9,9 @@ const HTTP_POST_CONFIG = {
   },
 };
 
-module.exports.get = (ck, at, params) => {
+module.exports.get = (at, params) => {
   const reqd = {
-    consumer_key: ck,
+    consumer_key: CONSUMER_KEY,
     access_token: at,
   };
   const data = JSON.stringify(Object.assign(reqd, params));

@@ -1,6 +1,6 @@
 const axios = require('axios');
 const URLSearchParams = require('url-search-params');
-const debug = require('debug')('chase:film');
+const debug = require('debug')('chase:pocket-adaptor');
 
 const Pocket = require('./PocketAPI');
 
@@ -90,11 +90,7 @@ module.exports.pocketOauthAuthorize = (event, context, callback) => {
 
 module.exports.pocketGet = (event, context, callback) => {
   const params = JSON.parse(event.body);
-  const reqd = {
-    consumer_key: process.env.POCKET_CONSUMER_KEY,
-    access_token: params.access_token,
-  };
-  Pocket.get(reqd.consumer_key, reqd.access_token, params)
+  Pocket.get(params.access_token, params)
     .then((res) => {
       callback(null, successResponseBuilder(res));
     })
@@ -102,6 +98,18 @@ module.exports.pocketGet = (event, context, callback) => {
       debug(error);
       callback(null, errorResponseBuilder(error));
     });
+};
+
+module.exports.pocketProgress = (params) => {
+  const funcU = Pocket.get(params.access_token, { state: 'unread' });
+  const funcA = Pocket.get(params.access_token, { state: 'archive' });
+  return Promise.all([
+    funcU.then(r => Object.keys(r.list).length),
+    funcA.then(r => Object.keys(r.list).length),
+  ]).then(([unread, archive]) => {
+    debug({ unread, archive });
+    return { unread, archive };
+  });
 };
 
 module.exports.pocketSendArchive = (event, context, callback) => {

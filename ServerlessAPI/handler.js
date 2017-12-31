@@ -70,6 +70,13 @@ module.exports.pocketGet = (event, context, callback) => {
   return PocketAdaptor.pocketGet(event, context, callback);
 };
 
+module.exports.pocketProgress = (event, context, callback) => {
+  const params = JSON.parse(event.body);
+  return PocketAdaptor.pocketProgress(params)
+    .then(r => callback(null, success(r)))
+    .catch(e => callback(null, failure(e)));
+};
+
 module.exports.pocketSendArchive = (event, context, callback) => {
   return PocketAdaptor.pocketSendArchive(event, context, callback);
 };
