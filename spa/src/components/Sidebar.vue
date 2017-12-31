@@ -6,6 +6,15 @@
         img(src="../assets/logo.png" alt="Chase")
 
   section.menu(v-if="login.accessToken")
+    .menu-title Progress
+    span {{ progress.unread }}
+    span= ' / '
+    span {{ progress.all }}
+    span= ' ('
+    span {{ Math.floor(progress.unread / progress.all * 100) }}
+    span= ' %)'
+
+  section.menu(v-if="login.accessToken")
     .menu-title Recent {{ catalogCount }}
     .link-item
       router-link(:to="{ name: 'Inbox' }")
@@ -81,6 +90,7 @@ export default {
   computed: {
     ...mapState({
       login: 'login',
+      progress: 'progress',
       mytags: 'mytags',
       myscenes: 'myscenes',
     }),

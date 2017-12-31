@@ -6,7 +6,7 @@ const REDIRECT_URI = process.env.NODE_ENV === 'development' ? 'http://localhost:
 const LAMBDA_ENDPOINT = 'https://ua5uhzf79d.execute-api.us-east-1.amazonaws.com/dev';
 
 async function getRequestToken() {
-  debug('[getAccessToken]>>>>');
+  debug('[getRequestToken]>>>>');
   const result = await fetch(`${LAMBDA_ENDPOINT}/pocket/oauth/request`, {
     method: 'POST',
     headers: {
@@ -24,7 +24,7 @@ async function getRequestToken() {
       };
     })
     .catch(err => debug(err));
-  debug('[getAccessToken]<<<<', result);
+  debug('[getRequestToken]<<<<', result);
   return result;
 }
 
@@ -62,6 +62,24 @@ async function get(accessToken) {
     .then(res => res.json())
     .catch(err => debug(err));
   debug('[get]<<<<', result);
+  return result;
+}
+
+async function progress(accessToken) {
+  debug('[progress]>>>>', accessToken);
+  if (!accessToken) return { list: {} };
+  const result = await fetch(`${LAMBDA_ENDPOINT}/pocket/progress`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      access_token: accessToken,
+    }),
+  })
+    .then(res => res.json())
+    .catch(err => debug(err));
+  debug('[progress]<<<<', result);
   return result;
 }
 
@@ -150,6 +168,7 @@ export default {
   getRequestToken,
   getAccessToken,
   get,
+  progress,
   getByTag,
   archive,
   favorite,

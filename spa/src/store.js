@@ -17,6 +17,11 @@ const initialState = {
     accessToken: '',
     username: '',
   },
+  progress: {
+    unread: 0,
+    archive: 0,
+    all: 0,
+  },
   entries: {},
   libraInfo: {},
   hatebuCntSet: {},
@@ -98,6 +103,10 @@ export default new Vuex.Store({
       Object.keys(initialState).forEach((key) => {
         state[key] = initialState[key];
       });
+    },
+    setProgress(state, payload) {
+      const { unread, archive } = payload;
+      state.progress = { unread, archive, all: unread + archive };
     },
     myscenes(state, myscenes) {
       state.myscenes = myscenes;
@@ -191,6 +200,7 @@ export default new Vuex.Store({
       debug('[actByPhase]', ph);
       if (ph === 'READY' && at) {
         dispatch('restoreLogin', $cookie);
+        dispatch('fetchProgress');
         dispatch('fetchEntries');
         dispatch('restoreScenes', $cookie);
       } else if (ph === 'WAITING_ACCESSTOKEN') {
@@ -219,6 +229,11 @@ export default new Vuex.Store({
       $cookie.set('phase', 'READY', { expires: '3M' });
       $cookie.set('pocket_access_token', json.access_token, { expires: '3M' });
       $cookie.set('pocket_username', json.username, { expires: '3M' });
+    },
+    async fetchProgress({ state, commit }) {
+      const at = state.login.accessToken;
+      const json = await LambdaPocket.progress(at);
+      commit('setProgress', json);
     },
     async fetchEntries({ state, dispatch }) {
       const at = state.login.accessToken;
