@@ -1,4 +1,3 @@
-require('dotenv').config();
 const axios = require('axios');
 const URLSearchParams = require('url-search-params');
 const debug = require('debug')('chase:film');

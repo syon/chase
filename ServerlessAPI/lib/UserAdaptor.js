@@ -1,4 +1,3 @@
-require('dotenv').config();
 const debug = require('debug')('chase:user-adaptor');
 const AWS = require('aws-sdk');
 
