@@ -1,8 +1,10 @@
 <template lang="pug">
 .screenshot
   template(v-if="entry.ready")
-    fit-image(:src="filmDesktopSrc" w="193" h="145" size="cover" :onloadsuccess="() => onFilmSuccess(entry)" :onloaderror="() => onFilmError(entry)")
-    fit-image(:src="filmMobileSrc" w="82" h="145" size="cover" :onloaderror="() => onFilmError(entry)")
+    template(v-if="isDesktop")
+      fit-image(:src="desktopUrl" w="257" h="193" size="cover" :onloadsuccess="() => onFilmSuccess(entry)" :onloaderror="() => onFilmError(entry)")
+    template(v-else)
+      fit-image(:src="mobileUrl" w="214" h="380" size="cover" :onloaderror="() => onFilmError(entry)")
 </template>
 
 <script>
@@ -10,6 +12,7 @@ import { mapGetters } from 'vuex';
 import FitImage from '@/components/FitImage';
 
 export default {
+  props: ['target'],
   components: {
     FitImage,
   },
@@ -17,12 +20,15 @@ export default {
     ...mapGetters({
       entry: 'activeEntry',
     }),
-    filmDesktopSrc() {
+    isDesktop() {
+      return this.target === 'desktop';
+    },
+    desktopUrl() {
       if (!this.entry) return '';
       const { eid } = this.entry;
       return `https://s3.amazonaws.com/syon-chase/films/${eid}/desktop.png`;
     },
-    filmMobileSrc() {
+    mobileUrl() {
       if (!this.entry) return '';
       const { eid } = this.entry;
       return `https://s3.amazonaws.com/syon-chase/films/${eid}/mobile.png`;
@@ -46,6 +52,4 @@ export default {
   display flex
   align-items center
   justify-content space-around
-  // background-color #eee
-  // border 4px solid #eee
 </style>

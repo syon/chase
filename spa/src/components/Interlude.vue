@@ -2,23 +2,29 @@
 .interlude
   template(v-if="entry.ready")
     fit-image.thumbnail(:src="entry.image_s3_url" w="290" h="193" size="cover")
-    .link
-      a(:href="entry.url" target="_blank") {{ linkTitle }}
-    .meta
-      div {{ entry.site_name }} ({{ entry.fqdn }})
-    .desc {{ entry.description }}
-    hr
-    .action
-      button(@click="archive(entry.eid)") 既読
-      div {{ entry.added }}
-    hr
-    .addscenes
-      button.scene(v-for="sce in scenes" @click="addTag({ eid: entry.eid, tag: sce.tag })") {{ sce.label }}
-    hr
-    .tags
-      clickable.tag(v-for="tag in recentTags" key="tag" @click.native="handleTagClick(tag)" :class="{ applied: Object.keys(entry.tags).includes(tag) }") {{ tag }}
-    .newtag
-      input(v-model="newtag" @keyup.enter="handleNewTag" placeholder="New Tag")
+    section
+      .link
+        a(:href="entry.url" target="_blank") {{ linkTitle }}
+    section
+      .meta
+        div {{ entry.site_name }} ({{ entry.fqdn }})
+      .desc {{ entry.description }}
+      hr
+      .action
+        button(@click="archive(entry.eid)") 既読
+        div {{ entry.added }}
+      hr
+      .addscenes
+        button.scene(v-for="sce in scenes" @click="addTag({ eid: entry.eid, tag: sce.tag })") {{ sce.label }}
+      hr
+      .tags
+        clickable.tag(v-for="tag in recentTags" key="tag" @click.native="handleTagClick(tag)" :class="{ applied: Object.keys(entry.tags).includes(tag) }") {{ tag }}
+      .newtag
+        input(v-model="newtag" @keyup.enter="handleNewTag" placeholder="New Tag")
+
+  section.mobile-screenshot
+    template(v-if="entry.ready")
+      fit-image(:src="filmMobileSrc" w="214" h="380" size="cover" :onloaderror="() => onFilmError(entry)")
 </template>
 
 <script>
@@ -92,7 +98,9 @@ export default {
 .interlude
   position fixed
   width inherit
+  height 100vh
   padding 0 15px
+  overflow auto
   .thumbnail
     border 1px solid #eee
   .link
@@ -127,6 +135,13 @@ export default {
     justify-content space-between
     .scene
       flex 1
+  .mobile-screenshot
+    display flex
+    align-items center
+    justify-content center
+    margin 30px 0
+    padding 8px
+    border 1px solid #eee
 
 .tags
   .tag

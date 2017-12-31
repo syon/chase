@@ -1,7 +1,7 @@
 <template lang="pug">
 .hatebu
   header
-    screenshot.imageframe
+    screenshot(target="desktop").imageframe
     h4
       span {{ hatebu.count }}
       button(v-if="!hatebuStarSet[entry.eid] && !loadingRank" @click="makeRanking") makeRanking
@@ -81,7 +81,6 @@ export default {
   padding 0 15px
 
 .imageframe
-  padding 2px
   border 1px solid #eee
 
 .bookmarks
