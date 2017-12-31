@@ -1,7 +1,7 @@
 <template lang="pug">
-.v-entry(:data-eid="obj.eid" :class="compoClasses")
+.v-entry(@click="activate(obj)" :data-eid="obj.eid" :class="compoClasses")
   template(v-if="obj.ready")
-    .pnl(@click="activate(obj)")
+    .pnl
       .pnl-thumb
         fit-image(:src="imgSrc" w="100" h="80" size="cover" :onloaderror="handleLoadImageError")
       .pnl-body
