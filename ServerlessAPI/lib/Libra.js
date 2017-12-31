@@ -21,8 +21,13 @@ module.exports = class Libra {
     return `items/libra/${itemId3}/${item10Id}.json`;
   }
 
-  getInfo() {
-    const config = { responseType: 'arraybuffer', timeout: 3000 };
+  async getInfo() {
+    const judge = await this.s3Head();
+    if (judge) {
+      const info = await Libra.getInfoS3(this.s3Path);
+      return info;
+    }
+    const config = { responseType: 'arraybuffer', timeout: 5000 };
     return axios.get(this.url, config)
       .then(res => res.data)
       .then((html) => {
@@ -48,11 +53,11 @@ module.exports = class Libra {
         };
       })
       .then((info) => {
-        this.putInfoS3(info);
+        this.putInfoS3(this.s3Path, info);
         return info;
       })
       .catch((error) => {
-        debug('Error on axios in Libra.getInfo');
+        debug('Error on axios in Libra.async ');
         debug(error);
         return {
           site_name: '',
@@ -63,19 +68,55 @@ module.exports = class Libra {
       });
   }
 
-  putInfoS3(info) {
-    debug('[putInfoS3]', this.s3Path);
-    if (this.s3Path) {
+  s3Head() {
+    return new Promise((rv) => {
       const obj = {
         Bucket: process.env.BUCKET,
         Key: this.s3Path,
-        Body: JSON.stringify(info, null, 2),
       };
-      s3.putObject(obj, (err, data) => {
-        if (err) { debug('Error:', err); }
-        if (data) { debug('Success:', data); }
+      debug(obj);
+      s3.headObject(obj, (err, data) => {
+        if (err) {
+          debug('Not found in S3');
+          rv(false);
+        }
+        if (data) {
+          debug('Already exists in S3');
+          rv(true);
+        }
       });
-    }
+    });
+  }
+
+  static putInfoS3(key, info) {
+    return new Promise((rv, rj) => {
+      if (key) {
+        const obj = {
+          Bucket: process.env.BUCKET,
+          Key: key,
+          Body: JSON.stringify(info, null, 2),
+        };
+        s3.putObject(obj, (err, data) => {
+          if (err) { rj(err); }
+          if (data) { rv(data); }
+        });
+      }
+    });
+  }
+
+  static getInfoS3(key) {
+    return new Promise((rv, rj) => {
+      if (key) {
+        const obj = {
+          Bucket: process.env.BUCKET,
+          Key: key,
+        };
+        s3.getObject(obj, (err, data) => {
+          if (err) { rj(err); }
+          if (data) { rv(JSON.parse(data.Body.toString())); }
+        });
+      }
+    });
   }
 
   static detectEncoding(html) {
