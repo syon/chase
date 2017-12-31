@@ -23,23 +23,32 @@ exports.run = async (browser, event) => {
   console.log(`URL: ${url}`);
   console.log(`PocketID: ${pocketId}`);
   // Check already exists
-  const judge = await s3Head(pocketId, 'desktop');
-  if (judge) return '(Skipped) Already exists.';
   const page = await browser.newPage();
-  // Capture desktop
-  page.setViewport({width: 1024, height: 768});
-  await page.goto(url);
-  const buf = await page.screenshot();
-  await s3Put(pocketId, buf, 'desktop');
-  // Capture mobile
-  page.setViewport({width: 375, height: 667, isMobile: true});
-  page.setUserAgent(ua.chrome.iOS(11));
-  await page.goto(url);
-  const buf2 = await page.screenshot();
-  await s3Put(pocketId, buf2, 'mobile');
+  const hasD = await s3Head(pocketId, 'desktop');
+  if (!hasD) {
+    // Capture desktop
+    page.setViewport({width: 1024, height: 768});
+    await page.goto(url);
+    const buf = await page.screenshot();
+    await s3Put(pocketId, buf, 'desktop');
+  }
+  const hasM = await s3Head(pocketId, 'mobile');
+  if (!hasM) {
+    // Capture mobile
+    page.setViewport({width: 375, height: 667, isMobile: true});
+    page.setUserAgent(ua.chrome.iOS(11));
+    await page.goto(url);
+    await sleep(1000);
+    const buf2 = await page.screenshot();
+    await s3Put(pocketId, buf2, 'mobile');
+  }
   await page.close();
   return 'done.';
 };
+
+async function sleep(ms) {
+  return await new Promise((r) => setTimeout(r, ms));
+}
 
 function s3Head(pocketId, kind) {
   return new Promise((rv, rj) => {
