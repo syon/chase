@@ -94,14 +94,15 @@ function moldEntry(pocketRawItem) {
 
 module.exports.prepare = async () => {
   const tokens = await extractAccesstokens();
-  await Promise.all(tokens.map(at => getPocketEntrySet(at).then((set) => {
+  const funcs = tokens.map(at => getPocketEntrySet(at).then((set) => {
     const items = Object.keys(set).map(id => moldEntry(set[id]));
     return items;
   }).then(async (items) => {
     await Promise.all(items.map(async (params) => {
-      LibraAdaptor.libraInfo(params);
-      FilmAdaptor.main(params);
-      ShotAdaptor.main(params);
+      await LibraAdaptor.libraInfo(params);
+      await FilmAdaptor.main(params);
+      await ShotAdaptor.main(params);
     }));
-  })));
+  }));
+  await Promise.all(funcs);
 };
