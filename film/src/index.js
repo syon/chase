@@ -32,7 +32,7 @@ exports.run = async (browser, event) => {
   const buf = await page.screenshot();
   await s3Put(pocketId, buf, 'desktop');
   // Capture mobile
-  page.setViewport({width: 320, height: 568, isMobile: true});
+  page.setViewport({width: 375, height: 667, isMobile: true});
   page.setUserAgent(ua.chrome.iOS(11));
   await page.goto(url);
   const buf2 = await page.screenshot();
