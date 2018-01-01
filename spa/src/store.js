@@ -4,7 +4,7 @@ import Debug from 'debug';
 
 import ChaseUtil from '@/lib/ChaseUtil';
 import Hatebu from '@/lib/Hatebu';
-import LambdaFilm from '@/lib/LambdaFilm';
+import LambdaShot from '@/lib/LambdaShot';
 import LambdaLibra from '@/lib/LambdaLibra';
 import LambdaPocket from '@/lib/LambdaPocket';
 import LambdaUser from '@/lib/LambdaUser';
@@ -302,7 +302,7 @@ export default new Vuex.Store({
       const { eid, url } = payload;
       if (!eid) return;
       context.commit('addFilm', { eid });
-      await LambdaFilm.shot({ eid, url });
+      await LambdaShot.shot({ eid, url });
     },
     async fetchHatebu(context, payload) {
       const { eid, url } = payload;
