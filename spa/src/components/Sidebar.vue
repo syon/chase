@@ -51,8 +51,6 @@
     .todo
       em ToDo:
       ul(style="padding-left: 2em;")
-        li ランキングまわり
-        li コード名前整理
         li 主要サイトOGP
 
   section

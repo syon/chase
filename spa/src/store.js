@@ -28,6 +28,7 @@ const initialState = {
   shotSet: {},
   hatebuSet: {},
   hatebuStarSet: {},
+  hatebuStarLoading: false,
   activeEid: '',
   myscenes: {},
 };
@@ -122,6 +123,9 @@ export default new Vuex.Store({
     },
     addHatebuStar(state, { eid, starSet }) {
       state.hatebuStarSet = { ...state.hatebuStarSet, [eid]: starSet };
+    },
+    setHatebuStarLoading(state, judge) {
+      state.hatebuStarLoading = judge;
     },
     activate(state, payload) {
       const { eid } = payload;
@@ -308,19 +312,23 @@ export default new Vuex.Store({
       const { eid, force } = payload;
       const hatebu = state.hatebuSet[eid];
       if (!hatebu) return;
+      const comments = hatebu.bookmarks.filter(d => d.comment.length !== 0);
       let needsFetch = false;
-      if (hatebu.count < 200) {
+      if (comments.length < 100) {
         const starSet = state.hatebuStarSet[eid];
         if (starSet) {
           debug('Already fetched stars.');
         } else {
+          debug('Auto fetching stars...');
           needsFetch = true;
         }
       }
       if (force) needsFetch = true;
       if (needsFetch) {
+        commit('setHatebuStarLoading', true);
         const set = await Hatebu.fetchStarSet(hatebu);
         commit('addHatebuStar', { eid, starSet: set });
+        commit('setHatebuStarLoading', false);
       }
     },
   },

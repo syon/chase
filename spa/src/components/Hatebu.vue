@@ -4,8 +4,9 @@
     screenshot(target="desktop").imageframe
     h4
       span {{ hatebu.count }}
-      button(v-if="!hatebuStarSet[entry.eid] && !loadingRank" @click="makeRanking") makeRanking
-      span(v-if="loadingRank") Loading...
+      span &nbsp;({{ comments.length }} comments)
+      button(v-if="!hatebuStarSet[entry.eid] && !hatebuStarLoading" @click="makeRanking") makeRanking
+      span(v-if="hatebuStarLoading") Loading...
   .bookmarks
     .voice(v-for="b in voices")
       .meta
@@ -28,12 +29,13 @@ export default {
   },
   data() {
     return {
-      loadingRank: false,
+      mode: 'recent',
     };
   },
   computed: {
     ...mapState([
       'hatebuStarSet',
+      'hatebuStarLoading',
     ]),
     ...mapGetters({
       entry: 'activeEntry',
@@ -42,9 +44,25 @@ export default {
       const eid = this.entry.eid;
       return this.$store.state.hatebuSet[eid] || {};
     },
-    voices() {
+    comments() {
       if (!this.hatebu.bookmarks) return [];
       return this.hatebu.bookmarks.filter(d => d.comment.length !== 0);
+    },
+    voices() {
+      if (!this.hatebu.bookmarks) return [];
+      const eid = this.entry.eid;
+      const starSet = this.$store.state.hatebuStarSet[eid] || {};
+      const voices = this.comments;
+      voices.sort((a, b) => {
+        const aStar = isNaN(Number(starSet[a.user])) ? 0 : Number(starSet[a.user]);
+        const bStar = isNaN(Number(starSet[b.user])) ? 0 : Number(starSet[b.user]);
+        if (aStar > bStar) return -1;
+        if (aStar < bStar) return 1;
+        if (a.timestamp > b.timestamp) return -1;
+        if (a.timestamp < b.timestamp) return 1;
+        return 0;
+      });
+      return voices;
     },
   },
   methods: {
@@ -63,9 +81,7 @@ export default {
     },
     async makeRanking() {
       const eid = this.entry.eid;
-      this.loadingRank = true;
       await this.$store.dispatch('makeHatebuRanking', { eid, force: true });
-      this.loadingRank = false;
     },
   },
 };
