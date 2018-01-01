@@ -73,9 +73,8 @@ function extractAccesstokens() {
 }
 
 function getPocketEntrySet(at) {
-  const ck = process.env.POCKET_CONSUMER_KEY;
   const params = { count: 50, detailType: 'complete' };
-  return Pocket.get(ck, at, params).then((d) => {
+  return Pocket.get(at, params).then((d) => {
     debug(`GET RESULT of ${at} IS:`, Object.keys(d.list).length);
     return d.list;
   }).catch((err) => {
