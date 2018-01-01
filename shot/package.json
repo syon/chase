@@ -1,5 +1,5 @@
 {
-  "name": "puppeteer-lambda-starter-kit",
+  "name": "chase-shot",
   "version": "0.9.4",
   "description": "Starter Kit for running Headless-Chrome by Puppeteer on AWS Lambda",
   "scripts": {
