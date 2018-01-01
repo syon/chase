@@ -39,8 +39,8 @@ export default {
       // console.log(entry.eid);
     },
     onShotError(entry) {
-      if (entry.filmOrdered) return;
-      this.$store.dispatch('fetchFilm', entry);
+      if (entry.shotOrdered) return;
+      this.$store.dispatch('fetchShot', entry);
     },
   },
 };

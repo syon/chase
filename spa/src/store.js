@@ -25,7 +25,7 @@ const initialState = {
   entries: {},
   libraInfo: {},
   hatebuCntSet: {},
-  filmSet: {},
+  shotSet: {},
   hatebuSet: {},
   hatebuStarSet: {},
   activeEid: '',
@@ -40,8 +40,8 @@ export default new Vuex.Store({
       const p = state.entries;
       const l = state.libraInfo;
       const h = state.hatebuCntSet;
-      const f = state.filmSet;
-      return ChaseUtil.makeCatalog(p, l, h, f);
+      const s = state.shotSet;
+      return ChaseUtil.makeCatalog(p, l, h, s);
     },
     filteredCatalog: (state, getters) => (route, tag) => {
       const arr = getters.catalog;
@@ -114,8 +114,8 @@ export default new Vuex.Store({
     addHatebuCnt(state, { eid, hatebuCnt }) {
       state.hatebuCntSet = { ...state.hatebuCntSet, [eid]: hatebuCnt };
     },
-    addFilm(state, { eid }) {
-      state.filmSet = { ...state.filmSet, [eid]: 'ordered' };
+    addShot(state, { eid }) {
+      state.shotSet = { ...state.shotSet, [eid]: 'ordered' };
     },
     addHatebu(state, { eid, hatebu }) {
       state.hatebuSet = { ...state.hatebuSet, [eid]: hatebu };
@@ -292,10 +292,10 @@ export default new Vuex.Store({
       const hatebuCnt = await ChaseUtil.fetchHatebuCnt(url);
       context.commit('addHatebuCnt', { eid, hatebuCnt });
     },
-    async fetchFilm(context, payload) {
+    async fetchShot(context, payload) {
       const { eid, url } = payload;
       if (!eid) return;
-      context.commit('addFilm', { eid });
+      context.commit('addShot', { eid });
       await LambdaShot.shot({ eid, url });
     },
     async fetchHatebu(context, payload) {
