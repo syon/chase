@@ -1,13 +1,14 @@
 import Debug from 'debug';
+import Consts from '@/Consts';
 
 const debug = Debug('chase:lambda-user');
-const LAMBDA_ENDPOINT = 'https://ua5uhzf79d.execute-api.us-east-1.amazonaws.com/dev';
+const ENDPOINT = Consts.LAMBDA_ENDPOINT.POCKET;
 
 async function register(arg) {
   if (!arg || !arg.accesstoken) return null;
   debug('[register]>>>>', arg);
   const { accesstoken } = arg;
-  const result = await fetch(`${LAMBDA_ENDPOINT}/user/register`, {
+  const result = await fetch(`${ENDPOINT}/user/register`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

@@ -1,13 +1,14 @@
 import Debug from 'debug';
+import Consts from '@/Consts';
 
 const debug = Debug('chase:lambda-shot');
-const LAMBDA_ENDPOINT = 'https://znvqcb3nb0.execute-api.us-east-1.amazonaws.com/prod';
+const ENDPOINT = Consts.LAMBDA_ENDPOINT.SHOT;
 
 async function shot(arg) {
   if (!arg || !arg.eid) return null;
   debug('[shot]>>>>', arg);
   const { eid, url } = arg;
-  const result = await fetch(`${LAMBDA_ENDPOINT}/shot`, {
+  const result = await fetch(`${ENDPOINT}/shot`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

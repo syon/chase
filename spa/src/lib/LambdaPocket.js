@@ -1,13 +1,14 @@
 import Debug from 'debug';
+import Consts from '@/Consts';
 import URLSearchParams from 'url-search-params';
 
 const debug = Debug('chase:lambda-pocket');
+const ENDPOINT = Consts.LAMBDA_ENDPOINT.POCKET;
 const REDIRECT_URI = process.env.NODE_ENV === 'development' ? 'http://localhost:8080/chase/' : 'https://syon.github.io/chase/';
-const LAMBDA_ENDPOINT = 'https://ua5uhzf79d.execute-api.us-east-1.amazonaws.com/dev';
 
 async function getRequestToken() {
   debug('[getRequestToken]>>>>');
-  const result = await fetch(`${LAMBDA_ENDPOINT}/pocket/oauth/request`, {
+  const result = await fetch(`${ENDPOINT}/pocket/oauth/request`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -30,7 +31,7 @@ async function getRequestToken() {
 
 async function getAccessToken(requestToken) {
   debug('[getAccessToken]>>>>', requestToken);
-  const result = await fetch(`${LAMBDA_ENDPOINT}/pocket/oauth/authorize`, {
+  const result = await fetch(`${ENDPOINT}/pocket/oauth/authorize`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -48,7 +49,7 @@ async function getAccessToken(requestToken) {
 async function get(accessToken) {
   debug('[get]>>>>', accessToken);
   if (!accessToken) return { list: {} };
-  const result = await fetch(`${LAMBDA_ENDPOINT}/pocket/get`, {
+  const result = await fetch(`${ENDPOINT}/pocket/get`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -68,7 +69,7 @@ async function get(accessToken) {
 async function progress(accessToken) {
   debug('[progress]>>>>', accessToken);
   if (!accessToken) return { list: {} };
-  const result = await fetch(`${LAMBDA_ENDPOINT}/pocket/progress`, {
+  const result = await fetch(`${ENDPOINT}/pocket/progress`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -85,7 +86,7 @@ async function progress(accessToken) {
 
 async function getByTag(accessToken, tag) {
   debug('[getByTag]>>>>', accessToken, tag);
-  const result = await fetch(`${LAMBDA_ENDPOINT}/pocket/get`, {
+  const result = await fetch(`${ENDPOINT}/pocket/get`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -108,7 +109,7 @@ async function archive(accessToken, itemId) {
   const q = new URLSearchParams();
   q.append('access_token', accessToken);
   q.append('item_id', itemId);
-  const url = `${LAMBDA_ENDPOINT}/pocket/send/archive?${q.toString()}`;
+  const url = `${ENDPOINT}/pocket/send/archive?${q.toString()}`;
   const result = await fetch(url, {
     method: 'GET',
   })
@@ -123,7 +124,7 @@ async function favorite(accessToken, itemId) {
   const q = new URLSearchParams();
   q.append('access_token', accessToken);
   q.append('item_id', itemId);
-  const url = `${LAMBDA_ENDPOINT}/pocket/send/favorite?${q.toString()}`;
+  const url = `${ENDPOINT}/pocket/send/favorite?${q.toString()}`;
   const result = await fetch(url, {
     method: 'GET',
   })
@@ -138,7 +139,7 @@ async function unfavorite(accessToken, itemId) {
   const q = new URLSearchParams();
   q.append('access_token', accessToken);
   q.append('item_id', itemId);
-  const url = `${LAMBDA_ENDPOINT}/pocket/send/unfavorite?${q.toString()}`;
+  const url = `${ENDPOINT}/pocket/send/unfavorite?${q.toString()}`;
   const result = await fetch(url, {
     method: 'GET',
   })
@@ -154,7 +155,7 @@ async function addTag(accessToken, itemId, tag) {
   q.append('access_token', accessToken);
   q.append('item_id', itemId);
   q.append('tag', tag);
-  const url = `${LAMBDA_ENDPOINT}/pocket/send/tags/add?${q.toString()}`;
+  const url = `${ENDPOINT}/pocket/send/tags/add?${q.toString()}`;
   const result = await fetch(url, {
     method: 'GET',
   })
