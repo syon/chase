@@ -54,7 +54,7 @@ function s3Head(pocketId, kind) {
   return new Promise((rv, rj) => {
     const obj = {
       Bucket: 'syon-chase',
-      Key: `films/${pocketId}/${kind}.png`,
+      Key: `shots/${pocketId}/${kind}.png`,
     };
     s3.headObject(obj, (err, data) => {
       if (err) {
@@ -73,11 +73,10 @@ function s3Put(pocketId, buf, kind) {
   return new Promise((rv, rj) => {
     const obj = {
       Bucket: 'syon-chase',
-      Key: `films/${pocketId}/${kind}.png`,
+      Key: `shots/${pocketId}/${kind}.png`,
       Body: buf,
     };
     console.log(`Saving object... ${obj.Key} (${buf.length} Bytes)`);
-    // require('fs').writeFile('zzzzz.png', buf, (e)=>{});
     s3.putObject(obj, (err, data) => {
       if (err) {
         rj(err);

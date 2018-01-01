@@ -302,7 +302,7 @@ export default new Vuex.Store({
       const { eid, url } = payload;
       if (!eid) return;
       context.commit('addFilm', { eid });
-      await LambdaFilm.film({ eid, url });
+      await LambdaFilm.shot({ eid, url });
     },
     async fetchHatebu(context, payload) {
       const { eid, url } = payload;

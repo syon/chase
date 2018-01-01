@@ -6,7 +6,7 @@ const LAMBDA_ENDPOINT = 'https://znvqcb3nb0.execute-api.us-east-1.amazonaws.com/
 module.exports.main = (arg) => {
   debug(arg);
   const { url, pocket_id: pid } = arg;
-  return axios.get(`${LAMBDA_ENDPOINT}/film`, {
+  return axios.get(`${LAMBDA_ENDPOINT}/shot`, {
     params: {
       url,
       pocket_id: pid,

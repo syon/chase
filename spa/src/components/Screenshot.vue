@@ -2,9 +2,9 @@
 .screenshot
   template(v-if="entry.ready")
     template(v-if="isDesktop")
-      fit-image(:src="desktopUrl" w="257" h="193" size="cover" :onloadsuccess="() => onFilmSuccess(entry)" :onloaderror="() => onFilmError(entry)")
+      fit-image(:src="desktopUrl" w="257" h="193" size="cover" :onloadsuccess="() => onShotSuccess(entry)" :onloaderror="() => onShotError(entry)")
     template(v-else)
-      fit-image(:src="mobileUrl" w="214" h="380" size="cover" :onloaderror="() => onFilmError(entry)")
+      fit-image(:src="mobileUrl" w="214" h="380" size="cover" :onloaderror="() => onShotError(entry)")
 </template>
 
 <script>
@@ -26,19 +26,19 @@ export default {
     desktopUrl() {
       if (!this.entry) return '';
       const { eid } = this.entry;
-      return `https://s3.amazonaws.com/syon-chase/films/${eid}/desktop.png`;
+      return `https://s3.amazonaws.com/syon-chase/shots/${eid}/desktop.png`;
     },
     mobileUrl() {
       if (!this.entry) return '';
       const { eid } = this.entry;
-      return `https://s3.amazonaws.com/syon-chase/films/${eid}/mobile.png`;
+      return `https://s3.amazonaws.com/syon-chase/shots/${eid}/mobile.png`;
     },
   },
   methods: {
-    onFilmSuccess() {
+    onShotSuccess() {
       // console.log(entry.eid);
     },
-    onFilmError(entry) {
+    onShotError(entry) {
       if (entry.filmOrdered) return;
       this.$store.dispatch('fetchFilm', entry);
     },

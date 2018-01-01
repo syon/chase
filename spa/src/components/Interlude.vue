@@ -24,7 +24,7 @@
 
   section.mobile-screenshot
     template(v-if="entry.ready")
-      fit-image(:src="filmMobileSrc" w="214" h="380" size="cover" :onloaderror="() => onFilmError(entry)")
+      fit-image(:src="shotMobileSrc" w="214" h="380" size="cover" :onloaderror="() => onShotError(entry)")
 </template>
 
 <script>
@@ -54,15 +54,10 @@ export default {
     linkTitle() {
       return this.entry.title ? this.entry.title : this.entry.url;
     },
-    filmDesktopSrc() {
+    shotMobileSrc() {
       if (!this.entry) return '';
       const { eid } = this.entry;
-      return `https://s3.amazonaws.com/syon-chase/films/${eid}/desktop.png`;
-    },
-    filmMobileSrc() {
-      if (!this.entry) return '';
-      const { eid } = this.entry;
-      return `https://s3.amazonaws.com/syon-chase/films/${eid}/mobile.png`;
+      return `https://s3.amazonaws.com/syon-chase/shots/${eid}/mobile.png`;
     },
   },
   methods: {
@@ -83,10 +78,10 @@ export default {
     handleNewTag() {
       this.handleTagClick(this.newtag);
     },
-    onFilmSuccess() {
+    onShotSuccess() {
       // console.log(entry.eid);
     },
-    onFilmError(entry) {
+    onShotError(entry) {
       if (entry.filmOrdered) return;
       this.$store.dispatch('fetchFilm', entry);
     },
