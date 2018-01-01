@@ -85,9 +85,6 @@ export default new Vuex.Store({
     },
   },
   mutations: {
-    increment(state) {
-      state.count = state.count + 1;
-    },
     updateEntries(state, newEntries) {
       state.entries = newEntries;
     },
@@ -155,9 +152,6 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    increment(context) {
-      context.commit('increment');
-    },
     restoreLogin({ commit }, $cookie) {
       const at = $cookie.get('pocket_access_token');
       const un = $cookie.get('pocket_username');
