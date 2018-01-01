@@ -205,8 +205,7 @@ export default new Vuex.Store({
         dispatch('restoreScenes', $cookie);
       } else if (ph === 'WAITING_ACCESSTOKEN') {
         await dispatch('getAccessToken', $cookie);
-        await dispatch('fetchEntries');
-        dispatch('restoreScenes', $cookie);
+        await dispatch('actByPhase', $cookie);
       } else {
         dispatch('logout', $cookie);
       }

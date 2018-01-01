@@ -54,7 +54,6 @@
         li ランキングまわり
         li コード名前整理
         li 主要サイトOGP
-        li 消化進捗
 
   section
     .misc
@@ -118,7 +117,7 @@ export default {
     },
     logout() {
       this.$store.dispatch('logout', this.$cookie);
-      this.$router.push('welcome');
+      this.$router.push({ path: '/welcome' });
     },
   },
 };
