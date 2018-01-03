@@ -66,11 +66,17 @@ module.exports.pocketOauthRequest = (event, context, callback) => {
 };
 
 module.exports.pocketOauthAuthorize = (event, context, callback) => {
-  return PocketAdaptor.pocketOauthAuthorize(event, context, callback);
+  const params = JSON.parse(event.body);
+  return PocketAdaptor.pocketOauthAuthorize(params)
+    .then(r => callback(null, success(r)))
+    .catch(e => callback(null, failure(e)));
 };
 
 module.exports.pocketGet = (event, context, callback) => {
-  return PocketAdaptor.pocketGet(event, context, callback);
+  const params = JSON.parse(event.body);
+  return PocketAdaptor.pocketGet(params)
+    .then(r => callback(null, success(r)))
+    .catch(e => callback(null, failure(e)));
 };
 
 module.exports.pocketProgress = (event, context, callback) => {
@@ -81,7 +87,10 @@ module.exports.pocketProgress = (event, context, callback) => {
 };
 
 module.exports.pocketSendArchive = (event, context, callback) => {
-  return PocketAdaptor.pocketSendArchive(event, context, callback);
+  const params = event.queryStringParameters;
+  return PocketAdaptor.pocketSendArchive(params)
+    .then(r => callback(null, success(r)))
+    .catch(e => callback(null, failure(e)));
 };
 
 module.exports.pocketSendFavorite = (event, context, callback) => {
