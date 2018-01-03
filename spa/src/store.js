@@ -58,7 +58,7 @@ export default new Vuex.Store({
       if (filterTxt) {
         result = result.filter((d) => {
           const tgt = `${d.title}${d.excerpt}${d.description}${d.site_name}${d.fqdn}`;
-          return tgt.includes(filterTxt);
+          return tgt.toUpperCase().includes(filterTxt.toUpperCase());
         });
       }
       return result;
