@@ -28,7 +28,7 @@ module.exports = class Libra {
       return info;
     }
     const config = { responseType: 'arraybuffer', timeout: 5000 };
-    return axios.get(this.url, config)
+    const siteinfo = await axios.get(this.url, config)
       .then(res => res.data)
       .then((html) => {
         let encoding = Libra.detectEncoding(html);
@@ -41,31 +41,20 @@ module.exports = class Libra {
         }
         return html.toString();
       })
-      .then((html) => {
-        const standardProps = Libra.extractStandardProps(html);
-        const metaProps = Libra.extractMetaProps(html);
-        const siteName = Libra.resolveSiteName(metaProps);
-        const title = Libra.resolveTitle(standardProps, metaProps);
-        const description = Libra.resolveDesc(standardProps, metaProps);
-        const image = Libra.resolveImageUrl(metaProps);
-        return {
-          site_name: siteName, title, description, image,
-        };
-      })
-      .then((info) => {
-        Libra.putInfoS3(this.s3Path, info);
-        return info;
-      })
+      .then(html => Libra.makeSiteInfo(html))
       .catch((error) => {
-        debug('Error on axios in Libra.async ');
+        debug('Error on axios in Libra');
         debug(error);
-        return {
+        const info = {
           site_name: '',
           title: '',
           description: '',
           image: '',
         };
+        return info;
       });
+    Libra.putInfoS3(this.s3Path, siteinfo);
+    return siteinfo;
   }
 
   s3Head() {
@@ -117,6 +106,18 @@ module.exports = class Libra {
         });
       }
     });
+  }
+
+  static makeSiteInfo(html) {
+    const standardProps = Libra.extractStandardProps(html);
+    const metaProps = Libra.extractMetaProps(html);
+    const siteName = Libra.resolveSiteName(metaProps);
+    const title = Libra.resolveTitle(standardProps, metaProps);
+    const description = Libra.resolveDesc(standardProps, metaProps);
+    const image = Libra.resolveImageUrl(metaProps);
+    return {
+      site_name: siteName, title, description, image,
+    };
   }
 
   static detectEncoding(html) {
