@@ -9,6 +9,7 @@
           a(:href="obj.url" target="_blank") {{ linkTitle }}
         .meta
           span.site(v-if="obj.site_name") {{ obj.site_name }}
+          span(v-if="DEBUG") {{ obj.eid }}
         .excerpt {{ obj.excerpt }}
         template(v-if="Object.keys(obj.tags).length > 0")
           .tags
@@ -42,6 +43,7 @@ export default {
   },
   data() {
     return {
+      DEBUG: process.env.NODE_ENV === 'development',
       imgSrc: this.obj.image_s3_url,
     };
   },
