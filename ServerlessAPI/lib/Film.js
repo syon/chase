@@ -40,7 +40,7 @@ module.exports = class Film {
     if (!pocketId) return null;
     const item10Id = `0000000000${pocketId}`.substr(-10, 10);
     const itemId3 = item10Id.slice(0, 3);
-    return `items/libra/${itemId3}/${item10Id}.json`;
+    return `items/thumbs/${itemId3}/${item10Id}.jpg`;
   }
 
   async main() {

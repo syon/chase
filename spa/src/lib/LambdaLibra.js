@@ -43,14 +43,10 @@ async function thumb(arg) {
       url,
       image_suggested,
     }),
-  })
-    .then(res => res.json()).then((json) => {
-      debug(json);
-      return json;
-    }).catch((error) => {
-      debug(arg, error);
-      throw error;
-    });
+  }).catch((error) => {
+    debug(arg, error);
+    throw error;
+  });
   debug('[thumb]<<<<', result);
   return result;
 }
