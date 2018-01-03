@@ -3,7 +3,9 @@
   nav.page-nav
     sidebar
   article.page-content
-    h2 {{ mode }}
+    header
+      h2 {{ mode }}
+      input(v-model="filterTxt" type="search" placeholder="Filter")
     .entries
       .entry(v-for="e in catalog" :data-eid="e.eid" :key="e.eid")
         entry(:obj="e")
@@ -27,6 +29,11 @@ export default {
     Interlude,
     Hatebu,
   },
+  data() {
+    return {
+      filterTxt: '',
+    };
+  },
   computed: {
     ...mapGetters({
       filteredCatalog: 'filteredCatalog',
@@ -41,7 +48,7 @@ export default {
     },
     catalog() {
       const route = this.$route;
-      return this.filteredCatalog(route.name, route.params.tag);
+      return this.filteredCatalog(route.name, route.params.tag, this.filterTxt);
     },
   },
 };
@@ -60,4 +67,9 @@ export default {
     width 320px
   .page-hatebu
     width 320px
+
+.page-content header
+  display flex
+  align-items center
+  justify-content space-between
 </style>

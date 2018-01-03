@@ -44,7 +44,7 @@ export default new Vuex.Store({
       const s = state.shotSet;
       return ChaseUtil.makeCatalog(p, l, h, s);
     },
-    filteredCatalog: (state, getters) => (route, tag) => {
+    filteredCatalog: (state, getters) => (route, tag, filterTxt) => {
       const arr = getters.catalog;
       let result = arr;
       if (route === 'Inbox') {
@@ -54,6 +54,12 @@ export default new Vuex.Store({
       } else if (route === 'Tag') {
         const tagged = arr.filter(d => Object.keys(d.tags).length > 0);
         result = tagged.filter(d => Object.keys(d.tags).includes(tag));
+      }
+      if (filterTxt) {
+        result = result.filter((d) => {
+          const tgt = `${d.title}${d.excerpt}${d.description}${d.site_name}${d.fqdn}`;
+          return tgt.includes(filterTxt);
+        });
       }
       return result;
     },
