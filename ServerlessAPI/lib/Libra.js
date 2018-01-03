@@ -41,7 +41,7 @@ module.exports = class Libra {
         }
         return html.toString();
       })
-      .then(html => Libra.makeSiteInfo(html))
+      .then(html => Libra.makeSiteInfo(this.url, html))
       .catch((error) => {
         debug('Error on axios in Libra');
         debug(error);
@@ -108,7 +108,7 @@ module.exports = class Libra {
     });
   }
 
-  static makeSiteInfo(html) {
+  static makeSiteInfo(url, html) {
     const standardProps = Libra.extractStandardProps(html);
     const metaProps = Libra.extractMetaProps(html);
     const siteName = Libra.resolveSiteName(metaProps);
@@ -116,7 +116,7 @@ module.exports = class Libra {
     const description = Libra.resolveDesc(standardProps, metaProps);
     const image = Libra.resolveImageUrl(metaProps);
     return {
-      site_name: siteName, title, description, image,
+      url, site_name: siteName, title, description, image,
     };
   }
 
