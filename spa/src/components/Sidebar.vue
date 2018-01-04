@@ -126,6 +126,7 @@ export default {
   position fixed
   width inherit
   height 100vh
+  max-height 900px
   display flex
   flex-direction column
   justify-content space-between

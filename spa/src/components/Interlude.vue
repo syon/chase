@@ -96,6 +96,8 @@ export default {
   height 100vh
   padding 0 15px
   overflow auto
+  -webkit-overflow-scrolling touch
+  overflow-scrolling touch
   .thumbnail
     border 1px solid #eee
   .link

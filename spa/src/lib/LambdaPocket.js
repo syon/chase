@@ -4,7 +4,7 @@ import URLSearchParams from 'url-search-params';
 
 const debug = Debug('chase:lambda-pocket');
 const ENDPOINT = Consts.LAMBDA_ENDPOINT.POCKET;
-const REDIRECT_URI = process.env.NODE_ENV === 'development' ? 'http://localhost:8080/chase/' : 'https://syon.github.io/chase/';
+const REDIRECT_URI = `${location.origin}/chase/`;
 
 async function getRequestToken() {
   debug('[getRequestToken]>>>>');

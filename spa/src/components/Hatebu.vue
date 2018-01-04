@@ -102,6 +102,8 @@ export default {
 .bookmarks
   flex 1
   overflow auto
+  -webkit-overflow-scrolling touch
+  overflow-scrolling touch
   padding-bottom 100px
   .voice
     padding 0 0 .75em
