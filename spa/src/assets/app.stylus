@@ -1,6 +1,10 @@
 *
   box-sizing border-box
 
+html
+  &.win
+    font-family "Segoe UI", "源ノ角ゴシック", "Yu Gothic", sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"
+
 body
   margin 0
   color #24292e
