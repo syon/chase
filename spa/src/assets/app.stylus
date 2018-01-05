@@ -2,8 +2,8 @@
   box-sizing border-box
 
 html
-  &.win
-    font-family "Segoe UI", "源ノ角ゴシック", "Yu Gothic", sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"
+  &.win body
+    font-family "Segoe UI", "Source Han Sans Light", "Yu Gothic", sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"
 
 body
   margin 0
