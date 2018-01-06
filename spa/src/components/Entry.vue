@@ -23,8 +23,7 @@
           clickable(v-else)
             button(@click="favorite(obj.eid)" style="color:#eee;") ★
         .archive
-          clickable
-            button(@click="archive(obj.eid)") ✓
+          icon-button.c-archive(@click.native="mArchive(obj.eid)" icon="ion-ios-checkmark-empty" :loading="ingArchive" :disabled="obj.archived" icon-disabled="ion-ios-checkmark")
   template(v-else)
     span.loading
       i.ion-load-d
@@ -34,17 +33,20 @@
 import { mapState, mapActions } from 'vuex';
 import FitImage from '@/components/FitImage';
 import Clickable from '@/components/Clickable';
+import IconButton from '@/components/IconButton';
 
 export default {
   props: ['obj'],
   components: {
     FitImage,
     Clickable,
+    IconButton,
   },
   data() {
     return {
       DEBUG: process.env.NODE_ENV === 'development',
       imgSrc: this.obj.image_s3_url,
+      ingArchive: false,
     };
   },
   computed: {
@@ -82,7 +84,6 @@ export default {
   methods: {
     ...mapActions([
       'activate',
-      'archive',
       'favorite',
       'unfavorite',
     ]),
@@ -90,6 +91,13 @@ export default {
       this.$store.dispatch('fetchLibraThumb', this.obj)
         .then((ETag) => {
           this.imgSrc = `${this.imgSrc}?etag=${ETag}`;
+        });
+    },
+    mArchive(eid) {
+      this.ingArchive = true;
+      this.$store.dispatch('archive', eid)
+        .then(() => {
+          this.ingArchive = false;
         });
     },
   },
@@ -202,4 +210,6 @@ export default {
       font-size 1.25rem
       cursor pointer
       color #9ea8b3
+    .c-archive
+      font-size 1.5em
 </style>

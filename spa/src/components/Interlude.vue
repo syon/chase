@@ -11,8 +11,8 @@
       .desc {{ entry.description }}
       hr
       .action
-        button(@click="archive(entry.eid)") 既読
-        div {{ entry.added }}
+        icon-button.c-archive(@click.native="mArchive(entry.eid)" icon="ion-ios-checkmark-empty" :loading="ingArchive" :disabled="entry.archived" icon-disabled="ion-ios-checkmark")
+        .c-added {{ entry.added }}
       hr
       .addscenes
         button.scene(v-for="sce in scenes" @click="addTag({ eid: entry.eid, tag: sce.tag })") {{ sce.label }}
@@ -29,17 +29,20 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex';
+import IconButton from '@/components/IconButton';
 import Clickable from '@/components/Clickable';
 import FitImage from '@/components/FitImage';
 
 export default {
   components: {
+    IconButton,
     Clickable,
     FitImage,
   },
   data() {
     return {
       newtag: '',
+      ingArchive: false,
     };
   },
   computed: {
@@ -62,7 +65,6 @@ export default {
   },
   methods: {
     ...mapActions([
-      'archive',
       'addTag',
     ]),
     handleTagClick(tag) {
@@ -84,6 +86,13 @@ export default {
     onShotError(entry) {
       if (entry.shotOrdered) return;
       this.$store.dispatch('fetchShot', entry);
+    },
+    mArchive(eid) {
+      this.ingArchive = true;
+      this.$store.dispatch('archive', eid)
+        .then(() => {
+          this.ingArchive = false;
+        });
     },
   },
 };
@@ -124,8 +133,11 @@ export default {
     display flex
     align-items center
     justify-content space-between
-    font-size .75em
     color #757575
+    .c-archive
+      font-size 1.5em
+    .c-added
+      font-size .75em
   .addscenes
     display flex
     align-items center
