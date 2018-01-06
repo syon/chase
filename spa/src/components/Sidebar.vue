@@ -52,7 +52,8 @@
     .todo
       em ToDo:
       ul(style="padding-left: 2em;")
-        li 主要サイトOGP
+        li Google検索OGP
+        li IFTTT -> Prepare
 
   section
     .misc
