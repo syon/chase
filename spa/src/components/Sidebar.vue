@@ -46,6 +46,7 @@
             .label
               i.ion-ios-pricetags-outline
               span {{ tag }}
+            .cnt {{ filteredCatalog('Tag', tag).length }}
 
   section
     .todo
