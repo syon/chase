@@ -53,27 +53,8 @@ module.exports.register = (event, context, callback) => {
   });
 };
 
-function extractAccesstokens() {
-  return new Promise((rv, rj) => {
-    const opts = {
-      Bucket: process.env.BUCKET,
-      Prefix: 'accesstokens/',
-      MaxKeys: 10,
-    };
-    s3.listObjectsV2(opts, (err, data) => {
-      if (err) {
-        rj(err.stack);
-      } else {
-        const files = data.Contents.filter(d => d.Key.match(/\.json$/));
-        const tokens = files.map(d => d.Key.match(/^accesstokens\/([a-z0-9-]+)\.json$/)[1]);
-        rv(tokens);
-      }
-    });
-  });
-}
-
 function getPocketEntrySet(at) {
-  const params = { count: 50, detailType: 'complete' };
+  const params = { count: 5, detailType: 'complete' };
   return Pocket.get(at, params).then((d) => {
     debug(`GET RESULT of ${at} IS:`, Object.keys(d.list).length);
     return d.list;
@@ -90,9 +71,10 @@ function moldEntry(pocketRawItem) {
   return { pocket_id: m.item_id, url, image_suggested: is };
 }
 
-module.exports.prepare = async () => {
-  const tokens = await extractAccesstokens();
-  const funcs = tokens.map(at => getPocketEntrySet(at).then((set) => {
+module.exports.prepare = async (args) => {
+  debug('[args]', args);
+  const { token } = args;
+  return getPocketEntrySet(token).then((set) => {
     const items = Object.keys(set).map(id => moldEntry(set[id]));
     return items;
   }).then(async (items) => {
@@ -101,6 +83,5 @@ module.exports.prepare = async () => {
       await FilmAdaptor.main(params);
       await ShotAdaptor.main(params);
     }));
-  }));
-  await Promise.all(funcs);
+  });
 };

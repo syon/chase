@@ -35,7 +35,7 @@ function success(bodyObj) {
 function failure(error) {
   debug('======== Failure in handler.js ========');
   let res;
-  if (error.response) {
+  if (error.status && error.headers) {
     // axios error
     res = error.response;
   } else {
@@ -43,7 +43,6 @@ function failure(error) {
     debug(error);
     res = { headers: {} };
   }
-  debug(res);
   const response = {
     statusCode: res.status,
     headers: {
@@ -110,7 +109,8 @@ module.exports.userregister = (event, context, callback) => {
 };
 
 module.exports.userprepare = (event, context, callback) => {
-  return UserAdaptor.prepare()
+  const params = JSON.parse(event.body);
+  return UserAdaptor.prepare(params)
     .then(r => callback(null, success(r)))
     .catch(e => callback(null, failure(e)));
 };

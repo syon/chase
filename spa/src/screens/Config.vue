@@ -19,6 +19,12 @@
       hr
       button(@click="doSceneEdit") OK
     section
+      h3 You
+      p
+        span.username {{ login.username }}
+      p
+        code {{ login.accessToken }}
+    section
       h3 About
       .meta
         a.author(href="https://github.com/syon").
@@ -33,7 +39,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import Sidebar from '@/components/Sidebar';
 
 export default {
@@ -54,6 +60,9 @@ export default {
     this.chaseC = this.myScenesTags[2].label;
   },
   computed: {
+    ...mapState({
+      login: 'login',
+    }),
     ...mapGetters([
       'myScenesTags',
     ]),

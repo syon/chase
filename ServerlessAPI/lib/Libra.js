@@ -27,7 +27,7 @@ module.exports = class Libra {
       const info = await Libra.getInfoS3(this.s3Path);
       return info;
     }
-    const config = { responseType: 'arraybuffer', timeout: 5000 };
+    const config = { responseType: 'arraybuffer', timeout: 10000 };
     const siteinfo = await axios.get(this.url, config)
       .then(res => res.data)
       .then((html) => {
