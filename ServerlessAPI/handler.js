@@ -93,15 +93,24 @@ module.exports.pocketSendArchive = (event, context, callback) => {
 };
 
 module.exports.pocketSendFavorite = (event, context, callback) => {
-  return PocketAdaptor.pocketSendFavorite(event, context, callback);
+  const params = event.queryStringParameters;
+  return PocketAdaptor.pocketSendFavorite(params)
+    .then(r => callback(null, success(r)))
+    .catch(e => callback(null, failure(e)));
 };
 
 module.exports.pocketSendUnfavorite = (event, context, callback) => {
-  return PocketAdaptor.pocketSendUnfavorite(event, context, callback);
+  const params = event.queryStringParameters;
+  return PocketAdaptor.pocketSendUnfavorite(params)
+    .then(r => callback(null, success(r)))
+    .catch(e => callback(null, failure(e)));
 };
 
 module.exports.pocketSendTagsAdd = (event, context, callback) => {
-  return PocketAdaptor.pocketSendTagsAdd(event, context, callback);
+  const params = event.queryStringParameters;
+  return PocketAdaptor.pocketSendTagsAdd(params)
+    .then(r => callback(null, success(r)))
+    .catch(e => callback(null, failure(e)));
 };
 
 module.exports.userlogin = (event, context, callback) => {
