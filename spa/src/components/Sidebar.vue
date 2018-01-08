@@ -49,13 +49,6 @@
             .cnt {{ filteredCatalog('Tag', tag).length }}
 
   section
-    .todo
-      em ToDo:
-      ul(style="padding-left: 2em;")
-        li Google検索OGP
-        li IFTTT -> Prepare
-
-  section
     .misc
       .link-item.font-smaller
         a(href="https://getpocket.com/" target="_blank")
