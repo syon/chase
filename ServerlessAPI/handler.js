@@ -104,6 +104,13 @@ module.exports.pocketSendTagsAdd = (event, context, callback) => {
   return PocketAdaptor.pocketSendTagsAdd(event, context, callback);
 };
 
+module.exports.userlogin = (event, context, callback) => {
+  const params = JSON.parse(event.body);
+  return UserAdaptor.login(params)
+    .then(r => callback(null, success(r)))
+    .catch(e => callback(null, failure(e)));
+};
+
 module.exports.userprepare = (event, context, callback) => {
   const params = JSON.parse(event.body);
   return UserAdaptor.prepare(params)

@@ -7,6 +7,7 @@ import Hatebu from '@/lib/Hatebu';
 import LambdaShot from '@/lib/LambdaShot';
 import LambdaLibra from '@/lib/LambdaLibra';
 import LambdaPocket from '@/lib/LambdaPocket';
+import LambdaUser from '@/lib/LambdaUser';
 
 const debug = Debug('chase:store');
 Vue.use(Vuex);
@@ -225,6 +226,7 @@ export default new Vuex.Store({
     async getAccessToken({ commit, state }, $cookie) {
       const rt = $cookie.get('pocket_request_token');
       const json = await LambdaPocket.getAccessToken(rt);
+      LambdaUser.login(json);
       commit('setLogin', json);
       $cookie.delete('pocket_request_token');
       $cookie.set('phase', 'READY', { expires: '3M' });

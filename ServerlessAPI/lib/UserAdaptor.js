@@ -1,9 +1,34 @@
 const debug = require('debug')('chase:user-adaptor');
+const AWS = require('aws-sdk');
 
 const Pocket = require('./PocketAPI');
 const LibraAdaptor = require('./LibraAdaptor');
 const FilmAdaptor = require('./FilmAdaptor');
 const ShotAdaptor = require('./ShotAdaptor');
+
+const s3 = new AWS.S3();
+
+/* eslint-disable arrow-body-style */
+module.exports.login = (params) => {
+  return new Promise((rv, rj) => {
+    debug('[login]>>>>', params);
+    const { access_token: token } = params.user;
+    if (!token || !token.match(/^[a-z0-9-]+$/)) {
+      rj(new Error('Invalid access token.'));
+    }
+    const timestamp = Math.floor((new Date()).getTime() / 1000);
+    const filename = `${timestamp}-${token}.json`;
+    const obj = {
+      Bucket: process.env.BUCKET,
+      Key: `logs/${filename}`,
+      Body: JSON.stringify(params, null, 2),
+    };
+    s3.putObject(obj, (err, data) => {
+      if (err) rj(err);
+      rv(data);
+    });
+  });
+};
 
 function getPocketEntrySet(at) {
   const params = { count: 5, detailType: 'complete' };

@@ -80,6 +80,13 @@ functions:
           path: pocket/send/tags/add
           method: get
           cors: true
+  userlogin:
+    handler: handler.userlogin
+    events:
+      - http:
+          path: user/login
+          method: post
+          cors: true
   userprepare:
     handler: handler.userprepare
     events:
