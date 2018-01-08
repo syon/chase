@@ -233,6 +233,4 @@ export default {
       font-size 1.25rem
       cursor pointer
       color #9ea8b3
-    .c-archive
-      font-size 1.5em
 </style>
