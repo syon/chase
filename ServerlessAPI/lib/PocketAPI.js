@@ -1,3 +1,4 @@
+const debug = require('debug')('chase:pocket');
 const axios = require('axios');
 const URLSearchParams = require('url-search-params');
 
@@ -59,6 +60,7 @@ module.exports.get = (at, params) => {
   };
   const data = JSON.stringify(Object.assign(reqd, params));
   const endpoint = 'https://getpocket.com/v3/get';
+  debug(endpoint);
   return axios.post(endpoint, data, HTTP_POST_CONFIG)
     .then(res => res.data);
 };
@@ -69,11 +71,16 @@ module.exports.send = {
       consumer_key: CONSUMER_KEY,
       access_token: at,
     };
+    const actions = [{
+      action: 'archive',
+      item_id: params.item_id,
+    }];
     const q = new URLSearchParams();
     q.append('consumer_key', reqd.consumer_key);
     q.append('access_token', reqd.access_token);
-    q.append('actions', `[{"action":"archive","item_id":${params.item_id}}]`);
+    q.append('actions', JSON.stringify(actions));
     const endpoint = `https://getpocket.com/v3/send?${q.toString()}`;
+    debug(endpoint);
     return axios.get(endpoint, HTTP_GET_CONFIG)
       .then(res => res.data);
   },
@@ -83,11 +90,16 @@ module.exports.send = {
       consumer_key: CONSUMER_KEY,
       access_token: at,
     };
+    const actions = [{
+      action: 'favorite',
+      item_id: params.item_id,
+    }];
     const q = new URLSearchParams();
     q.append('consumer_key', reqd.consumer_key);
     q.append('access_token', reqd.access_token);
-    q.append('actions', `[{"action":"favorite","item_id":${params.item_id}}]`);
+    q.append('actions', JSON.stringify(actions));
     const endpoint = `https://getpocket.com/v3/send?${q.toString()}`;
+    debug(endpoint);
     return axios.get(endpoint, HTTP_GET_CONFIG)
       .then(res => res.data);
   },
@@ -97,11 +109,16 @@ module.exports.send = {
       consumer_key: CONSUMER_KEY,
       access_token: at,
     };
+    const actions = [{
+      action: 'unfavorite',
+      item_id: params.item_id,
+    }];
     const q = new URLSearchParams();
     q.append('consumer_key', reqd.consumer_key);
     q.append('access_token', reqd.access_token);
-    q.append('actions', `[{"action":"unfavorite","item_id":${params.item_id}}]`);
+    q.append('actions', JSON.stringify(actions));
     const endpoint = `https://getpocket.com/v3/send?${q.toString()}`;
+    debug(endpoint);
     return axios.get(endpoint, HTTP_GET_CONFIG)
       .then(res => res.data);
   },
@@ -111,11 +128,17 @@ module.exports.send = {
       consumer_key: CONSUMER_KEY,
       access_token: at,
     };
+    const actions = [{
+      action: 'tags_add',
+      item_id: params.item_id,
+      tags: params.tag,
+    }];
     const q = new URLSearchParams();
     q.append('consumer_key', reqd.consumer_key);
     q.append('access_token', reqd.access_token);
-    q.append('actions', `[{"action":"tags_add","item_id":${params.item_id}}]`);
+    q.append('actions', JSON.stringify(actions));
     const endpoint = `https://getpocket.com/v3/send?${q.toString()}`;
+    debug(endpoint);
     return axios.get(endpoint, HTTP_GET_CONFIG)
       .then(res => res.data);
   },
