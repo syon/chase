@@ -53,11 +53,18 @@ function moldRawItem(pocketRawItem) {
   const item10Id = `0000000000${m.item_id}`.substr(-10, 10);
   const itemId3 = item10Id.slice(0, 3);
   const s3path = `items/thumbs/${itemId3}/${item10Id}.jpg`;
+  const img = (() => {
+    if (m.has_image === '1') {
+      if (m.image) return m.image.src;
+      if (m.images) return m.images['1'];
+    }
+    return '';
+  });
   return {
     eid: m.item_id,
     ready: false,
     url,
-    image_suggested: (m.has_image === '1') ? m.image.src : '',
+    image_suggested: img,
     image_s3_url: `${CHASE_S3_BASE_URL}/${s3path}`,
     title,
     excerpt: m.excerpt,
