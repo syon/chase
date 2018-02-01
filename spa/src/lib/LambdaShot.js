@@ -1,4 +1,3 @@
-import Debug from 'debug';
 import Consts from '@/Consts';
 
 const debug = Debug('chase:lambda-shot');

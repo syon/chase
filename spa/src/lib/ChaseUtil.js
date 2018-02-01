@@ -1,4 +1,3 @@
-import Debug from 'debug';
 import fetchJsonp from 'fetch-jsonp';
 
 const debug = Debug('chase:util');

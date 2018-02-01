@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import Debug from 'debug';
 
 import ChaseUtil from '@/lib/ChaseUtil';
 import Hatebu from '@/lib/Hatebu';

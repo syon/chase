@@ -1,4 +1,3 @@
-import Debug from 'debug';
 import Consts from '@/Consts';
 import URLSearchParams from 'url-search-params';
 
