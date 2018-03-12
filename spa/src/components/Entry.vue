@@ -185,6 +185,7 @@ export default {
     display -webkit-box
     -webkit-box-orient vertical
     overflow hidden
+    word-break break-word
   .tags
     .tag
       display inline-flex
