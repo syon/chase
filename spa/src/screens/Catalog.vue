@@ -16,32 +16,32 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import Sidebar from '@/components/Sidebar';
-import Interlude from '@/components/Interlude';
-import Hatebu from '@/components/Hatebu';
-import Entry from '@/components/Entry';
+import { mapGetters } from "vuex";
+import Sidebar from "@/components/Sidebar";
+import Interlude from "@/components/Interlude";
+import Hatebu from "@/components/Hatebu";
+import Entry from "@/components/Entry";
 
 export default {
   components: {
     Sidebar,
     Entry,
     Interlude,
-    Hatebu,
+    Hatebu
   },
   data() {
     return {
-      filterTxt: '',
+      filterTxt: ""
     };
   },
   computed: {
     ...mapGetters({
-      filteredCatalog: 'filteredCatalog',
-      entry: 'activeEntry',
+      filteredCatalog: "filteredCatalog",
+      entry: "activeEntry"
     }),
     mode() {
       let mode = this.$route.name;
-      if (this.$route.name === 'Tag') {
+      if (this.$route.name === "Tag") {
         mode = this.$cookie.get(this.$route.params.tag);
       }
       return mode;
@@ -49,8 +49,8 @@ export default {
     catalog() {
       const route = this.$route;
       return this.filteredCatalog(route.name, route.params.tag, this.filterTxt);
-    },
-  },
+    }
+  }
 };
 </script>
 

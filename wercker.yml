@@ -5,6 +5,10 @@ build:
     - script:
         code: |
           export WERCKER_SOURCE_DIR="$WERCKER_SOURCE_DIR/spa"
+    - script:
+        name: Vue CLI 3
+        code: |
+          npm install -g @vue/cli
     - npm-install
     - script:
         name: SPA

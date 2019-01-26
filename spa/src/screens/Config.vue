@@ -28,7 +28,7 @@
       h3 About
       .meta
         a.author(href="https://github.com/syon").
-          <img src="../assets/syon.png" alt="syon" target="_blank"><span>syon</span></a>
+          <img src="../assets/syon.png" alt="syon" target="_blank"><span>syon</span>
         .repo
           a(href="https://github.com/syon/chase" target="_blank" style="font-size:24px;")
             i.ion-social-github
@@ -39,19 +39,19 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
-import Sidebar from '@/components/Sidebar';
+import { mapState, mapGetters } from "vuex";
+import Sidebar from "@/components/Sidebar";
 
 export default {
   components: {
-    Sidebar,
+    Sidebar
   },
   data() {
     return {
       sceneEditing: false,
       chaseA: null,
       chaseB: null,
-      chaseC: null,
+      chaseC: null
     };
   },
   mounted() {
@@ -61,23 +61,21 @@ export default {
   },
   computed: {
     ...mapState({
-      login: 'login',
+      login: "login"
     }),
-    ...mapGetters([
-      'myScenesTags',
-    ]),
+    ...mapGetters(["myScenesTags"]),
     mode() {
       return this.$route.name;
-    },
+    }
   },
   methods: {
     doSceneEdit() {
       const scenes = { a: this.chaseA, b: this.chaseB, c: this.chaseC };
-      this.$store.dispatch('doSceneEdit', { $cookie: this.$cookie, scenes });
+      this.$store.dispatch("doSceneEdit", { $cookie: this.$cookie, scenes });
       this.sceneEditing = false;
-      this.$router.push({ name: 'Inbox' });
-    },
-  },
+      this.$router.push({ name: "Inbox" });
+    }
+  }
 };
 </script>
 

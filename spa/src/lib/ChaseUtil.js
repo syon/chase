@@ -1,17 +1,24 @@
-import fetchJsonp from 'fetch-jsonp';
+import Debug from "debug";
+import fetchJsonp from "fetch-jsonp";
 
-const debug = Debug('chase:util');
-const CHASE_S3_BASE_URL = 'https://s3.amazonaws.com/syon-chase';
+const debug = Debug("chase:util");
+const CHASE_S3_BASE_URL = "https://s3.amazonaws.com/syon-chase";
 
 function pickFallback(a, b, c) {
-  if (a) { return a; }
-  if (b) { return b; }
-  if (c) { return c; }
+  if (a) {
+    return a;
+  }
+  if (b) {
+    return b;
+  }
+  if (c) {
+    return c;
+  }
   return null;
 }
 
 function makeCatalog(pocketItemSet, libraSet, hatebuCntSet, shotSet) {
-  const arr = Object.keys(pocketItemSet).map((eid) => {
+  const arr = Object.keys(pocketItemSet).map(eid => {
     const item = pocketItemSet[eid];
     const libra = libraSet[eid];
     const shot = shotSet[eid];
@@ -24,8 +31,8 @@ function makeCatalog(pocketItemSet, libraSet, hatebuCntSet, shotSet) {
       site_name: pickFallback(libra.site_name, item.fqdn),
       excerpt: pickFallback(item.excerpt, libra.description),
       description: pickFallback(libra.description, item.excerpt),
-      hatebuCnt: hatebuCnt > 0 ? hatebuCnt : '',
-      shotOrdered: shot === 'ordered',
+      hatebuCnt: hatebuCnt > 0 ? hatebuCnt : "",
+      shotOrdered: shot === "ordered"
     };
     return { ...item, ...override };
   });
@@ -52,13 +59,13 @@ function moldRawItem(pocketRawItem) {
   const item10Id = `0000000000${m.item_id}`.substr(-10, 10);
   const itemId3 = item10Id.slice(0, 3);
   const s3path = `items/thumbs/${itemId3}/${item10Id}.jpg`;
-  const img = (() => {
-    if (m.has_image === '1') {
+  const img = () => {
+    if (m.has_image === "1") {
       if (m.image) return m.image.src;
-      if (m.images) return m.images['1'];
+      if (m.images) return m.images["1"];
     }
-    return '';
-  });
+    return "";
+  };
   return {
     eid: m.item_id,
     ready: false,
@@ -69,18 +76,18 @@ function moldRawItem(pocketRawItem) {
     excerpt: m.excerpt,
     fqdn: `${url}/`.match(/\/\/(.*?)\//)[1],
     sortId: m.sort_id,
-    favorite: m.favorite === '1',
+    favorite: m.favorite === "1",
     tags: m.tags || {},
     added: getDate(m.time_added),
     updated: getDate(m.time_updated),
     time_added: m.time_added,
-    time_updated: m.time_updated,
+    time_updated: m.time_updated
   };
 }
 
 function makeEntries(listFromPocket) {
   const newEntries = {};
-  Object.keys(listFromPocket).forEach((key) => {
+  Object.keys(listFromPocket).forEach(key => {
     newEntries[key] = moldRawItem(listFromPocket[key]);
   });
   return newEntries;
@@ -94,31 +101,32 @@ function makeS3Path(pocketId) {
 }
 
 async function fetchLibraS3(pocketId) {
-  debug('[fetchLibraS3]>>>>');
+  debug("[fetchLibraS3]>>>>");
   const s3Path = makeS3Path(pocketId);
   const result = await fetch(`${CHASE_S3_BASE_URL}/${s3Path}`, {
-    method: 'GET',
+    method: "GET"
   })
-    .then((response) => {
+    .then(response => {
       if (response.ok) {
         return response.json();
       }
       throw response;
-    }).catch((e) => {
+    })
+    .catch(e => {
       debug(pocketId, e);
       throw e;
     });
-  debug('[fetchLibraS3]<<<<', result);
+  debug("[fetchLibraS3]<<<<", result);
   return result;
 }
 
 async function fetchHatebuCnt(url) {
   const encodedUrl = encodeURI(url);
   let apiHost;
-  if (window.location.protocol === 'https:') {
-    apiHost = 'https://b.hatena.ne.jp';
+  if (window.location.protocol === "https:") {
+    apiHost = "https://b.hatena.ne.jp";
   } else {
-    apiHost = 'http://api.b.st-hatena.com';
+    apiHost = "http://api.b.st-hatena.com";
   }
   const apiUrl = `${apiHost}/entry.count?url=${encodedUrl}`;
   const cnt = await fetchJsonp(apiUrl).then(r => r.json());
@@ -129,5 +137,5 @@ export default {
   makeCatalog,
   makeEntries,
   fetchLibraS3,
-  fetchHatebuCnt,
+  fetchHatebuCnt
 };

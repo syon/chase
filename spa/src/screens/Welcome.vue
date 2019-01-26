@@ -8,12 +8,11 @@
 export default {
   methods: {
     getRequestToken() {
-      this.$store.dispatch('getRequestToken', this.$cookie)
-        .then((authUri) => {
-          window.location = authUri;
-        });
-    },
-  },
+      this.$store.dispatch("getRequestToken", this.$cookie).then(authUri => {
+        window.location = authUri;
+      });
+    }
+  }
 };
 </script>
 
