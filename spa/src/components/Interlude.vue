@@ -12,6 +12,21 @@
       hr
       .action
         icon-button.c-archive(@click.native="mArchive(entry.eid)" icon="ion-ios-checkmark-empty" :loading="ingArchive" :disabled="entry.archived" icon-disabled="ion-ios-checkmark")
+        .fav
+          icon-button.c-favorite(
+            v-if="entry.favorite"
+            @click.native="mUnfavorite(entry.eid)"
+            icon="ion-ios-star"
+            :loading="ingFavorite"
+            style="color:orange;"
+          )
+          icon-button.c-favorite(
+            v-else
+            @click.native="mFavorite(entry.eid)"
+            icon="ion-ios-star-outline"
+            :loading="ingFavorite"
+            style="color:#ccc;"
+          )
         .c-added {{ entry.added }}
       hr
       .addscenes
@@ -43,6 +58,7 @@ export default {
     return {
       newtag: '',
       ingArchive: false,
+      ingFavorite: false,
     };
   },
   computed: {
@@ -93,6 +109,16 @@ export default {
         .then(() => {
           this.ingArchive = false;
         });
+    },
+    async mFavorite(eid) {
+      this.ingFavorite = true;
+      await this.$store.dispatch('favorite', eid);
+      this.ingFavorite = false;
+    },
+    async mUnfavorite(eid) {
+      this.ingFavorite = true;
+      await this.$store.dispatch('unfavorite', eid);
+      this.ingFavorite = false;
     },
   },
 };

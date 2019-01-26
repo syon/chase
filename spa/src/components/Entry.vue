@@ -17,21 +17,6 @@
       .pnl-action
         .hatebu
           .hatebu-cnt(:style="hatebuCntStyle") {{ obj.hatebuCnt }}
-        .fav
-          icon-button.c-favorite(
-            v-if="obj.favorite"
-            @click.native="mUnfavorite(obj.eid)"
-            icon="ion-ios-star"
-            :loading="ingFavorite"
-            style="color:orange;"
-          )
-          icon-button.c-favorite(
-            v-else
-            @click.native="mFavorite(obj.eid)"
-            icon="ion-ios-star-outline"
-            :loading="ingFavorite"
-            style="color:#ccc;"
-          )
         .archive
           icon-button.c-archive(
             @click.native="mArchive(obj.eid)"
@@ -62,7 +47,6 @@ export default {
     return {
       DEBUG: process.env.NODE_ENV === 'development',
       imgSrc: this.obj.image_s3_url,
-      ingFavorite: false,
       ingArchive: false,
     };
   },
@@ -108,16 +92,6 @@ export default {
           this.imgSrc = `${this.imgSrc}?etag=${ETag}`;
         });
     },
-    async mFavorite(eid) {
-      this.ingFavorite = true;
-      await this.$store.dispatch('favorite', eid);
-      this.ingFavorite = false;
-    },
-    async mUnfavorite(eid) {
-      this.ingFavorite = true;
-      await this.$store.dispatch('unfavorite', eid);
-      this.ingFavorite = false;
-    },
     async mArchive(eid) {
       this.ingArchive = true;
       await this.$store.dispatch('archive', eid);
@@ -148,7 +122,9 @@ export default {
     display flex
     flex-direction column
     align-items center
-    justify-content space-around
+    justify-content space-between
+    > div
+      padding 3px 0
 
 .v-entry
   min-height 111px
