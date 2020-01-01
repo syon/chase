@@ -7,10 +7,16 @@
 <script>
 export default {
   methods: {
-    getRequestToken() {
-      this.$store.dispatch("getRequestToken", this.$cookie).then(authUri => {
+    async getRequestToken() {
+      const authUri = await this.$store.dispatch(
+        "getRequestToken",
+        this.$cookie
+      );
+      if (authUri) {
         window.location = authUri;
-      });
+      } else {
+        window.alert("Error on getting request token.");
+      }
     }
   }
 };

@@ -25,6 +25,8 @@ module.exports.oauth = {
     };
     const data = JSON.stringify(reqd);
     const endpoint = 'https://getpocket.com/v3/oauth/request';
+    debug(endpoint);
+    debug(data);
     const res = await axios.post(endpoint, data, HTTP_POST_CONFIG);
     const rt = res.data.code;
     const authorize = 'https://getpocket.com/auth/authorize';
@@ -42,6 +44,8 @@ module.exports.oauth = {
     };
     const data = JSON.stringify(reqd);
     const endpoint = 'https://getpocket.com/v3/oauth/authorize';
+    debug(endpoint);
+    debug(data);
     return axios.post(endpoint, data, HTTP_POST_CONFIG)
       .then((res) => {
         const { data: d } = res;

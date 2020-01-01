@@ -1,5 +1,8 @@
 service: chaseweb
 
+plugins:
+  - serverless-dotenv-plugin
+
 custom:
   bucket: syon-chase
 
@@ -18,6 +21,7 @@ provider:
   environment:
     BUCKET: ${self:custom.bucket}
     DEBUG: chase:*
+    POCKET_CONSUMER_KEY: ${env:STAGE}
 
 package:
   exclude:
