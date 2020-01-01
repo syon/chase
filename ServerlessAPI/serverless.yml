@@ -25,8 +25,7 @@ provider:
 
 package:
   exclude:
-    - test.dev/**
-    - test.local/**
+    - test/**
 
 functions:
   pocketoauthrequest:

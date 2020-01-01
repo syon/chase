@@ -11,13 +11,6 @@ BUCKET=syon-chase
 ```
 
 
-## dev
-
-```bash
-$ sls deploy --verbose
-```
-
-
 ## cf.
 
 - [serverless-webpack :: babel example](https://github.com/serverless-heaven/serverless-webpack/tree/master/examples/babel)

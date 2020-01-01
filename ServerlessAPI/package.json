@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "handler.js",
   "scripts": {
-    "test.dev": "jest test.dev",
-    "test.local": "jest test.local",
+    "test.dev": "jest test/dev",
+    "test.local": "jest test/local",
     "sls.deploy.dev": "sls deploy --stage dev",
     "sls.deploy.prod": "sls deploy --stage prod"
   },
