@@ -1,14 +1,14 @@
-// https://eslint.org/docs/user-guide/configuring
-
 module.exports = {
   root: true,
   parserOptions: {
-    sourceType: 'module'
+    ecmaVersion: 2019
   },
   env: {
+    node: true,
+    es6: true
   },
-  extends: 'airbnb-base',
+  extends: ['eslint:recommended', 'prettier', 'plugin:prettier/recommended'],
+  plugins: ['prettier'],
   // add your custom rules here
-  'rules': {
-  }
+  rules: {}
 }
