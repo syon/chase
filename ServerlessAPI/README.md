@@ -7,6 +7,7 @@ Chase :: Serverless
 __.env__
 ```bash
 POCKET_CONSUMER_KEY=99999-xxxxxxxxxxxxxxxxxxxxxxxx
+BUCKET=syon-chase
 ```
 
 
