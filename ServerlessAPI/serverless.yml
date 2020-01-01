@@ -1,14 +1,11 @@
 service: chaseweb
 
-plugins:
-  - serverless-webpack
-
 custom:
   bucket: syon-chase
 
 provider:
   name: aws
-  runtime: nodejs6.10
+  runtime: nodejs12.x
   stage: dev
   region: us-east-1
   iamRoleStatements:
@@ -21,6 +18,11 @@ provider:
   environment:
     BUCKET: ${self:custom.bucket}
     DEBUG: chase:*
+
+package:
+  exclude:
+    - test.dev/**
+    - test.local/**
 
 functions:
   pocketoauthrequest:
