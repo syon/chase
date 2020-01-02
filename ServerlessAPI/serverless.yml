@@ -9,7 +9,6 @@ custom:
 provider:
   name: aws
   runtime: nodejs12.x
-  stage: dev
   region: us-east-1
   iamRoleStatements:
     - Effect: Allow
@@ -21,7 +20,7 @@ provider:
   environment:
     BUCKET: ${self:custom.bucket}
     DEBUG: chase:*
-    POCKET_CONSUMER_KEY: ${env:STAGE}
+    POCKET_CONSUMER_KEY: ${env:POCKET_CONSUMER_KEY}
 
 package:
   exclude:
