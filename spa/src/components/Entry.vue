@@ -31,33 +31,31 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
-import FitImage from '@/components/FitImage';
-import Clickable from '@/components/Clickable';
-import IconButton from '@/components/IconButton';
+import { mapState, mapActions } from "vuex";
+import FitImage from "@/components/FitImage";
+import Clickable from "@/components/Clickable";
+import IconButton from "@/components/IconButton";
 
 export default {
-  props: ['obj'],
+  props: ["obj"],
   components: {
     FitImage,
     Clickable,
-    IconButton,
+    IconButton
   },
   data() {
     return {
-      DEBUG: process.env.NODE_ENV === 'development',
+      DEBUG: process.env.NODE_ENV === "development",
       imgSrc: this.obj.image_s3_url,
-      ingArchive: false,
+      ingArchive: false
     };
   },
   computed: {
-    ...mapState([
-      'activeEid',
-    ]),
+    ...mapState(["activeEid"]),
     compoClasses() {
       return {
         archived: this.obj.archived,
-        active: this.obj.eid === this.activeEid,
+        active: this.obj.eid === this.activeEid
       };
     },
     linkTitle() {
@@ -68,36 +66,33 @@ export default {
       let style;
       switch (true) {
         case cnt >= 500:
-          style = { color: '#F50057', fontWeight: 900 };
+          style = { color: "#F50057", fontWeight: 900 };
           break;
         case cnt >= 100:
-          style = { color: '#FF4081', fontWeight: 600 };
+          style = { color: "#FF4081", fontWeight: 600 };
           break;
         case cnt >= 10:
-          style = { color: '#FF4081', fontWeight: 100 };
+          style = { color: "#FF4081", fontWeight: 100 };
           break;
         default:
-          style = { color: '#9E9E9E' };
+          style = { color: "#9E9E9E" };
       }
       return style;
-    },
+    }
   },
   methods: {
-    ...mapActions([
-      'activate',
-    ]),
-    handleLoadImageError() {
-      this.$store.dispatch('fetchLibraThumb', this.obj)
-        .then((ETag) => {
-          this.imgSrc = `${this.imgSrc}?etag=${ETag}`;
-        });
+    ...mapActions(["activate"]),
+    async handleLoadImageError() {
+      const etag = await this.$store.dispatch("fetchLibraThumb", this.obj);
+      const imgUrl = this.imgSrc.replace(/\?etag=.*/, "");
+      this.imgSrc = `${imgUrl}?etag=${etag}`;
     },
     async mArchive(eid) {
       this.ingArchive = true;
-      await this.$store.dispatch('archive', eid);
+      await this.$store.dispatch("archive", eid);
       this.ingArchive = false;
-    },
-  },
+    }
+  }
 };
 </script>
 
