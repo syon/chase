@@ -2,13 +2,13 @@ import Debug from "debug";
 import Consts from "@/Consts";
 
 const debug = Debug("chase:lambda-shot");
-const ENDPOINT = Consts.LAMBDA_ENDPOINT.SHOT;
+const ENDPOINT = Consts.LAMBDA_ENDPOINT.LIBRA;
 
 async function shot(arg) {
   if (!arg || !arg.eid) return null;
   debug("[shot]>>>>", arg);
   const { eid, url } = arg;
-  const result = await fetch(`${ENDPOINT}/shot`, {
+  const result = await fetch(`${ENDPOINT}/thumb`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"

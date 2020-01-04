@@ -3,7 +3,7 @@ import Consts from "@/Consts";
 import URLSearchParams from "url-search-params";
 
 const debug = Debug("chase:lambda-libra");
-const ENDPOINT = Consts.LAMBDA_ENDPOINT.POCKET;
+const ENDPOINT = Consts.LAMBDA_ENDPOINT.LIBRA;
 
 async function info(arg) {
   debug("[info]>>>>");
@@ -11,7 +11,7 @@ async function info(arg) {
   const q = new URLSearchParams();
   q.append("url", url);
   q.append("pocket_id", eid);
-  const pageinfo = await fetch(`${ENDPOINT}/libra/info?${q.toString()}`, {
+  const pageinfo = await fetch(`${ENDPOINT}/info?${q.toString()}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json"
@@ -35,7 +35,7 @@ async function info(arg) {
 async function thumb(arg) {
   debug("[thumb]>>>>");
   const { eid, url, image_suggested } = arg;
-  const result = await fetch(`${ENDPOINT}/libra/thumb`, {
+  const result = await fetch(`${ENDPOINT}/thumb`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
