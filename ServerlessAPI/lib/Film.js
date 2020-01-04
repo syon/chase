@@ -105,6 +105,9 @@ module.exports = class Film {
   }
 
   static isValidSuggestedUrl(suggestedImgUrl) {
+    if (!suggestedImgUrl) {
+      return false
+    }
     if (typeof suggestedImgUrl === 'undefined') {
       return false
     }

@@ -8,3 +8,13 @@ test('/libra/info', async () => {
   console.log(res.data)
   expect(res.status).toBe(200)
 })
+
+test('/libra/thumb', async () => {
+  const data = {
+    url: 'https://anond.hatelabo.jp/20200102163416',
+    pocket_id: '2840521172'
+  }
+  const res = await axios.post(`${EP}/libra/thumb`, data)
+  console.log(res.data)
+  expect(res.status).toBe(200)
+})
