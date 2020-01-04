@@ -19,7 +19,7 @@
     "aws-sdk": "^2.166.0",
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.6.1",
-    "eslint": "^4.6.1",
+    "eslint": "^4.18.2",
     "eslint-config-google": "^0.9.1"
   }
 }
