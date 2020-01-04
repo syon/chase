@@ -5,10 +5,11 @@ module.exports = {
   },
   env: {
     node: true,
-    es6: true
+    es6: true,
+    "jest/globals": true
   },
   extends: ['eslint:recommended', 'prettier', 'plugin:prettier/recommended'],
-  plugins: ['prettier'],
+  plugins: ['prettier', 'jest'],
   // add your custom rules here
   rules: {}
 }
