@@ -111,6 +111,8 @@ functions:
     timeout: 10
   librathumb:
     handler: handler.libraThumb
+    layers:
+      - arn:aws:lambda:us-east-1:465934737912:layer:image-magick:1
     events:
       - http:
           path: libra/thumb
