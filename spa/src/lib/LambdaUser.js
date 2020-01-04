@@ -2,7 +2,7 @@ import Debug from "debug";
 import Consts from "@/Consts";
 
 const debug = Debug("chase:lambda-user");
-const ENDPOINT = Consts.LAMBDA_ENDPOINT.POCKET;
+const ENDPOINT = Consts.LAMBDA_ENDPOINT;
 
 async function login(arg) {
   debug("[login]>>>>", arg);

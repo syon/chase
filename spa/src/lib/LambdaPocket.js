@@ -3,7 +3,7 @@ import Consts from "@/Consts";
 import URLSearchParams from "url-search-params";
 
 const debug = Debug("chase:lambda-pocket");
-const ENDPOINT = Consts.LAMBDA_ENDPOINT.POCKET;
+const ENDPOINT = Consts.LAMBDA_ENDPOINT;
 const REDIRECT_URI = `${location.origin}/chase/`;
 
 async function getRequestToken() {
