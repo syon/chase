@@ -24,7 +24,6 @@ const initialState = {
   shotSet: {},
   hatebuSet: {},
   hatebuStarSet: {},
-  hatebuStarLoading: false,
   activeEid: '',
   myscenes: {},
 }
@@ -125,9 +124,6 @@ export const mutations = {
   },
   addHatebuStar(state, { eid, starSet }) {
     state.hatebuStarSet = { ...state.hatebuStarSet, [eid]: starSet }
-  },
-  setHatebuStarLoading(state, judge) {
-    state.hatebuStarLoading = judge
   },
   activate(state, payload) {
     const { eid } = payload
@@ -246,7 +242,6 @@ export const actions = {
     const { eid } = entry
     commit('activate', { eid })
     await dispatch('fetchHatebu', entry)
-    await dispatch('makeHatebuRanking', entry)
   },
   async archive({ commit, state, dispatch }, eid) {
     const at = state.login.accessToken
@@ -309,31 +304,7 @@ export const actions = {
   },
   async fetchHatebu(context, payload) {
     const { eid, url } = payload
-    const hatebu = await Hatebu.fetch(url)
+    const hatebu = await Hatebu.getEntry(url)
     context.commit('addHatebu', { eid, hatebu })
-  },
-  async makeHatebuRanking({ state, commit }, payload) {
-    debug('makeHatebuRanking', payload)
-    const { eid, force } = payload
-    const hatebu = state.hatebuSet[eid]
-    if (!hatebu) return
-    const comments = hatebu.bookmarks.filter((d) => d.comment.length !== 0)
-    let needsFetch = false
-    if (comments.length < 100) {
-      const starSet = state.hatebuStarSet[eid]
-      if (starSet) {
-        debug('Already fetched stars.')
-      } else {
-        debug('Auto fetching stars...')
-        needsFetch = true
-      }
-    }
-    if (force) needsFetch = true
-    if (needsFetch) {
-      commit('setHatebuStarLoading', true)
-      const set = await Hatebu.fetchStarSet(hatebu)
-      commit('addHatebuStar', { eid, starSet: set })
-      commit('setHatebuStarLoading', false)
-    }
   },
 }

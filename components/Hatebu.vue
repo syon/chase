@@ -3,14 +3,8 @@
     <header>
       <screenshot class="imageframe" target="desktop"></screenshot>
       <h4>
-        <span>{{ hatebu.count }}</span
-        ><span>&nbsp;({{ comments.length }} comments)</span
-        ><button
-          v-if="!hatebuStarSet[entry.eid] &amp;&amp; !hatebuStarLoading"
-          @click="makeRanking"
-        >
-          makeRanking</button
-        ><span v-if="hatebuStarLoading">Loading...</span>
+        <span>{{ hatebu.count }}</span>
+        <span>&nbsp;({{ comments.length }} comments)</span>
       </h4>
     </header>
     <div class="bookmarks">
@@ -47,7 +41,6 @@ export default {
   computed: {
     ...mapState('chase', {
       hatebuStarSet: (state) => state.hatebuStarSet,
-      hatebuStarLoading: (state) => state.hatebuStarLoading,
     }),
     ...mapGetters({
       entry: 'chase/activeEntry',
@@ -90,14 +83,9 @@ export default {
       return ymd.replace(/\//g, '.')
     },
     starCount(b) {
-      const starSet = this.hatebuStarSet[this.entry.eid]
-      if (!starSet) return ''
-      const cnt = starSet[b.user]
+      if (!b.stars) return ''
+      const cnt = b.stars.yellow
       return cnt > 0 ? `★${cnt}` : ''
-    },
-    async makeRanking() {
-      const eid = this.entry.eid
-      await this.$store.dispatch('makeHatebuRanking', { eid, force: true })
     },
   },
 }
