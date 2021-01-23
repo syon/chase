@@ -1,86 +1,84 @@
 <template>
   <div class="interlude">
-    <template v-if="entry.ready">
-      <fit-image
-        class="thumbnail"
-        :src="entry.image_s3_url"
-        w="290"
-        h="193"
-        size="cover"
-      ></fit-image>
-      <section>
-        <div class="link">
-          <a :href="entry.url" target="_blank">{{ linkTitle }}</a>
-        </div>
-      </section>
-      <section>
-        <div class="meta">
-          <div>{{ entry.site_name }} ({{ entry.fqdn }})</div>
-        </div>
-        <div class="desc">{{ entry.description }}</div>
-        <hr />
-        <div class="action">
+    <fit-image
+      class="thumbnail"
+      :src="entry.image_s3_url"
+      w="290"
+      h="193"
+      size="cover"
+    />
+    <section>
+      <div class="link">
+        <a :href="entry.url" target="_blank">{{ linkTitle }}</a>
+      </div>
+    </section>
+    <section>
+      <div class="meta">
+        <div>{{ entry.site_name }} ({{ entry.fqdn }})</div>
+      </div>
+      <div class="desc">{{ entry.description }}</div>
+      <hr />
+      <div class="action">
+        <icon-button
+          class="c-archive"
+          icon="ion-ios-checkmark-empty"
+          :loading="ingArchive"
+          :disabled="entry.archived"
+          icon-disabled="ion-ios-checkmark"
+          @click.native="mArchive(entry.eid)"
+        ></icon-button>
+        <div class="fav">
           <icon-button
-            class="c-archive"
-            icon="ion-ios-checkmark-empty"
-            :loading="ingArchive"
-            :disabled="entry.archived"
-            icon-disabled="ion-ios-checkmark"
-            @click.native="mArchive(entry.eid)"
+            v-if="entry.favorite"
+            class="c-favorite"
+            icon="ion-ios-star"
+            :loading="ingFavorite"
+            style="color: orange"
+            @click.native="mUnfavorite(entry.eid)"
           ></icon-button>
-          <div class="fav">
-            <icon-button
-              v-if="entry.favorite"
-              class="c-favorite"
-              icon="ion-ios-star"
-              :loading="ingFavorite"
-              style="color: orange"
-              @click.native="mUnfavorite(entry.eid)"
-            ></icon-button>
-            <icon-button
-              v-else
-              class="c-favorite"
-              icon="ion-ios-star-outline"
-              :loading="ingFavorite"
-              style="color: #ccc"
-              @click.native="mFavorite(entry.eid)"
-            ></icon-button>
-          </div>
-          <div class="c-added">{{ entry.added }}</div>
+          <icon-button
+            v-else
+            class="c-favorite"
+            icon="ion-ios-star-outline"
+            :loading="ingFavorite"
+            style="color: #ccc"
+            @click.native="mFavorite(entry.eid)"
+          ></icon-button>
         </div>
-        <hr />
-        <div class="addscenes">
-          <button
-            v-for="(sce, idx) in scenes"
-            :key="idx"
-            class="scene"
-            @click="addTag({ eid: entry.eid, tag: sce.tag })"
-          >
-            {{ sce.label }}
-          </button>
-        </div>
-        <hr />
-        <div class="tags">
-          <clickable
-            v-for="tag in recentTags"
-            :key="tag"
-            class="tag"
-            :class="{ applied: Object.keys(entry.tags).includes(tag) }"
-            @click.native="handleTagClick(tag)"
-            >{{ tag }}</clickable
-          >
-        </div>
-        <div class="newtag">
-          <input
-            v-model="newtag"
-            placeholder="New Tag"
-            @keyup.enter="handleNewTag"
-          />
-        </div>
-      </section>
-    </template>
-    <section class="mobile-screenshot">
-      <screenshot class="imageframe" target="mobile" />
+        <div class="c-added">{{ entry.added }}</div>
+      </div>
+      <hr />
+      <div class="addscenes">
+        <button
+          v-for="(sce, idx) in scenes"
+          :key="idx"
+          class="scene"
+          @click="addTag({ eid: entry.eid, tag: sce.tag })"
+        >
+          {{ sce.label }}
+        </button>
+      </div>
+      <hr />
+      <div class="tags">
+        <clickable
+          v-for="tag in recentTags"
+          :key="tag"
+          class="tag"
+          :class="{ applied: Object.keys(entry.tags).includes(tag) }"
+          @click.native="handleTagClick(tag)"
+          >{{ tag }}</clickable
+        >
+      </div>
+      <div class="newtag">
+        <input
+          v-model="newtag"
+          placeholder="New Tag"
+          @keyup.enter="handleNewTag"
+        />
+      </div>
+    </section>
+    <section class="area-screenshots">
+      <screenshots :wid="info.wid" />
     </section>
   </div>
 </template>
@@ -90,15 +88,16 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 import IconButton from '@/components/IconButton'
 import Clickable from '@/components/Clickable'
 import FitImage from '@/components/FitImage'
+import Screenshots from '@/components/lobine/Screenshots'
 
 export default {
   components: {
     IconButton,
     Clickable,
     FitImage,
+    Screenshots,
   },
   data: () => ({
-    wid: null,
     newtag: '',
     ingArchive: false,
     ingFavorite: false,
@@ -108,6 +107,7 @@ export default {
       mytags: 'mytags',
     }),
     ...mapGetters({
+      info: 'chase/activeInfo',
       entry: 'chase/activeEntry',
       scenes: 'chase/myScenesTags',
       recentTags: 'chase/recentTags',
@@ -119,6 +119,13 @@ export default {
       if (!this.entry) return ''
       const { eid } = this.entry
       return `https://s3.amazonaws.com/syon-chase/shots/${eid}/mobile.png`
+    },
+  },
+  watch: {
+    entry() {
+      console.log('____ [watch] changed entry ____')
+      const { wid } = this.info
+      this.$store.dispatch('lobine/lounge/setup', { wid })
     },
   },
   methods: {
