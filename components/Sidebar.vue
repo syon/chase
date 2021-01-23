@@ -104,8 +104,10 @@ export default {
     Clickable,
   },
   computed: {
-    ...mapState('chase', {
+    ...mapState('pocket/auth', {
       login: 'login',
+    }),
+    ...mapState('chase', {
       progress: 'progress',
       mytags: 'mytags',
       myscenes: 'myscenes',

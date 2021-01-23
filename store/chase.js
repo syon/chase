@@ -4,17 +4,12 @@ import Hatebu from '@/lib/Hatebu'
 import LambdaShot from '@/lib/LambdaShot'
 import LambdaLibra from '@/lib/LambdaLibra'
 import LambdaPocket from '@/lib/LambdaPocket'
-import LambdaUser from '@/lib/LambdaUser'
 import DB from '@/lib/DB'
 
 const debug = Debug('@:store')
 const db = new DB()
 
 const initialState = {
-  login: {
-    accessToken: '',
-    username: '',
-  },
   progress: {
     unread: 0,
     archive: 0,
@@ -95,11 +90,6 @@ export const mutations = {
   MERGE_Entries(state, newEntries) {
     state.entries = { ...state.entries, ...newEntries }
   },
-  setLogin(state, payload) {
-    const { access_token: accesstoken, username } = payload
-    state.login.accessToken = accesstoken
-    state.login.username = username
-  },
   logout(state) {
     Object.keys(initialState).forEach((key) => {
       state[key] = initialState[key]
@@ -157,11 +147,6 @@ export const mutations = {
 }
 
 export const actions = {
-  restoreLogin({ commit }, $cookie) {
-    const at = $cookie.get('pocket_access_token')
-    const un = $cookie.get('pocket_username')
-    commit('setLogin', { access_token: at, username: un })
-  },
   logout({ commit }, $cookie) {
     $cookie.delete('phase')
     $cookie.delete('pocket_access_token')
@@ -182,12 +167,12 @@ export const actions = {
       c: $cookie.get('chase:c'),
     })
   },
-  async actByPhase({ commit, dispatch }, $cookie) {
+  async actByPhase({ dispatch }, $cookie) {
     const ph = $cookie.get('phase')
     const at = $cookie.get('pocket_access_token')
     debug('[actByPhase]', ph)
     if (ph === 'READY' && at) {
-      dispatch('restoreLogin', $cookie)
+      dispatch('pocket/auth/restoreLogin', $cookie, { root: true })
       dispatch('fetchProgress')
       dispatch('fetchEntries')
       dispatch('restoreScenes', $cookie)
@@ -198,36 +183,15 @@ export const actions = {
       dispatch('logout', $cookie)
     }
   },
-  async getRequestToken({ commit }, $cookie) {
-    const json = await LambdaPocket.getRequestToken()
-    $cookie.set('pocket_request_token', json.request_token, {
-      expires: '3M',
-    })
-    $cookie.set('phase', 'WAITING_ACCESSTOKEN', { expires: '3M' })
-    $cookie.set('chase:a', 'Scene A')
-    $cookie.set('chase:b', 'Scene B')
-    $cookie.set('chase:c', 'Scene C')
-    return json.auth_uri
-  },
-  async getAccessToken({ commit, state }, $cookie) {
-    const rt = $cookie.get('pocket_request_token')
-    const json = await LambdaPocket.getAccessToken(rt)
-    LambdaUser.login(json)
-    commit('setLogin', json)
-    $cookie.delete('pocket_request_token')
-    $cookie.set('phase', 'READY', { expires: '3M' })
-    $cookie.set('pocket_access_token', json.access_token, { expires: '3M' })
-    $cookie.set('pocket_username', json.username, { expires: '3M' })
-  },
-  async fetchProgress({ state, commit }) {
-    const at = state.login.accessToken
+  async fetchProgress({ rootState, commit }) {
+    const at = rootState.pocket.auth.login.accessToken
     const json = await LambdaPocket.progress(at)
     commit('setProgress', json)
   },
-  async fetchEntries({ state, dispatch, commit }) {
-    const flg = false
+  async fetchEntries({ rootState, dispatch, commit }) {
+    const flg = true
     if (flg) {
-      const at = state.login.accessToken
+      const at = rootState.pocket.auth.login.accessToken
       const json = await LambdaPocket.get(at)
       const entries = ChaseUtil.makeEntries(json.list)
       commit('MERGE_Entries', entries)
@@ -237,7 +201,7 @@ export const actions = {
           dispatch('fetchLibraS3', entry)
           dispatch('fetchHatebuCnt', entry)
         }
-        await db.add(entry)
+        await db.put(entry)
       })
     } else {
       const entries = await db.selectAll()
@@ -249,24 +213,24 @@ export const actions = {
     commit('activate', { eid })
     await dispatch('fetchHatebu', entry)
   },
-  async archive({ commit, state, dispatch }, eid) {
+  async archive({ commit, state }, eid) {
     const at = state.login.accessToken
     const json = await LambdaPocket.archive(at, eid)
     debug(json.status === 1)
     commit('archive', { eid })
   },
-  async addTag({ commit, state, dispatch }, { eid, tag }) {
+  async addTag({ commit, state }, { eid, tag }) {
     const at = state.login.accessToken
     await LambdaPocket.addTag(at, eid, tag)
     commit('addTag', { eid, tag })
   },
-  async favorite({ commit, state, dispatch }, eid) {
+  async favorite({ commit, state }, eid) {
     const at = state.login.accessToken
     const json = await LambdaPocket.favorite(at, eid)
     debug('[favorite]', json)
     commit('favorite', { eid })
   },
-  async unfavorite({ commit, state, dispatch }, eid) {
+  async unfavorite({ commit, state }, eid) {
     const at = state.login.accessToken
     const json = await LambdaPocket.unfavorite(at, eid)
     debug('[unfavorite]', json)
