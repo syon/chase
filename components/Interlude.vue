@@ -123,7 +123,6 @@ export default {
   },
   watch: {
     entry() {
-      console.log('____ [watch] changed entry ____')
       const { wid } = this.info
       this.$store.dispatch('lobine/lounge/setup', { wid })
     },

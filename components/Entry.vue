@@ -35,7 +35,7 @@
       <div class="pnl-action">
         <div class="hatebu">
           <div class="hatebu-cnt" :style="hatebuCntStyle">
-            {{ obj.hatebuCnt }}
+            {{ hatebuCnt }}
           </div>
         </div>
         <div class="archive">
@@ -69,6 +69,7 @@ export default {
       DEBUG: process.env.NODE_ENV === 'development',
       imgSrc: this.obj.image_s3_url,
       ingArchive: false,
+      hatebuCnt: null,
     }
   },
   computed: {
@@ -83,7 +84,7 @@ export default {
       return this.obj.title ? this.obj.title : this.obj.url
     },
     hatebuCntStyle() {
-      const cnt = this.obj.hatebuCnt
+      const cnt = this.hatebuCnt
       let style
       switch (true) {
         case cnt >= 500:
@@ -100,6 +101,10 @@ export default {
       }
       return style
     },
+  },
+  async mounted() {
+    const eid = this.obj.eid
+    this.hatebuCnt = await this.$cache.getHatebuCntByEid(eid)
   },
   methods: {
     ...mapActions({

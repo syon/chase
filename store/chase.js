@@ -213,7 +213,7 @@ export const actions = {
       await db.put(entry)
     })
     dispatch('restoreEntries')
-    dispatch('prepareWid')
+    dispatch('syncDB')
   },
   async activate({ commit, dispatch }, entry) {
     const { eid } = entry
@@ -285,8 +285,9 @@ export const actions = {
     const hatebu = await Hatebu.getEntry(url)
     context.commit('addHatebu', { eid, hatebu })
   },
-  async prepareWid({ state }) {
+  async syncDB({ state }) {
     await db.putEidWidBulk(state.entries)
+    await db.putHatebuBulk()
   },
   async getWidByEid(_, eid) {
     return await db.getWidByEid(eid)
