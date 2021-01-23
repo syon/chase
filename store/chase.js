@@ -5,8 +5,10 @@ import LambdaShot from '@/lib/LambdaShot'
 import LambdaLibra from '@/lib/LambdaLibra'
 import LambdaPocket from '@/lib/LambdaPocket'
 import LambdaUser from '@/lib/LambdaUser'
+import DB from '@/lib/DB'
 
 const debug = Debug('@:store')
+const db = new DB()
 
 const initialState = {
   login: {
@@ -41,11 +43,11 @@ export const getters = {
   filteredCatalog: (state, getters) => (route, tag, filterTxt) => {
     const arr = getters.catalog
     let result = arr
-    if (route === 'Inbox') {
+    if (route === 'index') {
       result = arr.filter((d) => Object.keys(d.tags).length === 0)
-    } else if (route === 'Favorite') {
+    } else if (route === 'favorite') {
       result = arr.filter((d) => d.favorite)
-    } else if (route === 'Tag') {
+    } else if (route === 'tag') {
       const tagged = arr.filter((d) => Object.keys(d.tags).length > 0)
       result = tagged.filter((d) => Object.keys(d.tags).includes(tag))
     }
@@ -87,10 +89,10 @@ export const getters = {
 }
 
 export const mutations = {
-  updateEntries(state, newEntries) {
+  SET_Entries(state, newEntries) {
     state.entries = newEntries
   },
-  mergeEntries(state, newEntries) {
+  MERGE_Entries(state, newEntries) {
     state.entries = { ...state.entries, ...newEntries }
   },
   setLogin(state, payload) {
@@ -166,17 +168,6 @@ export const actions = {
     $cookie.delete('pocket_username')
     commit('logout')
   },
-  updateEntries(context, payload) {
-    const newEntries = ChaseUtil.makeEntries(payload.list)
-    context.commit('mergeEntries', newEntries)
-    Object.keys(newEntries).forEach((key) => {
-      const entry = newEntries[key]
-      if (!entry.ready) {
-        context.dispatch('fetchLibraS3', entry)
-        context.dispatch('fetchHatebuCnt', entry)
-      }
-    })
-  },
   doSceneEdit({ commit, dispatch }, { $cookie, scenes }) {
     debug('doSceneEdit', $cookie, scenes)
     $cookie.set('chase:a', scenes.a)
@@ -233,10 +224,25 @@ export const actions = {
     const json = await LambdaPocket.progress(at)
     commit('setProgress', json)
   },
-  async fetchEntries({ state, dispatch }) {
-    const at = state.login.accessToken
-    const json = await LambdaPocket.get(at)
-    dispatch('updateEntries', json)
+  async fetchEntries({ state, dispatch, commit }) {
+    const flg = false
+    if (flg) {
+      const at = state.login.accessToken
+      const json = await LambdaPocket.get(at)
+      const entries = ChaseUtil.makeEntries(json.list)
+      commit('MERGE_Entries', entries)
+      Object.keys(entries).forEach(async (key) => {
+        const entry = entries[key]
+        if (!entry.ready) {
+          dispatch('fetchLibraS3', entry)
+          dispatch('fetchHatebuCnt', entry)
+        }
+        await db.add(entry)
+      })
+    } else {
+      const entries = await db.selectAll()
+      commit('MERGE_Entries', entries)
+    }
   },
   async activate({ commit, dispatch }, entry) {
     const { eid } = entry

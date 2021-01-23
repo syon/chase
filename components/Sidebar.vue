@@ -49,7 +49,7 @@
     <section class="tags">
       <template v-for="tag in recentTags">
         <div :key="tag" class="link-item font-smaller">
-          <nuxt-link :to="{ name: 'Tag', params: { tag } }">
+          <nuxt-link :to="{ name: 'tag', params: { tag } }">
             <clickable class="menu-item">
               <div class="label">
                 <i class="ion-ios-pricetags-outline"></i><span>{{ tag }}</span>

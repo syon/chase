@@ -5,56 +5,51 @@
     :class="compoClasses"
     @click="activate(obj)"
   >
-    <template v-if="obj.ready">
-      <div class="pnl">
-        <div class="pnl-thumb">
-          <fit-image
-            :src="imgSrc"
-            w="100"
-            h="80"
-            size="cover"
-            :onloaderror="handleLoadImageError"
-          ></fit-image>
+    <div class="pnl">
+      <div class="pnl-thumb">
+        <fit-image
+          :src="imgSrc"
+          w="100"
+          h="80"
+          size="cover"
+          :onloaderror="handleLoadImageError"
+        ></fit-image>
+      </div>
+      <div class="pnl-body">
+        <div class="link">
+          <a :href="obj.url" target="_blank">{{ linkTitle }}</a>
         </div>
-        <div class="pnl-body">
-          <div class="link">
-            <a :href="obj.url" target="_blank">{{ linkTitle }}</a>
-          </div>
-          <div class="meta">
-            <span v-if="obj.site_name" class="site">{{ obj.site_name }}</span>
-            <span v-if="DEBUG">{{ obj.eid }}</span>
-          </div>
-          <div class="excerpt">{{ obj.excerpt }}</div>
-          <template v-if="Object.keys(obj.tags).length > 0">
-            <div class="tags">
-              <span v-for="tag in Object.keys(obj.tags)" :key="tag" class="tag">
-                {{ tag }}
-              </span>
-            </div>
-          </template>
+        <div class="meta">
+          <span v-if="obj.site_name" class="site">{{ obj.site_name }}</span>
+          <span v-if="DEBUG">{{ obj.eid }}</span>
         </div>
-        <div class="pnl-action">
-          <div class="hatebu">
-            <div class="hatebu-cnt" :style="hatebuCntStyle">
-              {{ obj.hatebuCnt }}
-            </div>
+        <div class="excerpt">{{ obj.excerpt }}</div>
+        <template v-if="Object.keys(obj.tags).length > 0">
+          <div class="tags">
+            <span v-for="tag in Object.keys(obj.tags)" :key="tag" class="tag">
+              {{ tag }}
+            </span>
           </div>
-          <div class="archive">
-            <icon-button
-              class="c-archive"
-              icon="ion-ios-checkmark-empty"
-              :loading="ingArchive"
-              :disabled="obj.archived"
-              icon-disabled="ion-ios-checkmark"
-              @click.native="mArchive(obj.eid)"
-            ></icon-button>
+        </template>
+      </div>
+      <div class="pnl-action">
+        <div class="hatebu">
+          <div class="hatebu-cnt" :style="hatebuCntStyle">
+            {{ obj.hatebuCnt }}
           </div>
+        </div>
+        <div class="archive">
+          <icon-button
+            class="c-archive"
+            icon="ion-ios-checkmark-empty"
+            :loading="ingArchive"
+            :disabled="obj.archived"
+            icon-disabled="ion-ios-checkmark"
+            @click.native="mArchive(obj.eid)"
+          ></icon-button>
         </div>
       </div>
-    </template>
-    <template v-else>
-      <span class="loading"><i class="ion-load-d"></i></span>
-    </template>
+    </div>
   </div>
 </template>
 
