@@ -22,6 +22,7 @@ const initialState = {
   hatebuSet: {},
   hatebuStarSet: {},
   activeEid: '',
+  activeWid: '',
   myscenes: {},
 }
 
@@ -56,6 +57,10 @@ export const getters = {
   },
   catalogCount(state, getters) {
     return getters.catalog.length
+  },
+  activeInfo(state) {
+    const { activeEid, activeWid } = state
+    return { eid: activeEid, wid: activeWid }
   },
   activeEntry(state, getters) {
     const eid = state.activeEid
@@ -118,8 +123,9 @@ export const mutations = {
     state.hatebuStarSet = { ...state.hatebuStarSet, [eid]: starSet }
   },
   activate(state, payload) {
-    const { eid } = payload
+    const { eid, wid } = payload
     state.activeEid = eid
+    state.activeWid = wid
   },
   archive(state, payload) {
     const { eid } = payload
@@ -189,10 +195,10 @@ export const actions = {
     commit('setProgress', json)
   },
   async fetchEntries({ rootState, dispatch, commit }) {
-    const flg = false
+    const flg = true
     if (flg) {
       const at = rootState.pocket.auth.login.accessToken
-      const options = { count: 1000, detailType: 'complete' }
+      const options = { count: 20, detailType: 'complete' }
       const json = await LambdaPocket.get(at, options)
       const entries = ChaseUtil.makeEntries(json.list)
       commit('MERGE_Entries', entries)
@@ -211,7 +217,8 @@ export const actions = {
   },
   async activate({ commit, dispatch }, entry) {
     const { eid } = entry
-    commit('activate', { eid })
+    const wid = await db.getWidByEid(eid)
+    commit('activate', { eid, wid })
     await dispatch('fetchHatebu', entry)
   },
   async archive({ commit, state }, eid) {
@@ -277,5 +284,13 @@ export const actions = {
     const { eid, url } = payload
     const hatebu = await Hatebu.getEntry(url)
     context.commit('addHatebu', { eid, hatebu })
+  },
+  async prepareWid({ state }) {
+    for (const [eid, entry] of Object.entries(state.entries)) {
+      await db.putEidWid({ eid, url: entry.url })
+    }
+  },
+  async getWidByEid(_, eid) {
+    return await db.getWidByEid(eid)
   },
 }

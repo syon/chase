@@ -80,15 +80,7 @@
       </section>
     </template>
     <section class="mobile-screenshot">
-      <template v-if="entry.ready">
-        <fit-image
-          :src="shotMobileSrc"
-          w="214"
-          h="380"
-          size="cover"
-          :onloaderror="() =&gt; onShotError(entry)"
-        ></fit-image>
-      </template>
+      <screenshot class="imageframe" target="mobile" />
     </section>
   </div>
 </template>
@@ -105,13 +97,12 @@ export default {
     Clickable,
     FitImage,
   },
-  data() {
-    return {
-      newtag: '',
-      ingArchive: false,
-      ingFavorite: false,
-    }
-  },
+  data: () => ({
+    wid: null,
+    newtag: '',
+    ingArchive: false,
+    ingFavorite: false,
+  }),
   computed: {
     ...mapState({
       mytags: 'mytags',

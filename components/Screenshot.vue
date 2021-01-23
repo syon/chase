@@ -1,24 +1,23 @@
 <template>
   <div class="screenshot">
-    <template v-if="entry.ready"
-      ><template v-if="isDesktop">
-        <fit-image
-          :src="desktopUrl"
-          w="257"
-          h="193"
-          size="cover"
-          :onloadsuccess="() => onShotSuccess(entry)"
-          :onloaderror="() => onShotError(entry)"
-        ></fit-image> </template
-      ><template v-else>
-        <fit-image
-          :src="mobileUrl"
-          w="214"
-          h="380"
-          size="cover"
-          :onloaderror="() => onShotError(entry)"
-        ></fit-image> </template
-    ></template>
+    <template v-if="isDesktop">
+      <fit-image
+        :src="desktopUrl"
+        w="257"
+        h="193"
+        size="cover"
+        :onloadsuccess="() => onShotSuccess(entry)"
+        :onloaderror="() => onShotError(entry)"
+      ></fit-image> </template
+    ><template v-else>
+      <fit-image
+        :src="mobileUrl"
+        w="214"
+        h="380"
+        size="cover"
+        :onloaderror="() => onShotError(entry)"
+      ></fit-image>
+    </template>
   </div>
 </template>
 
@@ -33,20 +32,21 @@ export default {
   props: { target: { type: String, required: true } },
   computed: {
     ...mapGetters({
+      info: 'chase/activeInfo',
       entry: 'chase/activeEntry',
     }),
     isDesktop() {
       return this.target === 'desktop'
     },
     desktopUrl() {
-      if (!this.entry) return ''
-      const { eid } = this.entry
-      return `https://s3.amazonaws.com/syon-chase/shots/${eid}/desktop.png`
+      if (!this.info) return ''
+      const { wid } = this.info
+      return `https://lobine.s3.amazonaws.com/shot/${wid}/desktop.png`
     },
     mobileUrl() {
-      if (!this.entry) return ''
-      const { eid } = this.entry
-      return `https://s3.amazonaws.com/syon-chase/shots/${eid}/mobile.png`
+      if (!this.info) return ''
+      const { wid } = this.info
+      return `https://lobine.s3.amazonaws.com/shot/${wid}/mobile.png`
     },
   },
   methods: {

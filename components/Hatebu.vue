@@ -1,7 +1,7 @@
 <template>
   <div class="hatebu">
     <header>
-      <screenshot class="imageframe" target="desktop"></screenshot>
+      <screenshot class="imageframe" target="desktop" />
       <h4>
         <span>{{ hatebu.count }}</span>
         <span>&nbsp;({{ comments.length }} comments)</span>
