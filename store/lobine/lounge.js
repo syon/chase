@@ -46,7 +46,6 @@ export const actions = {
   async emitDoubleshot({ state }) {
     const { wid, dig } = state
     const { url } = dig
-    console.log('==emitDoubleshot=============================', { wid, url })
     if (wid && url) {
       dg('emitDoubleshot', { wid, url })
       return await axios.post(EP.SHOT, { wid, url })

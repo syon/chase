@@ -1,4 +1,5 @@
-import Debug from 'debug'
+import consola from 'consola/src/browser'
+
 import ChaseUtil from '@/lib/ChaseUtil'
 import Hatebu from '@/lib/Hatebu'
 import LambdaShot from '@/lib/LambdaShot'
@@ -6,7 +7,6 @@ import LambdaLibra from '@/lib/LambdaLibra'
 import LambdaPocket from '@/lib/LambdaPocket'
 import DB from '@/lib/DB'
 
-const debug = Debug('@:store')
 const db = new DB()
 
 const initialState = {
@@ -160,7 +160,7 @@ export const actions = {
     commit('logout')
   },
   doSceneEdit({ commit, dispatch }, { $cookie, scenes }) {
-    debug('doSceneEdit', $cookie, scenes)
+    consola.info('doSceneEdit', $cookie, scenes)
     $cookie.set('chase:a', scenes.a)
     $cookie.set('chase:b', scenes.b)
     $cookie.set('chase:c', scenes.c)
@@ -176,11 +176,12 @@ export const actions = {
   async actByPhase({ dispatch }, $cookie) {
     const ph = $cookie.get('phase')
     const at = $cookie.get('pocket_access_token')
-    debug('[actByPhase]', ph)
+    consola.info('[actByPhase]', ph)
     if (ph === 'READY' && at) {
       dispatch('pocket/auth/restoreLogin', $cookie, { root: true })
+      await dispatch('restoreEntries')
+      await dispatch('fetchEntries')
       dispatch('fetchProgress')
-      dispatch('fetchEntries')
       dispatch('restoreScenes', $cookie)
     } else if (ph === 'WAITING_ACCESSTOKEN') {
       await dispatch('getAccessToken', $cookie)
@@ -194,26 +195,25 @@ export const actions = {
     const json = await LambdaPocket.progress(at)
     commit('setProgress', json)
   },
-  async fetchEntries({ rootState, dispatch, commit }) {
-    const flg = true
-    if (flg) {
-      const at = rootState.pocket.auth.login.accessToken
-      const options = { count: 20, detailType: 'complete' }
-      const json = await LambdaPocket.get(at, options)
-      const entries = ChaseUtil.makeEntries(json.list)
-      commit('MERGE_Entries', entries)
-      Object.keys(entries).forEach(async (key) => {
-        const entry = entries[key]
-        if (!entry.ready) {
-          // dispatch('fetchLibraS3', entry)
-          // dispatch('fetchHatebuCnt', entry)
-        }
-        await db.put(entry)
-      })
-    } else {
-      const entries = await db.selectAll()
-      commit('MERGE_Entries', entries)
-    }
+  async restoreEntries({ commit }) {
+    const entries = await db.selectAll()
+    commit('MERGE_Entries', entries)
+  },
+  async fetchEntries({ rootState, dispatch }) {
+    const at = rootState.pocket.auth.login.accessToken
+    const options = { count: 100, detailType: 'complete' }
+    const json = await LambdaPocket.get(at, options)
+    const entries = ChaseUtil.makeEntries(json.list)
+    Object.keys(entries).forEach(async (key) => {
+      const entry = entries[key]
+      if (!entry.ready) {
+        // dispatch('fetchLibraS3', entry)
+        // dispatch('fetchHatebuCnt', entry)
+      }
+      await db.put(entry)
+    })
+    dispatch('restoreEntries')
+    dispatch('prepareWid')
   },
   async activate({ commit, dispatch }, entry) {
     const { eid } = entry
@@ -224,7 +224,7 @@ export const actions = {
   async archive({ commit, state }, eid) {
     const at = state.login.accessToken
     const json = await LambdaPocket.archive(at, eid)
-    debug(json.status === 1)
+    consola.info(json.status === 1)
     commit('archive', { eid })
   },
   async addTag({ commit, state }, { eid, tag }) {
@@ -235,13 +235,13 @@ export const actions = {
   async favorite({ commit, state }, eid) {
     const at = state.login.accessToken
     const json = await LambdaPocket.favorite(at, eid)
-    debug('[favorite]', json)
+    consola.info('[favorite]', json)
     commit('favorite', { eid })
   },
   async unfavorite({ commit, state }, eid) {
     const at = state.login.accessToken
     const json = await LambdaPocket.unfavorite(at, eid)
-    debug('[unfavorite]', json)
+    consola.info('[unfavorite]', json)
     commit('unfavorite', { eid })
   },
   fetchLibraS3(context, entry) {
@@ -251,7 +251,7 @@ export const actions = {
         context.commit('addLibraInfo', { eid, pageinfo })
       })
       .catch(() => {
-        debug('First scraping for S3...', eid)
+        consola.info('First scraping for S3...', eid)
         context.dispatch('fetchLibraInfo', entry)
       })
   },
@@ -263,9 +263,9 @@ export const actions = {
   fetchLibraThumb(context, payload) {
     // eslint-disable-next-line camelcase
     const { eid, url, image_suggested } = payload
-    debug('[fetchLibraThumb]>>>>')
+    consola.info('[fetchLibraThumb]>>>>')
     return LambdaLibra.thumb({ eid, url, image_suggested }).then((r) => {
-      debug('[fetchLibraThumb]<<<<', r)
+      consola.info('[fetchLibraThumb]<<<<', r)
       return r.ETag
     })
   },
@@ -286,9 +286,7 @@ export const actions = {
     context.commit('addHatebu', { eid, hatebu })
   },
   async prepareWid({ state }) {
-    for (const [eid, entry] of Object.entries(state.entries)) {
-      await db.putEidWid({ eid, url: entry.url })
-    }
+    await db.putEidWidBulk(state.entries)
   },
   async getWidByEid(_, eid) {
     return await db.getWidByEid(eid)
