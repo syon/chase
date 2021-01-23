@@ -52,7 +52,7 @@ export const getters = {
         return tgt.toUpperCase().includes(filterTxt.toUpperCase())
       })
     }
-    return result
+    return result.slice(0, 100)
   },
   catalogCount(state, getters) {
     return getters.catalog.length
@@ -189,17 +189,18 @@ export const actions = {
     commit('setProgress', json)
   },
   async fetchEntries({ rootState, dispatch, commit }) {
-    const flg = true
+    const flg = false
     if (flg) {
       const at = rootState.pocket.auth.login.accessToken
-      const json = await LambdaPocket.get(at)
+      const options = { count: 1000, detailType: 'complete' }
+      const json = await LambdaPocket.get(at, options)
       const entries = ChaseUtil.makeEntries(json.list)
       commit('MERGE_Entries', entries)
       Object.keys(entries).forEach(async (key) => {
         const entry = entries[key]
         if (!entry.ready) {
-          dispatch('fetchLibraS3', entry)
-          dispatch('fetchHatebuCnt', entry)
+          // dispatch('fetchLibraS3', entry)
+          // dispatch('fetchHatebuCnt', entry)
         }
         await db.put(entry)
       })
