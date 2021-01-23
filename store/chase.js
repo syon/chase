@@ -5,9 +5,6 @@ import Hatebu from '@/lib/Hatebu'
 import LambdaShot from '@/lib/LambdaShot'
 import LambdaLibra from '@/lib/LambdaLibra'
 import LambdaPocket from '@/lib/LambdaPocket'
-import DB from '@/lib/DB'
-
-const db = new DB()
 
 const initialState = {
   progress: {
@@ -196,7 +193,7 @@ export const actions = {
     commit('setProgress', json)
   },
   async restoreEntries({ commit }) {
-    const entries = await db.selectAll()
+    const entries = await this.$cache.selectAll()
     commit('MERGE_Entries', entries)
   },
   async fetchEntries({ rootState, dispatch }) {
@@ -210,14 +207,14 @@ export const actions = {
         // dispatch('fetchLibraS3', entry)
         // dispatch('fetchHatebuCnt', entry)
       }
-      await db.put(entry)
+      await this.$cache.put(entry)
     })
     dispatch('restoreEntries')
     dispatch('syncDB')
   },
   async activate({ commit, dispatch }, entry) {
     const { eid } = entry
-    const wid = await db.getWidByEid(eid)
+    const wid = await this.$cache.getWidByEid(eid)
     commit('activate', { eid, wid })
     await dispatch('fetchHatebu', entry)
   },
@@ -286,10 +283,10 @@ export const actions = {
     context.commit('addHatebu', { eid, hatebu })
   },
   async syncDB({ state }) {
-    await db.putEidWidBulk(state.entries)
-    await db.putHatebuBulk()
+    await this.$cache.putEidWidBulk(state.entries)
+    await this.$cache.putHatebuBulk()
   },
   async getWidByEid(_, eid) {
-    return await db.getWidByEid(eid)
+    return await this.$cache.getWidByEid(eid)
   },
 }

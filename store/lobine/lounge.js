@@ -1,6 +1,5 @@
 import debug from 'debug'
 import axios from 'axios'
-import DB from '@/lib/DB'
 
 const EP = {
   WID: `https://api.lobine.app/wid`,
@@ -11,7 +10,6 @@ const EP = {
 }
 
 const dg = debug('@:store:lobine:lounge')
-const db = new DB()
 
 export const state = () => ({
   wid: null,
@@ -40,7 +38,7 @@ export const mutations = {
 
 export const actions = {
   async setup({ commit }, { wid }) {
-    const dig = await db.getDigByWid(wid)
+    const dig = await this.$cache.getDigByWid(wid)
     commit('SET_WIDDIG', { wid, dig })
   },
   async emitDoubleshot({ state }) {
