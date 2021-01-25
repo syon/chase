@@ -7,13 +7,12 @@
   >
     <div class="pnl">
       <div class="pnl-thumb">
-        <fit-image
+        <v-img
           :src="imgSrc"
-          w="100"
-          h="80"
-          size="cover"
-          :onloaderror="handleLoadImageError"
-        ></fit-image>
+          width="100"
+          height="80"
+          @error="handleLoadImageError"
+        />
       </div>
       <div class="pnl-body">
         <div class="link">
@@ -55,12 +54,10 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import FitImage from '@/components/FitImage'
 import IconButton from '@/components/IconButton'
 
 export default {
   components: {
-    FitImage,
     IconButton,
   },
   props: { obj: { type: Object, required: true } },
@@ -128,14 +125,17 @@ export default {
 .pnl {
   display: flex;
 
-  .pnl-thumb figure {
-    display: flex;
+  .pnl-thumb {
     margin: 0 15px 0 0;
-    width: 100px;
-    height: 80px;
-    overflow: hidden;
-    align-items: center;
-    justify-content: center;
+
+    figure {
+      display: flex;
+      width: 100px;
+      height: 80px;
+      overflow: hidden;
+      align-items: center;
+      justify-content: center;
+    }
   }
 
   .pnl-body {
