@@ -201,14 +201,16 @@ export const actions = {
     const options = { count: 100, detailType: 'complete' }
     const json = await LambdaPocket.get(at, options)
     const entries = ChaseUtil.makeEntries(json.list)
-    Object.keys(entries).forEach(async (key) => {
-      const entry = entries[key]
-      if (!entry.ready) {
-        // dispatch('fetchLibraS3', entry)
-        // dispatch('fetchHatebuCnt', entry)
-      }
-      await this.$cache.put(entry)
-    })
+    await this.$cache.putBulk(entries)
+    dispatch('restoreEntries')
+    dispatch('syncDB')
+  },
+  async moreEntries({ rootState, dispatch }) {
+    const at = rootState.pocket.auth.login.accessToken
+    const options = { count: 1000, detailType: 'complete' }
+    const json = await LambdaPocket.get(at, options)
+    const entries = ChaseUtil.makeEntries(json.list)
+    await this.$cache.putBulk(entries)
     dispatch('restoreEntries')
     dispatch('syncDB')
   },

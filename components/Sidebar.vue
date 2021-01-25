@@ -5,6 +5,7 @@
         <a href="/"><img src="~/assets/logo.png" alt="Chase" /></a>
       </h1>
     </section>
+    <button @click="more">more</button>
     <section v-if="login.accessToken" class="menu">
       <div class="menu-title">Progress</div>
       <span>{{ progress.unread }}</span
@@ -137,6 +138,9 @@ export default {
     logout() {
       this.$store.dispatch('chase/logout', this.$cookie)
       this.$router.push({ path: '/welcome' })
+    },
+    more() {
+      this.$store.dispatch('chase/moreEntries')
     },
   },
 }
