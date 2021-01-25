@@ -1,7 +1,6 @@
 <template>
   <div class="hatebu">
     <header>
-      <screenshot class="imageframe" target="desktop" />
       <h4>
         <span>{{ hatebu.count }}</span>
         <span>&nbsp;({{ comments.length }} comments)</span>
@@ -27,12 +26,8 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import Screenshot from '@/components/Screenshot'
 
 export default {
-  components: {
-    Screenshot,
-  },
   data() {
     return {
       mode: 'recent',

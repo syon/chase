@@ -38,14 +38,16 @@
           </div>
         </div>
         <div class="archive">
-          <icon-button
-            class="c-archive"
-            icon="ion-ios-checkmark-empty"
+          <v-btn
+            icon
+            x-small
             :loading="ingArchive"
             :disabled="obj.archived"
-            icon-disabled="ion-ios-checkmark"
-            @click.native="mArchive(obj.eid)"
-          ></icon-button>
+            class="c-archive"
+            @click="mArchive(obj.eid)"
+          >
+            <v-icon>mdi-check</v-icon>
+          </v-btn>
         </div>
       </div>
     </div>
@@ -114,7 +116,7 @@ export default {
     },
     async mArchive(eid) {
       this.ingArchive = true
-      await this.$store.dispatch('archive', eid)
+      await this.$store.dispatch('chase/archive', eid)
       this.ingArchive = false
     },
   },

@@ -220,25 +220,25 @@ export const actions = {
     commit('activate', { eid, wid })
     await dispatch('fetchHatebu', entry)
   },
-  async archive({ commit, state }, eid) {
-    const at = state.login.accessToken
+  async archive({ commit, rootState }, eid) {
+    const at = rootState.pocket.auth.login.accessToken
     const json = await LambdaPocket.archive(at, eid)
     consola.info(json.status === 1)
     commit('archive', { eid })
   },
-  async addTag({ commit, state }, { eid, tag }) {
-    const at = state.login.accessToken
+  async addTag({ commit, rootState }, { eid, tag }) {
+    const at = rootState.pocket.auth.login.accessToken
     await LambdaPocket.addTag(at, eid, tag)
     commit('addTag', { eid, tag })
   },
-  async favorite({ commit, state }, eid) {
-    const at = state.login.accessToken
+  async favorite({ commit, rootState }, eid) {
+    const at = rootState.pocket.auth.login.accessToken
     const json = await LambdaPocket.favorite(at, eid)
     consola.info('[favorite]', json)
     commit('favorite', { eid })
   },
-  async unfavorite({ commit, state }, eid) {
-    const at = state.login.accessToken
+  async unfavorite({ commit, rootState }, eid) {
+    const at = rootState.pocket.auth.login.accessToken
     const json = await LambdaPocket.unfavorite(at, eid)
     consola.info('[unfavorite]', json)
     commit('unfavorite', { eid })

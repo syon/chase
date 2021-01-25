@@ -28,22 +28,26 @@
           @click.native="mArchive(entry.eid)"
         ></icon-button>
         <div class="fav">
-          <icon-button
+          <v-btn
             v-if="entry.favorite"
+            icon
             class="c-favorite"
-            icon="ion-ios-star"
+            color="orange"
             :loading="ingFavorite"
-            style="color: orange"
             @click.native="mUnfavorite(entry.eid)"
-          ></icon-button>
-          <icon-button
+          >
+            <v-icon>mdi-star</v-icon>
+          </v-btn>
+          <v-btn
             v-else
             class="c-favorite"
-            icon="ion-ios-star-outline"
+            icon
+            color="grey"
             :loading="ingFavorite"
-            style="color: #ccc"
             @click.native="mFavorite(entry.eid)"
-          ></icon-button>
+          >
+            <v-icon>mdi-star</v-icon>
+          </v-btn>
         </div>
         <div class="c-added">{{ entry.added }}</div>
       </div>
