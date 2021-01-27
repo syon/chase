@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import IconButton from '@/components/IconButton'
 import Clickable from '@/components/Clickable'
 import FitImage from '@/components/FitImage'
@@ -96,9 +96,6 @@ export default {
     ingFavorite: false,
   }),
   computed: {
-    ...mapState({
-      mytags: 'mytags',
-    }),
     ...mapGetters({
       info: 'chase/activeInfo',
       entry: 'chase/activeEntry',

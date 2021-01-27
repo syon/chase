@@ -7,11 +7,6 @@ import LambdaLibra from '@/lib/LambdaLibra'
 import LambdaPocket from '@/lib/LambdaPocket'
 
 const initialState = {
-  progress: {
-    unread: 0,
-    archive: 0,
-    all: 0,
-  },
   entries: {},
   libraInfo: {},
   hatebuCntSet: {},
@@ -20,7 +15,6 @@ const initialState = {
   hatebuStarSet: {},
   activeEid: '',
   activeWid: '',
-  myscenes: {},
 }
 
 export const state = () => JSON.parse(JSON.stringify(initialState))
@@ -111,9 +105,6 @@ export const mutations = {
     const { unread, archive } = payload
     state.progress = { unread, archive, all: unread + archive }
   },
-  myscenes(state, myscenes) {
-    state.myscenes = myscenes
-  },
   addLibraInfo(state, { eid, pageinfo }) {
     state.libraInfo = { ...state.libraInfo, [eid]: pageinfo }
   },
@@ -174,18 +165,12 @@ export const actions = {
       dispatch('pocket/auth/restoreLogin', $cookie, { root: true })
       await dispatch('fetchEntries')
       await dispatch('restoreEntries')
-      dispatch('fetchProgress')
     } else if (ph === 'WAITING_ACCESSTOKEN') {
       await dispatch('getAccessToken', $cookie)
       await dispatch('actByPhase', $cookie)
     } else {
       dispatch('logout', $cookie)
     }
-  },
-  async fetchProgress({ rootState, commit }) {
-    const at = rootState.pocket.auth.login.accessToken
-    const json = await LambdaPocket.progress(at)
-    commit('setProgress', json)
   },
   async restoreEntries({ commit }) {
     const entries = await this.$cache.selectAll()

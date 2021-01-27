@@ -5,15 +5,12 @@
         <a href="/"><img src="~/assets/logo.png" alt="Chase" /></a>
       </h1>
     </section>
-    <button @click="more">more</button>
-    <button @click="deleteDB">deleteDB</button>
-    <section v-if="login.accessToken" class="menu">
-      <div class="menu-title">Progress</div>
-      <span>{{ progress.unread }}</span
-      ><span> / </span><span>{{ progress.all }}</span
-      ><span> (</span
-      ><span>{{ Math.floor((progress.unread / progress.all) * 100) }}</span
-      ><span> %)</span>
+    <section>
+      {{ catalogCount }}
+    </section>
+    <section>
+      <v-btn @click="more">more</v-btn>
+      <v-btn @click="deleteDB">deleteDB</v-btn>
     </section>
     <section>
       <div class="misc">
@@ -53,11 +50,6 @@ export default {
   computed: {
     ...mapState('pocket/auth', {
       login: 'login',
-    }),
-    ...mapState('chase', {
-      progress: 'progress',
-      mytags: 'mytags',
-      myscenes: 'myscenes',
     }),
     ...mapGetters({
       catalogCount: 'chase/catalogCount',
