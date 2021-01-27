@@ -56,12 +56,8 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import IconButton from '@/components/IconButton'
 
 export default {
-  components: {
-    IconButton,
-  },
   props: { obj: { type: Object, required: true } },
   data() {
     return {
@@ -83,7 +79,7 @@ export default {
       return this.obj.title ? this.obj.title : this.obj.url
     },
     hatebuCntStyle() {
-      const cnt = this.hatebuCnt
+      const cnt = this.obj.hatebuCnt
       let style
       switch (true) {
         case cnt >= 500:
@@ -100,10 +96,6 @@ export default {
       }
       return style
     },
-  },
-  async mounted() {
-    const eid = this.obj.eid
-    this.hatebuCnt = await this.$cache.getHatebuCntByEid(eid)
   },
   methods: {
     ...mapActions({

@@ -119,8 +119,8 @@ export const mutations = {
   addLibraInfo(state, { eid, pageinfo }) {
     state.libraInfo = { ...state.libraInfo, [eid]: pageinfo }
   },
-  addHatebuCnt(state, { eid, hatebuCnt }) {
-    state.hatebuCntSet = { ...state.hatebuCntSet, [eid]: hatebuCnt }
+  SET_HatebuCntSet(state, hatebuCntSet) {
+    state.hatebuCntSet = hatebuCntSet
   },
   addShot(state, { eid }) {
     state.shotSet = { ...state.shotSet, [eid]: 'ordered' }
@@ -264,11 +264,6 @@ export const actions = {
       return r.ETag
     })
   },
-  async fetchHatebuCnt(context, entry) {
-    const { eid, url } = entry
-    const hatebuCnt = await ChaseUtil.fetchHatebuCnt(url)
-    context.commit('addHatebuCnt', { eid, hatebuCnt })
-  },
   async fetchShot(context, payload) {
     const { eid, url } = payload
     if (!eid) return
@@ -280,9 +275,11 @@ export const actions = {
     const hatebu = await Hatebu.getEntry(url)
     context.commit('addHatebu', { eid, hatebu })
   },
-  async syncDB({ state }) {
+  async syncDB({ commit }) {
     await this.$cache.prepareJunction()
     await this.$cache.putHatebuBulk()
+    const hatebuCntSet = await this.$cache.getHatebuCntSet()
+    commit('SET_HatebuCntSet', hatebuCntSet)
   },
   async getWidByEid(_, eid) {
     return await this.$cache.getWidByEid(eid)
