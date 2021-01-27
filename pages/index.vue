@@ -1,11 +1,8 @@
 <template>
   <div class="screen page-container">
-    <nav class="page-nav">
-      <sidebar></sidebar>
-    </nav>
     <article class="page-content">
       <header>
-        <h2>{{ mode }}</h2>
+        <sidebar />
         <input v-model="filterTxt" type="search" placeholder="Filter" />
       </header>
       <div class="entries">
@@ -67,9 +64,6 @@ export default {
   width: 100%;
   display: flex;
 
-  .page-nav {
-    width: 165px;
-  }
   .page-content {
     flex: 1;
     padding: 0 15px;
@@ -82,11 +76,5 @@ export default {
   .page-hatebu {
     width: 320px;
   }
-}
-
-.page-content header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 }
 </style>

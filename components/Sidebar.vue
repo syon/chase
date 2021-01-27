@@ -74,14 +74,6 @@
           </nuxt-link>
         </div>
       </div>
-      <div class="userinfo">
-        <template v-if="login.accessToken"
-          ><span class="username">{{ login.username }}</span>
-          <clickable class="disconnect" @click.native="logout"
-            ><i class="ion-ios-close-empty"></i
-          ></clickable>
-        </template>
-      </div>
     </section>
   </div>
 </template>
@@ -137,14 +129,8 @@ export default {
 
 <style lang="scss" scoped>
 .sidebar {
-  position: fixed;
-  width: inherit;
-  height: 100vh;
   display: flex;
-  flex-direction: column;
   justify-content: space-between;
-  padding: 15px;
-  font-size: 0.75rem;
 }
 
 .flex-aic-jcsb {

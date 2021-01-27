@@ -52,17 +52,6 @@
         <div class="c-added">{{ entry.added }}</div>
       </div>
       <hr />
-      <div class="addscenes">
-        <button
-          v-for="(sce, idx) in scenes"
-          :key="idx"
-          class="scene"
-          @click="addTag({ eid: entry.eid, tag: sce.tag })"
-        >
-          {{ sce.label }}
-        </button>
-      </div>
-      <hr />
       <div class="tags">
         <clickable
           v-for="tag in recentTags"
