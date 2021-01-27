@@ -42,11 +42,14 @@ export const actions = {
     commit('SET_WIDDIG', { wid, dig })
   },
   async emitDoubleshot({ state }) {
+    console.log('[#emitDoubleshot]')
     const { wid, dig } = state
     const { url } = dig
     if (wid && url) {
       dg('emitDoubleshot', { wid, url })
       return await axios.post(EP.SHOT, { wid, url })
+    } else {
+      console.log('[#emitDoubleshot] (SKIP)', { wid, url })
     }
   },
 }

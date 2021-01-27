@@ -29,7 +29,7 @@ import debug from 'debug'
 import InstantImage from '@/components/lobine/InstantImage'
 
 const dg = debug('@:Screenshots')
-const s3bucket = 'https://s3.amazonaws.com/lobine'
+const s3bucket = 'https://d3o218h5wwcfo8.cloudfront.net'
 
 export default {
   components: {
