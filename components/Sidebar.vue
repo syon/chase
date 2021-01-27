@@ -22,7 +22,7 @@
             <div class="label">
               <i class="ion-ios-filing-outline"></i><span>Inbox</span>
             </div>
-            <div class="cnt">{{ filteredCatalog('inbox').length }}</div>
+            <div class="cnt">{{ gPreparedCatalog().length }}</div>
           </clickable>
         </nuxt-link>
       </div>
@@ -32,7 +32,9 @@
             <div class="label">
               <i class="ion-ios-star-outline"></i><span>Favorite</span>
             </div>
-            <div class="cnt">{{ filteredCatalog('favorite').length }}</div>
+            <div class="cnt">
+              {{ gPreparedCatalog({ isFav: true }).length }}
+            </div>
           </clickable>
         </nuxt-link>
       </div>
@@ -45,7 +47,7 @@
               <div class="label">
                 <i class="ion-ios-pricetags-outline"></i><span>{{ tag }}</span>
               </div>
-              <div class="cnt">{{ filteredCatalog('tag', tag).length }}</div>
+              <div class="cnt">{{ gPreparedCatalog({ tag }).length }}</div>
             </clickable>
           </nuxt-link>
         </div>
@@ -97,7 +99,7 @@ export default {
     }),
     ...mapGetters({
       catalogCount: 'chase/catalogCount',
-      filteredCatalog: 'chase/filteredCatalog',
+      gPreparedCatalog: 'chase/gPreparedCatalog',
       recentTags: 'chase/recentTags',
     }),
   },

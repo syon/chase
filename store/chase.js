@@ -33,24 +33,43 @@ export const getters = {
     const s = state.shotSet
     return ChaseUtil.makeCatalog(p, l, h, s)
   },
-  filteredCatalog: (state, getters) => (route, tag, filterTxt) => {
+  gPreparedCatalog: (state, getters) => (query) => {
     const arr = getters.catalog
     let result = arr
-    if (route === 'index') {
+    const { isFav, tag } = query || {}
+    if (!isFav && !tag) {
       result = arr.filter((d) => Object.keys(d.tags).length === 0)
-    } else if (route === 'favorite') {
+    } else if (isFav) {
       result = arr.filter((d) => d.favorite)
-    } else if (route === 'tag') {
+    } else if (tag) {
       const tagged = arr.filter((d) => Object.keys(d.tags).length > 0)
       result = tagged.filter((d) => Object.keys(d.tags).includes(tag))
     }
-    if (filterTxt) {
-      result = result.filter((d) => {
+    return result
+  },
+  filteredCatalog(state, getters, rootState) {
+    let arr = getters.catalog
+    const query = {
+      spell: rootState.stream.filter.spell,
+      isFav: rootState.stream.filter.isFav,
+      tags: rootState.stream.filter.tags,
+    }
+    if (query.spell && query.spell.length >= 3) {
+      arr = arr.filter((d) => {
         const tgt = `${d.title}${d.excerpt}${d.description}${d.site_name}${d.fqdn}`
-        return tgt.toUpperCase().includes(filterTxt.toUpperCase())
+        return tgt.toUpperCase().includes(query.spell.toUpperCase())
       })
     }
-    return result.slice(0, 200)
+    if (query.isFav) {
+      arr = arr.filter((d) => d.favorite)
+    }
+    if (query.tags) {
+      for (const tag of query.tags) {
+        const tagged = arr.filter((d) => Object.keys(d.tags).length > 0)
+        arr = tagged.filter((d) => Object.keys(d.tags).includes(tag))
+      }
+    }
+    return arr.slice(0, 200)
   },
   catalogCount(state, getters) {
     return getters.catalog.length
