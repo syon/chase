@@ -3,7 +3,22 @@
     <article class="page-content">
       <header>
         <sidebar />
-        <input v-model="filterTxt" type="search" placeholder="Filter" />
+        <nav class="d-flex align-center">
+          <v-text-field
+            v-model="filterTxt"
+            label="Filter"
+            dense
+            outlined
+            clearable
+            prepend-icon="mdi-filter-variant"
+            hide-details
+          />
+          <v-checkbox v-model="filterIsFav" hide-details class="mt-0 ml-8">
+            <template #label>
+              <v-icon>mdi-star</v-icon>
+            </template>
+          </v-checkbox>
+        </nav>
       </header>
       <div class="entries">
         <div
@@ -42,6 +57,7 @@ export default {
   computed: {
     ...mapState('stream/filter', {
       spell: (state) => state.spell,
+      isFav: (state) => state.isFav,
     }),
     ...mapGetters({
       filteredCatalog: 'chase/filteredCatalog',
@@ -53,6 +69,14 @@ export default {
       },
       set(v) {
         this.$store.commit('stream/filter/SET_Spell', v)
+      },
+    },
+    filterIsFav: {
+      get() {
+        return this.isFav
+      },
+      set(v) {
+        this.$store.commit('stream/filter/SET_IsFav', v)
       },
     },
   },
