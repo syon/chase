@@ -2,23 +2,7 @@
   <div class="screen page-container">
     <article class="page-content">
       <header>
-        <sidebar />
-        <nav class="d-flex align-center">
-          <v-text-field
-            v-model="filterTxt"
-            label="Filter"
-            dense
-            outlined
-            clearable
-            prepend-icon="mdi-filter-variant"
-            hide-details
-          />
-          <v-checkbox v-model="filterIsFav" hide-details class="mt-0 ml-8">
-            <template #label>
-              <v-icon>mdi-star</v-icon>
-            </template>
-          </v-checkbox>
-        </nav>
+        <filter-toolbar />
       </header>
       <div class="entries">
         <div
@@ -41,44 +25,24 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
-import Sidebar from '@/components/Sidebar'
+import { mapGetters } from 'vuex'
+import FilterToolbar from '@/components/FilterToolbar'
 import Interlude from '@/components/Interlude'
 import Hatebu from '@/components/Hatebu'
 import Entry from '@/components/Entry'
 
 export default {
   components: {
-    Sidebar,
+    FilterToolbar,
     Entry,
     Interlude,
     Hatebu,
   },
   computed: {
-    ...mapState('stream/filter', {
-      spell: (state) => state.spell,
-      isFav: (state) => state.isFav,
-    }),
     ...mapGetters({
       filteredCatalog: 'chase/filteredCatalog',
       entry: 'chase/activeEntry',
     }),
-    filterTxt: {
-      get() {
-        return this.spell
-      },
-      set(v) {
-        this.$store.commit('stream/filter/SET_Spell', v)
-      },
-    },
-    filterIsFav: {
-      get() {
-        return this.isFav
-      },
-      set(v) {
-        this.$store.commit('stream/filter/SET_IsFav', v)
-      },
-    },
   },
 }
 </script>

@@ -15,45 +15,6 @@
       ><span>{{ Math.floor((progress.unread / progress.all) * 100) }}</span
       ><span> %)</span>
     </section>
-    <section v-if="login.accessToken" class="menu">
-      <div class="menu-title">Recent {{ catalogCount }}</div>
-      <div class="link-item">
-        <nuxt-link to="/">
-          <clickable class="menu-item">
-            <div class="label">
-              <i class="ion-ios-filing-outline"></i><span>Inbox</span>
-            </div>
-            <div class="cnt">{{ gPreparedCatalog().length }}</div>
-          </clickable>
-        </nuxt-link>
-      </div>
-      <div class="link-item">
-        <nuxt-link to="/favorite">
-          <clickable class="menu-item">
-            <div class="label">
-              <i class="ion-ios-star-outline"></i><span>Favorite</span>
-            </div>
-            <div class="cnt">
-              {{ gPreparedCatalog({ isFav: true }).length }}
-            </div>
-          </clickable>
-        </nuxt-link>
-      </div>
-    </section>
-    <section class="tags">
-      <template v-for="tag in recentTags">
-        <div :key="tag" class="link-item font-smaller">
-          <nuxt-link :to="{ name: 'tag', params: { tag } }">
-            <clickable class="menu-item">
-              <div class="label">
-                <i class="ion-ios-pricetags-outline"></i><span>{{ tag }}</span>
-              </div>
-              <div class="cnt">{{ gPreparedCatalog({ tag }).length }}</div>
-            </clickable>
-          </nuxt-link>
-        </div>
-      </template>
-    </section>
     <section>
       <div class="misc">
         <div class="link-item font-smaller">
@@ -101,7 +62,6 @@ export default {
     ...mapGetters({
       catalogCount: 'chase/catalogCount',
       gPreparedCatalog: 'chase/gPreparedCatalog',
-      recentTags: 'chase/recentTags',
     }),
   },
   mounted() {
