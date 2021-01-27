@@ -37,9 +37,7 @@ export const getters = {
     const arr = getters.catalog
     let result = arr
     const { isFav, tag } = query || {}
-    if (!isFav && !tag) {
-      result = arr.filter((d) => Object.keys(d.tags).length === 0)
-    } else if (isFav) {
+    if (isFav) {
       result = arr.filter((d) => d.favorite)
     } else if (tag) {
       const tagged = arr.filter((d) => Object.keys(d.tags).length > 0)
@@ -201,9 +199,10 @@ export const actions = {
     await this.$cache.putBulk(entries)
     dispatch('syncDB')
   },
-  async moreEntries({ rootState, dispatch }) {
+  async moreEntries({ state, rootState, dispatch }) {
     const at = rootState.pocket.auth.login.accessToken
-    const options = { count: 1000, detailType: 'complete' }
+    const offset = Object.keys(state.entries).length
+    const options = { count: 1000, detailType: 'complete', offset }
     const json = await LambdaPocket.get(at, options)
     const entries = ChaseUtil.makeEntries(json.list)
     await this.$cache.putBulk(entries)
