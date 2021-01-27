@@ -2,6 +2,7 @@ export const state = () => ({
   spell: '',
   isFav: false,
   tags: [],
+  showMode: 'rack',
 })
 
 export const getters = {}
@@ -15,6 +16,9 @@ export const mutations = {
   },
   SET_Tags(state, tags) {
     state.tags = tags
+  },
+  SET_ShowMode(state, showMode) {
+    state.showMode = showMode
   },
 }
 

@@ -34,7 +34,7 @@
       <div class="pnl-action">
         <div class="hatebu">
           <div class="hatebu-cnt" :style="hatebuCntStyle">
-            {{ hatebuCnt }}
+            {{ obj.hatebuCnt }}
           </div>
         </div>
         <div class="archive">
@@ -64,7 +64,6 @@ export default {
       DEBUG: process.env.NODE_ENV === 'development',
       imgSrc: this.obj.image_s3_url,
       ingArchive: false,
-      hatebuCnt: null,
     }
   },
   computed: {

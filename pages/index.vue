@@ -6,12 +6,17 @@
       </header>
       <div class="entries">
         <div
-          v-for="e in filteredCatalog"
+          v-for="(e, idx) in filteredCatalog"
           :key="e.eid"
           :data-eid="e.eid"
           class="entry"
         >
-          <entry :obj="e"></entry>
+          <template v-if="showMode === 'rack'">
+            <rack-entry :obj="e" />
+          </template>
+          <template v-else-if="showMode === 'slim'">
+            <slim-entry :obj="e" :no="idx + 1" />
+          </template>
         </div>
       </div>
     </article>
@@ -25,20 +30,25 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import FilterToolbar from '@/components/FilterToolbar'
 import Interlude from '@/components/Interlude'
 import Hatebu from '@/components/Hatebu'
-import Entry from '@/components/Entry'
+import RackEntry from '@/components/RackEntry'
+import SlimEntry from '@/components/SlimEntry'
 
 export default {
   components: {
     FilterToolbar,
-    Entry,
+    RackEntry,
+    SlimEntry,
     Interlude,
     Hatebu,
   },
   computed: {
+    ...mapState('stream/filter', {
+      showMode: (state) => state.showMode,
+    }),
     ...mapGetters({
       filteredCatalog: 'chase/filteredCatalog',
       entry: 'chase/activeEntry',

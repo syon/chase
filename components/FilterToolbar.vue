@@ -28,6 +28,16 @@
         hide-details
       />
     </nav>
+    <div>
+      <v-btn-toggle v-model="pickedShowMode" mandatory>
+        <v-btn value="rack">
+          <v-icon>mdi-format-align-left</v-icon>
+        </v-btn>
+        <v-btn value="slim">
+          <v-icon>mdi-format-align-center</v-icon>
+        </v-btn>
+      </v-btn-toggle>
+    </div>
   </div>
 </template>
 
@@ -40,6 +50,7 @@ export default {
       spell: (state) => state.spell,
       isFav: (state) => state.isFav,
       tags: (state) => state.tags,
+      showMode: (state) => state.showMode,
     }),
     ...mapGetters({
       recentTags: 'chase/recentTags',
@@ -66,6 +77,14 @@ export default {
       },
       set(tags) {
         this.$store.commit('stream/filter/SET_Tags', tags)
+      },
+    },
+    pickedShowMode: {
+      get() {
+        return this.showMode
+      },
+      set(v) {
+        this.$store.commit('stream/filter/SET_ShowMode', v)
       },
     },
   },

@@ -61,7 +61,7 @@ export const getters = {
         arr = tagged.filter((d) => Object.keys(d.tags).includes(tag))
       }
     }
-    return arr.slice(0, 200)
+    return arr.slice(0, 100)
   },
   catalogCount(state, getters) {
     return getters.catalog.length
