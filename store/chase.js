@@ -50,7 +50,7 @@ export const getters = {
         return tgt.toUpperCase().includes(filterTxt.toUpperCase())
       })
     }
-    return result.slice(0, 100)
+    return result.slice(0, 200)
   },
   catalogCount(state, getters) {
     return getters.catalog.length
@@ -75,13 +75,6 @@ export const getters = {
     })
     tags = tags.filter((t) => !t.startsWith('chase:'))
     return [...new Set(tags)]
-  },
-  myScenesTags(state) {
-    return [
-      { tag: 'chase:a', label: state.myscenes.a },
-      { tag: 'chase:b', label: state.myscenes.b },
-      { tag: 'chase:c', label: state.myscenes.c },
-    ]
   },
 }
 

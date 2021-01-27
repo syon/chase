@@ -113,7 +113,6 @@ export default {
     ...mapGetters({
       info: 'chase/activeInfo',
       entry: 'chase/activeEntry',
-      scenes: 'chase/myScenesTags',
       recentTags: 'chase/recentTags',
     }),
     linkTitle() {

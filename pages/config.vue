@@ -5,15 +5,6 @@
     </nav>
     <article class="page-content">
       <h2>Config</h2>
-      <section class="scene">
-        <label><span>chase:a</span><input v-model="chaseA" /></label>
-        <hr />
-        <label><span>chase:b</span><input v-model="chaseB" /></label>
-        <hr />
-        <label><span>chase:c</span><input v-model="chaseC" /></label>
-        <hr />
-        <button @click="doSceneEdit">OK</button>
-      </section>
       <section>
         <h3>You</h3>
         <p>
@@ -60,44 +51,17 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import Sidebar from '@/components/Sidebar'
 
 export default {
   components: {
     Sidebar,
   },
-  data() {
-    return {
-      sceneEditing: false,
-      chaseA: null,
-      chaseB: null,
-      chaseC: null,
-    }
-  },
   computed: {
-    ...mapState({
-      login: 'login',
+    ...mapState('pocket/auth', {
+      login: (state) => state.login,
     }),
-    ...mapGetters({
-      myScenesTags: 'chase/myScenesTags',
-    }),
-    mode() {
-      return this.$route.name
-    },
-  },
-  mounted() {
-    this.chaseA = this.myScenesTags[0].label
-    this.chaseB = this.myScenesTags[1].label
-    this.chaseC = this.myScenesTags[2].label
-  },
-  methods: {
-    doSceneEdit() {
-      const scenes = { a: this.chaseA, b: this.chaseB, c: this.chaseC }
-      this.$store.dispatch('doSceneEdit', { $cookie: this.$cookie, scenes })
-      this.sceneEditing = false
-      this.$router.push({ name: 'Inbox' })
-    },
   },
 }
 </script>

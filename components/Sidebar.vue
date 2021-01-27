@@ -22,7 +22,7 @@
             <div class="label">
               <i class="ion-ios-filing-outline"></i><span>Inbox</span>
             </div>
-            <div class="cnt">{{ filteredCatalog('Inbox').length }}</div>
+            <div class="cnt">{{ filteredCatalog('inbox').length }}</div>
           </clickable>
         </nuxt-link>
       </div>
@@ -32,17 +32,7 @@
             <div class="label">
               <i class="ion-ios-star-outline"></i><span>Favorite</span>
             </div>
-            <div class="cnt">{{ filteredCatalog('Favorite').length }}</div>
-          </clickable>
-        </nuxt-link>
-      </div>
-      <div v-for="(sce, idx) in myScenesTags" :key="idx" class="link-item">
-        <nuxt-link to="{ name: 'tag', params: { tag: sce.tag } }">
-          <clickable class="menu-item">
-            <div class="label">
-              <i class="ion-ios-arrow-right"></i><span>{{ sce.label }}</span>
-            </div>
-            <div class="cnt">{{ filteredCatalog('Tag', sce.tag).length }}</div>
+            <div class="cnt">{{ filteredCatalog('favorite').length }}</div>
           </clickable>
         </nuxt-link>
       </div>
@@ -55,7 +45,7 @@
               <div class="label">
                 <i class="ion-ios-pricetags-outline"></i><span>{{ tag }}</span>
               </div>
-              <div class="cnt">{{ filteredCatalog('Tag', tag).length }}</div>
+              <div class="cnt">{{ filteredCatalog('tag', tag).length }}</div>
             </clickable>
           </nuxt-link>
         </div>
@@ -117,7 +107,6 @@ export default {
       catalogCount: 'chase/catalogCount',
       filteredCatalog: 'chase/filteredCatalog',
       recentTags: 'chase/recentTags',
-      myScenesTags: 'chase/myScenesTags',
     }),
   },
   mounted() {
