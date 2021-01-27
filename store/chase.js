@@ -168,30 +168,15 @@ export const actions = {
     $cookie.delete('pocket_username')
     commit('logout')
   },
-  doSceneEdit({ commit, dispatch }, { $cookie, scenes }) {
-    consola.info('doSceneEdit', $cookie, scenes)
-    $cookie.set('chase:a', scenes.a)
-    $cookie.set('chase:b', scenes.b)
-    $cookie.set('chase:c', scenes.c)
-    dispatch('restoreScenes', $cookie)
-  },
-  restoreScenes({ commit, dispatch }, $cookie) {
-    commit('myscenes', {
-      a: $cookie.get('chase:a'),
-      b: $cookie.get('chase:b'),
-      c: $cookie.get('chase:c'),
-    })
-  },
   async actByPhase({ dispatch }, $cookie) {
     const ph = $cookie.get('phase')
     const at = $cookie.get('pocket_access_token')
     consola.info('[actByPhase]', ph)
     if (ph === 'READY' && at) {
       dispatch('pocket/auth/restoreLogin', $cookie, { root: true })
-      await dispatch('restoreEntries')
       await dispatch('fetchEntries')
+      await dispatch('restoreEntries')
       dispatch('fetchProgress')
-      dispatch('restoreScenes', $cookie)
     } else if (ph === 'WAITING_ACCESSTOKEN') {
       await dispatch('getAccessToken', $cookie)
       await dispatch('actByPhase', $cookie)
@@ -214,7 +199,6 @@ export const actions = {
     const json = await LambdaPocket.get(at, options)
     const entries = ChaseUtil.makeEntries(json.list)
     await this.$cache.putBulk(entries)
-    dispatch('restoreEntries')
     dispatch('syncDB')
   },
   async moreEntries({ rootState, dispatch }) {
@@ -297,10 +281,13 @@ export const actions = {
     context.commit('addHatebu', { eid, hatebu })
   },
   async syncDB({ state }) {
-    await this.$cache.putEidWidBulk(state.entries)
+    await this.$cache.prepareJunction()
     await this.$cache.putHatebuBulk()
   },
   async getWidByEid(_, eid) {
     return await this.$cache.getWidByEid(eid)
+  },
+  async deleteDB() {
+    await this.$cache.delete()
   },
 }

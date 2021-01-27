@@ -6,6 +6,7 @@
       </h1>
     </section>
     <button @click="more">more</button>
+    <button @click="deleteDB">deleteDB</button>
     <section v-if="login.accessToken" class="menu">
       <div class="menu-title">Progress</div>
       <span>{{ progress.unread }}</span
@@ -124,6 +125,9 @@ export default {
     },
     more() {
       this.$store.dispatch('chase/moreEntries')
+    },
+    deleteDB() {
+      this.$store.dispatch('chase/deleteDB')
     },
   },
 }
