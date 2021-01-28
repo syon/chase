@@ -20,7 +20,6 @@
         </div>
         <div class="meta">
           <span v-if="obj.site_name" class="site">{{ obj.site_name }}</span>
-          <span v-if="DEBUG">{{ obj.eid }}</span>
         </div>
         <div class="excerpt">{{ obj.excerpt }}</div>
         <template v-if="Object.keys(obj.tags).length > 0">

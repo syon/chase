@@ -6,9 +6,6 @@
       </h1>
     </section>
     <section>
-      {{ catalogCount }}
-    </section>
-    <section>
       <v-btn @click="more">more</v-btn>
       <v-btn @click="deleteDB">deleteDB</v-btn>
     </section>
@@ -52,7 +49,6 @@ export default {
       login: 'login',
     }),
     ...mapGetters({
-      catalogCount: 'chase/catalogCount',
       gPreparedCatalog: 'chase/gPreparedCatalog',
     }),
   },

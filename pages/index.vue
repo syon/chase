@@ -3,10 +3,11 @@
     <article class="page-content">
       <header>
         <filter-toolbar />
+        <summary-bar />
       </header>
       <div class="entries">
         <div
-          v-for="(e, idx) in filteredCatalog"
+          v-for="(e, idx) in gShowingCatalog"
           :key="e.eid"
           :data-eid="e.eid"
           class="entry"
@@ -31,6 +32,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
+import SummaryBar from '@/components/SummaryBar'
 import FilterToolbar from '@/components/FilterToolbar'
 import Interlude from '@/components/Interlude'
 import Hatebu from '@/components/Hatebu'
@@ -39,6 +41,7 @@ import SlimEntry from '@/components/SlimEntry'
 
 export default {
   components: {
+    SummaryBar,
     FilterToolbar,
     RackEntry,
     SlimEntry,
@@ -50,7 +53,7 @@ export default {
       showMode: (state) => state.showMode,
     }),
     ...mapGetters({
-      filteredCatalog: 'chase/filteredCatalog',
+      gShowingCatalog: 'chase/gShowingCatalog',
       entry: 'chase/activeEntry',
     }),
   },
