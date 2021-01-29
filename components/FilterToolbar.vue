@@ -1,39 +1,31 @@
 <template>
-  <div>
-    <sidebar />
-    <v-row>
-      <v-col>
-        <v-checkbox v-model="filterIsFav" hide-details class="mt-0 ml-8">
-          <template #label>
-            <v-icon>mdi-star</v-icon>
-          </template>
-        </v-checkbox>
-      </v-col>
-      <v-col>
-        <v-text-field
-          v-model="filterTxt"
-          label="Filter"
-          dense
-          outlined
-          clearable
-          prepend-icon="mdi-filter-variant"
-          hide-details
-        />
-      </v-col>
-      <v-col>
-        <v-select
-          v-model="pickedTags"
-          :items="recentTags"
-          chips
-          clearable
-          label="Tags"
-          multiple
-          outlined
-          dense
-          hide-details
-        />
-      </v-col>
-    </v-row>
+  <div v-if="isFiltering" class="d-flex px-8 py-4">
+    <v-checkbox v-model="filterIsFav" hide-details class="mt-0 mr-6">
+      <template #label>
+        <v-icon>mdi-star</v-icon>
+      </template>
+    </v-checkbox>
+    <v-text-field
+      v-model="filterTxt"
+      label="Filter"
+      dense
+      outlined
+      clearable
+      prepend-icon="mdi-filter-variant"
+      hide-details
+      class="mx-6"
+    />
+    <v-select
+      v-model="pickedTags"
+      :items="recentTags"
+      chips
+      clearable
+      label="Tags"
+      multiple
+      outlined
+      dense
+      hide-details
+    />
   </div>
 </template>
 
@@ -47,6 +39,7 @@ export default {
       isFav: (state) => state.isFav,
       tags: (state) => state.tags,
       showMode: (state) => state.showMode,
+      isFiltering: (state) => state.isFiltering,
     }),
     ...mapGetters({
       recentTags: 'chase/recentTags',

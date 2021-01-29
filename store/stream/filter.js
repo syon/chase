@@ -3,6 +3,7 @@ export const state = () => ({
   isFav: false,
   tags: [],
   showMode: 'rack',
+  isFiltering: false,
 })
 
 export const getters = {}
@@ -19,6 +20,9 @@ export const mutations = {
   },
   SET_ShowMode(state, showMode) {
     state.showMode = showMode
+  },
+  SET_IsFiltering(state, isFiltering) {
+    state.isFiltering = isFiltering
   },
 }
 

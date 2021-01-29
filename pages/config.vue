@@ -1,7 +1,8 @@
 <template>
   <div class="screen page-container">
     <nav class="page-nav">
-      <sidebar></sidebar>
+      <v-btn @click="more">more</v-btn>
+      <v-btn @click="deleteDB">deleteDB</v-btn>
     </nav>
     <article class="page-content">
       <h2>Config</h2>
@@ -52,16 +53,20 @@
 
 <script>
 import { mapState } from 'vuex'
-import Sidebar from '@/components/Sidebar'
 
 export default {
-  components: {
-    Sidebar,
-  },
   computed: {
     ...mapState('pocket/auth', {
       login: (state) => state.login,
     }),
+  },
+  methods: {
+    more() {
+      this.$store.dispatch('chase/moreEntries')
+    },
+    deleteDB() {
+      this.$store.dispatch('chase/deleteDB')
+    },
   },
 }
 </script>

@@ -1,38 +1,32 @@
 <template>
-  <div class="sidebar">
+  <div class="appbar my-2">
     <section>
       <h1 class="logo">
         <a href="/"><img src="~/assets/logo.png" alt="Chase" /></a>
       </h1>
     </section>
-    <section>
-      <v-btn @click="more">more</v-btn>
-      <v-btn @click="deleteDB">deleteDB</v-btn>
-    </section>
-    <section>
-      <div class="misc">
-        <div class="link-item font-smaller">
-          <a href="https://getpocket.com/" target="_blank">
-            <clickable class="menu-item">
-              <div class="label">
-                <i class="ion-ios-world-outline"></i><span>Pocket</span>
-              </div>
-            </clickable>
-          </a>
-        </div>
+    <div class="misc">
+      <div class="link-item font-smaller">
+        <a href="https://getpocket.com/" target="_blank">
+          <clickable class="menu-item">
+            <div class="label">
+              <i class="ion-ios-world-outline"></i><span>Pocket</span>
+            </div>
+          </clickable>
+        </a>
       </div>
-      <div class="config">
-        <div class="link-item font-smaller">
-          <nuxt-link to="/config">
-            <clickable class="menu-item">
-              <div class="label">
-                <i class="ion-ios-settings"></i><span>Config</span>
-              </div>
-            </clickable>
-          </nuxt-link>
-        </div>
+    </div>
+    <div class="config">
+      <div class="link-item font-smaller">
+        <nuxt-link to="/config">
+          <clickable class="menu-item">
+            <div class="label">
+              <i class="ion-ios-settings"></i><span>Config</span>
+            </div>
+          </clickable>
+        </nuxt-link>
       </div>
-    </section>
+    </div>
   </div>
 </template>
 
@@ -71,18 +65,12 @@ export default {
       this.$store.dispatch('chase/logout', this.$cookie)
       this.$router.push({ path: '/welcome' })
     },
-    more() {
-      this.$store.dispatch('chase/moreEntries')
-    },
-    deleteDB() {
-      this.$store.dispatch('chase/deleteDB')
-    },
   },
 }
 </script>
 
 <style lang="scss" scoped>
-.sidebar {
+.appbar {
   display: flex;
   justify-content: space-between;
 }
