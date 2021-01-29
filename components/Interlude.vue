@@ -31,7 +31,6 @@
           <v-btn
             v-if="entry.favorite"
             icon
-            class="c-favorite"
             color="orange"
             :loading="ingFavorite"
             @click.native="mUnfavorite(entry.eid)"
@@ -40,7 +39,6 @@
           </v-btn>
           <v-btn
             v-else
-            class="c-favorite"
             icon
             color="grey"
             :loading="ingFavorite"

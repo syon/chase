@@ -2,7 +2,7 @@
   <div v-if="isFiltering" class="d-flex px-8 py-4">
     <v-checkbox v-model="filterIsFav" hide-details class="mt-0 mr-6">
       <template #label>
-        <v-icon>mdi-star</v-icon>
+        <v-icon color="orange">mdi-star</v-icon>
       </template>
     </v-checkbox>
     <v-text-field

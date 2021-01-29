@@ -36,6 +36,11 @@
             {{ obj.hatebuCnt }}
           </div>
         </div>
+        <div class="favorite">
+          <template v-if="obj.favorite">
+            <v-icon small color="orange">mdi-star</v-icon>
+          </template>
+        </div>
         <div class="archive">
           <v-btn
             icon
