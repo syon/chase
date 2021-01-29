@@ -1,27 +1,20 @@
 <template>
   <div class="d-flex align-center justify-space-between">
-    <div class="cc-bar-left d-flex">
-      <div class="d-flex align-center mr-4">
-        <v-icon color="grey" class="mr-1">mdi-view-list-outline</v-icon>
-        {{ entryCountLabel }}
-      </div>
-      <div>
-        <v-btn icon @click="handleFiltering">
-          <v-icon :color="isFiltering ? 'primary' : null">mdi-filter</v-icon>
-        </v-btn>
-      </div>
+    <div class="d-flex align-center mr-4">
+      <v-icon color="grey" class="mr-1">mdi-view-list-outline</v-icon>
+      {{ entryCountLabel }}
     </div>
-
-    <div class="cc-bar-right">
-      <v-btn-toggle v-model="pickedShowMode" mandatory>
-        <v-btn value="rack" small>
-          <v-icon small>mdi-format-align-left</v-icon>
-        </v-btn>
-        <v-btn value="slim" small>
-          <v-icon small>mdi-format-align-center</v-icon>
-        </v-btn>
-      </v-btn-toggle>
-    </div>
+    <v-btn icon class="mr-4" @click="handleFiltering">
+      <v-icon :color="isFiltering ? 'primary' : null">mdi-filter</v-icon>
+    </v-btn>
+    <v-btn-toggle v-model="pickedShowMode" mandatory>
+      <v-btn value="rack" small>
+        <v-icon small>mdi-format-list-bulleted-square</v-icon>
+      </v-btn>
+      <v-btn value="slim" small>
+        <v-icon small>mdi-format-align-justify</v-icon>
+      </v-btn>
+    </v-btn-toggle>
   </div>
 </template>
 

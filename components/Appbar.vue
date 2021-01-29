@@ -5,6 +5,9 @@
         <a href="/"><img src="~/assets/logo.png" alt="Chase" /></a>
       </h1>
     </section>
+    <section>
+      <summary-bar />
+    </section>
     <section class="d-flex">
       <div class="misc">
         <v-btn href="https://getpocket.com/" target="_blank" text small>
@@ -23,11 +26,11 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import Clickable from '@/components/Clickable'
+import SummaryBar from '@/components/SummaryBar'
 
 export default {
   components: {
-    Clickable,
+    SummaryBar,
   },
   computed: {
     ...mapState('pocket/auth', {

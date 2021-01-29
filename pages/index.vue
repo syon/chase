@@ -3,7 +3,6 @@
     <article class="page-content">
       <header>
         <appbar />
-        <summary-bar />
         <filter-toolbar />
       </header>
       <div class="entries">
@@ -34,7 +33,6 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import Appbar from '@/components/Appbar'
-import SummaryBar from '@/components/SummaryBar'
 import FilterToolbar from '@/components/FilterToolbar'
 import Interlude from '@/components/Interlude'
 import Hatebu from '@/components/Hatebu'
@@ -44,7 +42,6 @@ import SlimEntry from '@/components/SlimEntry'
 export default {
   components: {
     Appbar,
-    SummaryBar,
     FilterToolbar,
     RackEntry,
     SlimEntry,
