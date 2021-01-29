@@ -46,7 +46,7 @@
             icon
             x-small
             :loading="ingArchive"
-            :disabled="obj.archived"
+            :disabled="isArchived"
             class="c-archive"
             @click="mArchive(obj.eid)"
           >
@@ -68,6 +68,7 @@ export default {
       DEBUG: process.env.NODE_ENV === 'development',
       imgSrc: this.obj.image_s3_url,
       ingArchive: false,
+      nowArchived: false,
     }
   },
   computed: {
@@ -76,12 +77,15 @@ export default {
     }),
     compoClasses() {
       return {
-        archived: this.obj.archived,
+        archived: this.isArchived || this.nowArchived,
         active: this.obj.eid === this.activeEid,
       }
     },
     linkTitle() {
       return this.obj.title ? this.obj.title : this.obj.url
+    },
+    isArchived() {
+      return this.obj.status === '1' || this.nowArchived
     },
     hatebuCntStyle() {
       const cnt = this.obj.hatebuCnt
@@ -114,6 +118,7 @@ export default {
     async mArchive(eid) {
       this.ingArchive = true
       await this.$store.dispatch('chase/archive', eid)
+      this.nowArchived = true
       this.ingArchive = false
     },
   },

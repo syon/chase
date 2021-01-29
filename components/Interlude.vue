@@ -27,7 +27,7 @@
             v-else
             icon
             color="grey"
-            :loading="ingFavorite"
+            :loading="ingArchive"
             @click.native="mArchive(entry.eid)"
           >
             <v-icon>mdi-check</v-icon>

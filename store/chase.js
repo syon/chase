@@ -205,9 +205,9 @@ export const actions = {
   },
   async archive({ commit, rootState }, eid) {
     const at = rootState.pocket.auth.login.accessToken
-    const json = await LambdaPocket.archive(at, eid)
-    consola.info(json.status === 1)
+    await LambdaPocket.archive(at, eid)
     commit('archive', { eid })
+    await this.$cache.archive(eid)
   },
   async addTag({ commit, rootState }, { eid, tag }) {
     const at = rootState.pocket.auth.login.accessToken
