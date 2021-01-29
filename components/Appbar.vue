@@ -5,28 +5,19 @@
         <a href="/"><img src="~/assets/logo.png" alt="Chase" /></a>
       </h1>
     </section>
-    <div class="misc">
-      <div class="link-item font-smaller">
-        <a href="https://getpocket.com/" target="_blank">
-          <clickable class="menu-item">
-            <div class="label">
-              <i class="ion-ios-world-outline"></i><span>Pocket</span>
-            </div>
-          </clickable>
-        </a>
+    <section class="d-flex">
+      <div class="misc">
+        <v-btn href="https://getpocket.com/" target="_blank" text small>
+          <v-icon small>mdi-web</v-icon>
+          <span>Pocket</span>
+        </v-btn>
       </div>
-    </div>
-    <div class="config">
-      <div class="link-item font-smaller">
-        <nuxt-link to="/config">
-          <clickable class="menu-item">
-            <div class="label">
-              <i class="ion-ios-settings"></i><span>Config</span>
-            </div>
-          </clickable>
-        </nuxt-link>
+      <div class="config">
+        <v-btn text small>
+          <v-icon small>mdi-cog</v-icon>
+        </v-btn>
       </div>
-    </div>
+    </section>
   </div>
 </template>
 
