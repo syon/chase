@@ -71,7 +71,9 @@ export default {
     }
   },
   computed: {
-    ...mapState(['activeEid']),
+    ...mapState('chase', {
+      activeEid: (state) => state.activeEid,
+    }),
     compoClasses() {
       return {
         archived: this.obj.archived,

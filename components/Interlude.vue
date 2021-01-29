@@ -19,14 +19,20 @@
       <div class="desc">{{ entry.description }}</div>
       <hr />
       <div class="action">
-        <icon-button
-          class="c-archive"
-          icon="ion-ios-checkmark-empty"
-          :loading="ingArchive"
-          :disabled="entry.archived"
-          icon-disabled="ion-ios-checkmark"
-          @click.native="mArchive(entry.eid)"
-        ></icon-button>
+        <div class="archive">
+          <v-btn v-if="entry.archived" icon color="primary">
+            <v-icon>mdi-check</v-icon>
+          </v-btn>
+          <v-btn
+            v-else
+            icon
+            color="grey"
+            :loading="ingFavorite"
+            @click.native="mArchive(entry.eid)"
+          >
+            <v-icon>mdi-check</v-icon>
+          </v-btn>
+        </div>
         <div class="fav">
           <v-btn
             v-if="entry.favorite"
@@ -44,7 +50,7 @@
             :loading="ingFavorite"
             @click.native="mFavorite(entry.eid)"
           >
-            <v-icon>mdi-star</v-icon>
+            <v-icon>mdi-star-outline</v-icon>
           </v-btn>
         </div>
         <div class="c-added">{{ entry.added }}</div>
