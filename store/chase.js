@@ -46,7 +46,7 @@ export const getters = {
       isFav: rootState.stream.filter.isFav,
       tags: rootState.stream.filter.tags,
     }
-    if (query.spell && query.spell.length >= 3) {
+    if (query.spell) {
       arr = arr.filter((d) => {
         const tgt = `${d.title}${d.excerpt}${d.description}${d.site_name}${d.fqdn}`
         return tgt.toUpperCase().includes(query.spell.toUpperCase())
