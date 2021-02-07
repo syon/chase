@@ -15,6 +15,11 @@
           <span>Pocket</span>
         </v-btn>
       </div>
+      <div>
+        <v-btn text small @click="handleCloudSync">
+          <v-icon small>mdi-cloud-sync</v-icon>
+        </v-btn>
+      </div>
       <div class="config">
         <v-btn text small>
           <v-icon small>mdi-cog</v-icon>
@@ -58,6 +63,9 @@ export default {
     logout() {
       this.$store.dispatch('chase/logout', this.$cookie)
       this.$router.push({ path: '/welcome' })
+    },
+    handleCloudSync() {
+      this.$store.dispatch('chase/fetchAllEntries')
     },
   },
 }

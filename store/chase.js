@@ -166,8 +166,8 @@ export const actions = {
     consola.info('[actByPhase]', ph)
     if (ph === 'READY' && at) {
       dispatch('pocket/auth/restoreLogin', $cookie, { root: true })
-      await dispatch('fetchEntries')
-      await dispatch('restoreEntries')
+      await dispatch('restore100Entries')
+      await dispatch('fetchEntries').then(dispatch('restoreAllEntries'))
     } else if (ph === 'WAITING_ACCESSTOKEN') {
       await dispatch('getAccessToken', $cookie)
       await dispatch('actByPhase', $cookie)
@@ -175,26 +175,61 @@ export const actions = {
       dispatch('logout', $cookie)
     }
   },
-  async restoreEntries({ commit }) {
+  async restore100Entries({ commit }) {
+    consola.info('[#restore100Entries]')
+    const entries = await this.$cache.selectCachedLatest100()
+    commit('MERGE_Entries', entries)
+  },
+  async restoreAllEntries({ commit }) {
+    consola.info('[#restoreAllEntries]')
     const entries = await this.$cache.selectAll()
     commit('MERGE_Entries', entries)
   },
-  async fetchEntries({ rootState, dispatch }) {
+  async fetchEntries({ commit, rootState, dispatch }) {
+    consola.info('[#fetchEntries]')
     const at = rootState.pocket.auth.login.accessToken
-    const options = { count: 100, detailType: 'complete' }
+    const options = { state: 'unread', count: 100, detailType: 'complete' }
     const json = await LambdaPocket.get(at, options)
     const entries = ChaseUtil.makeEntries(json.list)
+    commit('MERGE_Entries', entries)
     await this.$cache.putBulk(entries)
+    dispatch('syncDB')
+  },
+  async fetchAllEntries({ state, rootState, dispatch }) {
+    const at = rootState.pocket.auth.login.accessToken
+    let offset = Object.keys(state.entries).length
+    while (true) {
+      const options = {
+        state: 'unread',
+        count: 1000,
+        detailType: 'complete',
+        offset,
+      }
+      const json = await LambdaPocket.get(at, options)
+      const resultCount = Object.keys(json.list).length
+      const entries = ChaseUtil.makeEntries(json.list)
+      await this.$cache.putBulk(entries)
+      if (resultCount < 1000) {
+        break
+      }
+      offset = offset + resultCount
+    }
+    dispatch('restoreAllEntries')
     dispatch('syncDB')
   },
   async moreEntries({ state, rootState, dispatch }) {
     const at = rootState.pocket.auth.login.accessToken
     const offset = Object.keys(state.entries).length
-    const options = { count: 1000, detailType: 'complete', offset }
+    const options = {
+      state: 'unread',
+      count: 1000,
+      detailType: 'complete',
+      offset,
+    }
     const json = await LambdaPocket.get(at, options)
     const entries = ChaseUtil.makeEntries(json.list)
     await this.$cache.putBulk(entries)
-    dispatch('restoreEntries')
+    dispatch('restoreAllEntries')
     dispatch('syncDB')
   },
   async activate({ commit, dispatch }, entry) {
