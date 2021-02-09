@@ -30,6 +30,10 @@ module.exports.pocketSendTagsAdd = (params) => {
   return Pocket.send.tagsAdd(params.access_token, params)
 }
 
+module.exports.pocketSendTagsClear = (params) => {
+  return Pocket.send.tagsClear(params.access_token, params)
+}
+
 module.exports.pocketProgress = (params) => {
   const funcU = Pocket.get(params.access_token, { state: 'unread' })
   const funcA = Pocket.get(params.access_token, { state: 'archive' })

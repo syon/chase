@@ -104,6 +104,13 @@ module.exports.pocketSendTagsAdd = (event, context, callback) => {
     .catch((e) => callback(null, failure(e)))
 }
 
+module.exports.pocketSendTagsClear = (event, context, callback) => {
+  const params = event.queryStringParameters
+  return PocketAdaptor.pocketSendTagsClear(params)
+    .then((r) => callback(null, success(r)))
+    .catch((e) => callback(null, failure(e)))
+}
+
 module.exports.userlogin = (event, context, callback) => {
   const params = JSON.parse(event.body)
   return UserAdaptor.login(params)
