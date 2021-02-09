@@ -151,6 +151,11 @@ export const mutations = {
     const entry = state.entries[eid]
     entry.tags = { ...entry.tags, [tag]: { item_id: eid, tag } }
   },
+  clearTags(state, payload) {
+    const { eid } = payload
+    const entry = state.entries[eid]
+    entry.tags = {}
+  },
 }
 
 export const actions = {
@@ -244,10 +249,17 @@ export const actions = {
     commit('archive', { eid })
     await this.$cache.archive(eid)
   },
-  async addTag({ commit, rootState }, { eid, tag }) {
+  async addTag({ commit, rootState }, { eid, tags }) {
     const at = rootState.pocket.auth.login.accessToken
-    await LambdaPocket.addTag(at, eid, tag)
-    commit('addTag', { eid, tag })
+    await LambdaPocket.addTag(at, eid, tags)
+    for (const tag of tags) {
+      commit('addTag', { eid, tag })
+    }
+  },
+  async clearTags({ commit, rootState }, { eid }) {
+    const at = rootState.pocket.auth.login.accessToken
+    await LambdaPocket.clearTags(at, eid)
+    commit('clearTags', { eid })
   },
   async favorite({ commit, rootState }, eid) {
     const at = rootState.pocket.auth.login.accessToken

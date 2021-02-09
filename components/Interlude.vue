@@ -57,14 +57,16 @@
       </div>
       <hr />
       <div class="tags">
-        <clickable
-          v-for="tag in recentTags"
-          :key="tag"
-          class="tag"
-          :class="{ applied: Object.keys(entry.tags).includes(tag) }"
-          @click.native="handleTagClick(tag)"
-          >{{ tag }}</clickable
-        >
+        <v-autocomplete
+          v-model="appliedTags"
+          :items="recentTags"
+          outlined
+          dense
+          chips
+          small-chips
+          label="Tags"
+          multiple
+        />
       </div>
       <div class="newtag">
         <input
@@ -81,16 +83,12 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
-import IconButton from '@/components/IconButton'
-import Clickable from '@/components/Clickable'
+import { mapGetters } from 'vuex'
 import FitImage from '@/components/FitImage'
 import Screenshots from '@/components/lobine/Screenshots'
 
 export default {
   components: {
-    IconButton,
-    Clickable,
     FitImage,
     Screenshots,
   },
@@ -113,6 +111,22 @@ export default {
       const { eid } = this.entry
       return `https://s3.amazonaws.com/syon-chase/shots/${eid}/mobile.png`
     },
+    appliedTags: {
+      get() {
+        return Object.keys(this.entry.tags)
+      },
+      async set(tags) {
+        const eid = this.entry.eid
+        const cnt = Object.keys(this.entry.tags).length
+        if (tags.length > cnt) {
+          const tag = tags.slice().pop()
+          await this.$store.dispatch('chase/addTag', { eid, tags: [tag] })
+        } else {
+          await this.$store.dispatch('chase/clearTags', { eid })
+          await this.$store.dispatch('chase/addTag', { eid, tags })
+        }
+      },
+    },
   },
   watch: {
     entry() {
@@ -121,16 +135,6 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['addTag']),
-    handleTagClick(tag) {
-      if (Object.keys(this.entry.tags).includes(tag)) {
-        return
-      }
-      const eid = this.entry.eid
-      this.$store.dispatch('addTag', { eid, tag }).then(() => {
-        this.entry.tags[tag] = { item_id: eid, tag }
-      })
-    },
     handleNewTag() {
       this.handleTagClick(this.newtag)
     },
