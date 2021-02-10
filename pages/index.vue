@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="area-page">
     <v-container fluid>
       <v-row>
         <v-col cols="6">
@@ -7,16 +7,18 @@
             <appbar />
             <filter-toolbar />
           </header>
-          <v-list>
-            <template v-for="e in gShowingCatalog" :data-eid="e.eid">
-              <template v-if="showMode === 'rack'">
-                <rack-entry :key="e.eid" :obj="e" />
+          <v-card>
+            <v-list>
+              <template v-for="e in gShowingCatalog" :data-eid="e.eid">
+                <template v-if="showMode === 'rack'">
+                  <rack-entry :key="e.eid" :obj="e" />
+                </template>
+                <template v-else-if="showMode === 'slim'">
+                  <slim-entry :key="e.eid" :obj="e" :no="idx + 1" />
+                </template>
               </template>
-              <template v-else-if="showMode === 'slim'">
-                <slim-entry :key="e.eid" :obj="e" :no="idx + 1" />
-              </template>
-            </template>
-          </v-list>
+            </v-list>
+          </v-card>
         </v-col>
         <v-col cols="6">
           <v-container class="area-lobby">
@@ -66,6 +68,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.area-page {
+  background-color: #f9fafb;
+}
+
 .area-lobby {
   position: fixed;
   width: inherit;
