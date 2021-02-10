@@ -76,21 +76,21 @@
         />
       </div>
     </section>
-    <section class="area-screenshots">
+    <!-- <section class="area-screenshots">
       <screenshots :wid="info.wid" />
-    </section>
+    </section> -->
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import FitImage from '@/components/FitImage'
-import Screenshots from '@/components/lobine/Screenshots'
+// import Screenshots from '@/components/lobine/Screenshots'
 
 export default {
   components: {
     FitImage,
-    Screenshots,
+    // Screenshots,
   },
   data: () => ({
     newtag: '',
@@ -167,7 +167,7 @@ export default {
 
 <style lang="scss" scoped>
 .interlude {
-  position: fixed;
+  // position: fixed;
   width: inherit;
   height: 100vh;
   padding: 0 15px;

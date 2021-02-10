@@ -88,7 +88,7 @@ export default {
 
 <style lang="scss" scoped>
 .hatebu {
-  position: fixed;
+  // position: fixed;
   width: inherit;
   height: 100vh;
   display: flex;

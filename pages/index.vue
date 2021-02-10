@@ -1,32 +1,37 @@
 <template>
-  <div class="screen page-container">
-    <article class="page-content">
-      <header>
-        <appbar />
-        <filter-toolbar />
-      </header>
-      <div class="entries">
-        <div
-          v-for="(e, idx) in gShowingCatalog"
-          :key="e.eid"
-          :data-eid="e.eid"
-          class="entry"
-        >
-          <template v-if="showMode === 'rack'">
-            <rack-entry :obj="e" />
-          </template>
-          <template v-else-if="showMode === 'slim'">
-            <slim-entry :obj="e" :no="idx + 1" />
-          </template>
-        </div>
-      </div>
-    </article>
-    <section class="page-interlude">
-      <interlude v-if="entry.eid"></interlude>
-    </section>
-    <section class="page-hatebu">
-      <hatebu v-if="entry.eid"></hatebu>
-    </section>
+  <div>
+    <v-container fluid>
+      <v-row>
+        <v-col cols="6">
+          <header>
+            <appbar />
+            <filter-toolbar />
+          </header>
+          <v-list>
+            <template v-for="e in gShowingCatalog" :data-eid="e.eid">
+              <template v-if="showMode === 'rack'">
+                <rack-entry :key="e.eid" :obj="e" />
+              </template>
+              <template v-else-if="showMode === 'slim'">
+                <slim-entry :key="e.eid" :obj="e" :no="idx + 1" />
+              </template>
+            </template>
+          </v-list>
+        </v-col>
+        <v-col cols="6">
+          <v-container class="area-lobby">
+            <v-row>
+              <v-col cols="6">
+                <interlude v-if="entry.eid" />
+              </v-col>
+              <v-col cols="6">
+                <hatebu v-if="entry.eid" />
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
@@ -61,21 +66,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.page-container {
-  width: 100%;
-  display: flex;
-
-  .page-content {
-    flex: 1;
-    padding: 0 15px;
-  }
-
-  .page-interlude {
-    width: 320px;
-  }
-
-  .page-hatebu {
-    width: 320px;
-  }
+.area-lobby {
+  position: fixed;
+  width: inherit;
+  max-width: inherit;
 }
 </style>
