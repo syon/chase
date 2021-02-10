@@ -7,6 +7,7 @@ import LambdaLibra from '@/lib/LambdaLibra'
 import LambdaPocket from '@/lib/LambdaPocket'
 
 const initialState = {
+  ping: 0,
   entries: {},
   libraInfo: {},
   hatebuCntSet: {},
@@ -21,6 +22,7 @@ export const state = () => JSON.parse(JSON.stringify(initialState))
 
 export const getters = {
   catalog(state) {
+    if (state.ping);
     const p = state.entries
     const l = state.libraInfo
     const h = state.hatebuCntSet
@@ -93,6 +95,10 @@ export const getters = {
 }
 
 export const mutations = {
+  SET_Ping(state) {
+    consola.info('[#PING]')
+    state.ping = new Date().getTime()
+  },
   SET_Entries(state, newEntries) {
     state.entries = newEntries
   },
@@ -182,8 +188,8 @@ export const actions = {
   },
   async restore100Entries({ commit }) {
     consola.info('[#restore100Entries]')
-    const entries = await this.$cache.selectCachedLatest100()
-    commit('MERGE_Entries', entries)
+    const catalog = await ChaseUtil.coordinateCatalogLatest100()
+    commit('MERGE_Entries', catalog)
   },
   async restoreAllEntries({ commit }) {
     consola.info('[#restoreAllEntries]')
@@ -195,9 +201,10 @@ export const actions = {
     const at = rootState.pocket.auth.login.accessToken
     const options = { state: 'unread', count: 100, detailType: 'complete' }
     const json = await LambdaPocket.get(at, options)
-    const entries = ChaseUtil.makeEntries(json.list)
-    commit('MERGE_Entries', entries)
-    await this.$cache.putBulk(entries)
+    const pktDict = ChaseUtil.makeEntries(json.list)
+    await this.$cache.putPocketDict(pktDict)
+    await this.$cache.prepareDigTable()
+    dispatch('restore100Entries')
     dispatch('syncDB')
   },
   async fetchAllEntries({ state, rootState, dispatch }) {
@@ -310,10 +317,11 @@ export const actions = {
     context.commit('addHatebu', { eid, hatebu })
   },
   async syncDB({ commit }) {
-    await this.$cache.prepareJunction()
+    await this.$cache.prepareDigTable()
     await this.$cache.putHatebuBulk()
     const hatebuCntSet = await this.$cache.getHatebuCntSet()
     commit('SET_HatebuCntSet', hatebuCntSet)
+    commit('SET_Ping')
   },
   async getWidByEid(_, eid) {
     return await this.$cache.getWidByEid(eid)

@@ -21,7 +21,7 @@
         <div class="meta">
           <span v-if="obj.site_name" class="site">{{ obj.site_name }}</span>
         </div>
-        <div class="excerpt">{{ obj.excerpt }}</div>
+        <div class="description">{{ obj.description }}</div>
         <template v-if="Object.keys(obj.tags).length > 0">
           <div class="tags">
             <span v-for="tag in Object.keys(obj.tags)" :key="tag" class="tag">
@@ -208,7 +208,8 @@ export default {
     margin-right: 1em;
   }
 
-  .excerpt {
+  .excerpt,
+  .description {
     font-size: 0.67em;
     -webkit-line-clamp: 2;
     display: -webkit-box;
