@@ -179,8 +179,8 @@ export const actions = {
     dg('[actByPhase]', ph)
     if (ph === 'READY' && at) {
       dispatch('pocket/auth/restoreLogin', $cookie, { root: true })
-      await dispatch('restore100Entries')
-      await dispatch('fetchEntries').then(dispatch('restoreAllEntries'))
+      await dispatch('restoreRecentEntries')
+      dispatch('backgroundProcess')
     } else if (ph === 'WAITING_ACCESSTOKEN') {
       await dispatch('getAccessToken', $cookie)
       await dispatch('actByPhase', $cookie)
@@ -188,15 +188,19 @@ export const actions = {
       dispatch('logout', $cookie)
     }
   },
-  async restore100Entries({ commit }) {
-    dg('[#restore100Entries]')
-    const catalog = await ChaseUtil.coordinateCatalogLatest100()
+  async restoreRecentEntries({ commit }) {
+    dg('[#restoreRecentEntries]')
+    const catalog = await ChaseUtil.coordinateRecentCatalog()
     commit('MERGE_Entries', catalog)
+  },
+  backgroundProcess({ dispatch }) {
+    dg('[#backgroundProcess]')
+    dispatch('fetchEntries').then(dispatch('restoreAllEntries'))
   },
   async restoreAllEntries({ commit }) {
     dg('[#restoreAllEntries]')
-    const entries = await this.$cache.selectAll()
-    commit('MERGE_Entries', entries)
+    const catalog = await ChaseUtil.coordinateAllCatalog()
+    commit('MERGE_Entries', catalog)
   },
   async fetchEntries({ commit, rootState, dispatch }) {
     dg('[#fetchEntries]')
@@ -206,7 +210,7 @@ export const actions = {
     const pktDict = ChaseUtil.makeEntries(json.list)
     await this.$cache.putPocketDict(pktDict)
     await this.$cache.prepareDigTable()
-    dispatch('restore100Entries')
+    dispatch('restoreRecentEntries')
     dispatch('syncDB')
   },
   async fetchAllEntries({ state, rootState, dispatch }) {
