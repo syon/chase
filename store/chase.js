@@ -1,10 +1,12 @@
-import consola from 'consola/src/browser'
+import Debug from 'debug'
 
 import ChaseUtil from '@/lib/ChaseUtil'
 import Hatebu from '@/lib/Hatebu'
 import LambdaShot from '@/lib/LambdaShot'
 import LambdaLibra from '@/lib/LambdaLibra'
 import LambdaPocket from '@/lib/LambdaPocket'
+
+const dg = Debug('@:$:chase')
 
 const initialState = {
   ping: 0,
@@ -96,7 +98,7 @@ export const getters = {
 
 export const mutations = {
   SET_Ping(state) {
-    consola.info('[#PING]')
+    dg('[#PING]')
     state.ping = new Date().getTime()
   },
   SET_Entries(state, newEntries) {
@@ -174,7 +176,7 @@ export const actions = {
   async actByPhase({ dispatch }, $cookie) {
     const ph = $cookie.get('phase')
     const at = $cookie.get('pocket_access_token')
-    consola.info('[actByPhase]', ph)
+    dg('[actByPhase]', ph)
     if (ph === 'READY' && at) {
       dispatch('pocket/auth/restoreLogin', $cookie, { root: true })
       await dispatch('restore100Entries')
@@ -187,17 +189,17 @@ export const actions = {
     }
   },
   async restore100Entries({ commit }) {
-    consola.info('[#restore100Entries]')
+    dg('[#restore100Entries]')
     const catalog = await ChaseUtil.coordinateCatalogLatest100()
     commit('MERGE_Entries', catalog)
   },
   async restoreAllEntries({ commit }) {
-    consola.info('[#restoreAllEntries]')
+    dg('[#restoreAllEntries]')
     const entries = await this.$cache.selectAll()
     commit('MERGE_Entries', entries)
   },
   async fetchEntries({ commit, rootState, dispatch }) {
-    consola.info('[#fetchEntries]')
+    dg('[#fetchEntries]')
     const at = rootState.pocket.auth.login.accessToken
     const options = { state: 'unread', count: 100, detailType: 'complete' }
     const json = await LambdaPocket.get(at, options)
@@ -271,13 +273,13 @@ export const actions = {
   async favorite({ commit, rootState }, eid) {
     const at = rootState.pocket.auth.login.accessToken
     const json = await LambdaPocket.favorite(at, eid)
-    consola.info('[favorite]', json)
+    dg('[favorite]', json)
     commit('favorite', { eid })
   },
   async unfavorite({ commit, rootState }, eid) {
     const at = rootState.pocket.auth.login.accessToken
     const json = await LambdaPocket.unfavorite(at, eid)
-    consola.info('[unfavorite]', json)
+    dg('[unfavorite]', json)
     commit('unfavorite', { eid })
   },
   fetchLibraS3(context, entry) {
@@ -287,7 +289,7 @@ export const actions = {
         context.commit('addLibraInfo', { eid, pageinfo })
       })
       .catch(() => {
-        consola.info('First scraping for S3...', eid)
+        dg('First scraping for S3...', eid)
         context.dispatch('fetchLibraInfo', entry)
       })
   },
@@ -299,9 +301,9 @@ export const actions = {
   fetchLibraThumb(context, payload) {
     // eslint-disable-next-line camelcase
     const { eid, url, image_suggested } = payload
-    consola.info('[fetchLibraThumb]>>>>')
+    dg('[fetchLibraThumb]>>>>')
     return LambdaLibra.thumb({ eid, url, image_suggested }).then((r) => {
-      consola.info('[fetchLibraThumb]<<<<', r)
+      dg('[fetchLibraThumb]<<<<', r)
       return r.ETag
     })
   },
