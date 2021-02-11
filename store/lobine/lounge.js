@@ -9,7 +9,7 @@ const EP = {
   HATENA: 'https://hatena.lobine.app',
 }
 
-const dg = debug('@:store:lobine:lounge')
+const dg = debug('@:$:lobine/lounge')
 
 export const state = () => ({
   wid: null,
@@ -42,14 +42,14 @@ export const actions = {
     commit('SET_WIDDIG', { wid, dig })
   },
   async emitDoubleshot({ state }) {
-    console.log('[#emitDoubleshot]')
+    dg('[#emitDoubleshot]')
     const { wid, dig } = state
     const { url } = dig
     if (wid && url) {
       dg('emitDoubleshot', { wid, url })
       return await axios.post(EP.SHOT, { wid, url })
     } else {
-      console.log('[#emitDoubleshot] (SKIP)', { wid, url })
+      dg('[#emitDoubleshot] (SKIP)', { wid, url })
     }
   },
 }
