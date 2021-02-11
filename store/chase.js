@@ -25,11 +25,13 @@ export const state = () => JSON.parse(JSON.stringify(initialState))
 export const getters = {
   catalog(state) {
     if (state.ping);
-    const p = state.entries
-    const l = state.libraInfo
-    const h = state.hatebuCntSet
-    const s = state.shotSet
-    return ChaseUtil.makeCatalog(p, l, h, s)
+    const arr = Object.entries(state.entries).map(([eid, item]) => item)
+    arr.sort((a, b) => {
+      if (a.time_added < b.time_added) return 1
+      if (a.time_added > b.time_added) return -1
+      return 0
+    })
+    return arr
   },
   gPreparedCatalog: (state, getters) => (query) => {
     const arr = getters.catalog
@@ -106,6 +108,7 @@ export const mutations = {
   },
   MERGE_Entries(state, newEntries) {
     state.entries = { ...state.entries, ...newEntries }
+    state.ping = new Date().getTime()
   },
   logout(state) {
     Object.keys(initialState).forEach((key) => {
@@ -210,7 +213,6 @@ export const actions = {
     const pktDict = ChaseUtil.makeEntries(json.list)
     await this.$cache.putPocketDict(pktDict)
     await this.$cache.prepareDigTable()
-    dispatch('restoreRecentEntries')
     dispatch('syncDB')
   },
   async fetchAllEntries({ state, rootState, dispatch }) {
@@ -322,11 +324,12 @@ export const actions = {
     const hatebu = await Hatebu.getEntry(url)
     context.commit('addHatebu', { eid, hatebu })
   },
-  async syncDB({ commit }) {
+  async syncDB({ dispatch, commit }) {
     await this.$cache.prepareDigTable()
-    await this.$cache.putHatebuBulk()
-    const hatebuCntSet = await this.$cache.getHatebuCntSet()
-    commit('SET_HatebuCntSet', hatebuCntSet)
+    await this.$cache.prepareHatebuTable()
+    dispatch('restoreRecentEntries')
+    // const hatebuCntSet = await this.$cache.getHatebuCntSet()
+    // commit('SET_HatebuCntSet', hatebuCntSet)
     commit('SET_Ping')
   },
   async getWidByEid(_, eid) {
