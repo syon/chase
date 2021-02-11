@@ -16,6 +16,11 @@
         </v-btn>
       </div>
       <div>
+        <v-btn text small @click="handleRefresh">
+          <v-icon small>mdi-refresh</v-icon>
+        </v-btn>
+      </div>
+      <div>
         <v-btn text small @click="handleCloudSync">
           <v-icon small>mdi-cloud-sync</v-icon>
         </v-btn>
@@ -63,6 +68,9 @@ export default {
     logout() {
       this.$store.dispatch('chase/logout', this.$cookie)
       this.$router.push({ path: '/welcome' })
+    },
+    handleRefresh() {
+      this.$store.dispatch('chase/fetchEntries')
     },
     handleCloudSync() {
       this.$store.dispatch('chase/fetchAllEntries')
