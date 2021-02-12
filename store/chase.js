@@ -9,6 +9,7 @@ import LambdaPocket from '@/lib/LambdaPocket'
 const dg = Debug('@:$:chase')
 
 const initialState = {
+  isPremium: false,
   ping: 0,
   entries: {},
   libraInfo: {},
@@ -230,6 +231,9 @@ export const actions = {
       const entries = ChaseUtil.makeEntries(json.list)
       await this.$cache.putBulk(entries)
       if (resultCount < 1000) {
+        break
+      }
+      if (!state.isPremium) {
         break
       }
       offset = offset + resultCount
