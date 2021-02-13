@@ -224,7 +224,7 @@ export const actions = {
       const json = await LambdaPocket.get(at, options)
       const resultCount = Object.keys(json.list).length
       const entries = ChaseUtil.makeEntries(json.list)
-      await this.$cache.putBulk(entries)
+      await this.$cache.renewPocket(entries)
       if (resultCount < 1000) {
         break
       }
@@ -247,7 +247,7 @@ export const actions = {
     }
     const json = await LambdaPocket.get(at, options)
     const entries = ChaseUtil.makeEntries(json.list)
-    await this.$cache.putBulk(entries)
+    await this.$cache.renewPocket(entries)
     dispatch('restoreAllEntries')
     dispatch('syncDB')
   },
@@ -324,9 +324,9 @@ export const actions = {
     context.commit('addHatebu', { eid, hatebu })
   },
   async syncDB({ dispatch, commit }) {
-    await this.$cache.prepareDigTable()
+    // await this.$cache.totalSyncDigTable()
     await this.$cache.prepareHatebuTable()
-    dispatch('restoreRecentEntries')
+    // dispatch('restoreRecentEntries')
     // const hatebuCntSet = await this.$cache.getHatebuCntSet()
     // commit('SET_HatebuCntSet', hatebuCntSet)
     commit('SET_Ping')
