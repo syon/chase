@@ -26,13 +26,8 @@ export const state = () => JSON.parse(JSON.stringify(initialState))
 export const getters = {
   catalog(state) {
     if (state.ping);
-    const arr = Object.entries(state.entries).map(([eid, item]) => item)
-    arr.sort((a, b) => {
-      if (a.time_added < b.time_added) return 1
-      if (a.time_added > b.time_added) return -1
-      return 0
-    })
-    return arr
+    // const dict = { ...state.entries }
+    return ChaseUtil.makeCatalog(state.entries, state.hatebuCntSet)
   },
   gPreparedCatalog: (state, getters) => (query) => {
     const arr = getters.catalog
@@ -199,7 +194,10 @@ export const actions = {
   },
   backgroundProcess({ dispatch }) {
     dg('[#backgroundProcess]')
-    dispatch('fetchEntries').then(dispatch('restoreAllEntries'))
+    dispatch('fetchEntries').then(() => {
+      dispatch('updateHatebuCnt')
+      dispatch('restoreAllEntries')
+    })
   },
   async restoreAllEntries({ commit }) {
     dg('[#restoreAllEntries]')
@@ -209,7 +207,6 @@ export const actions = {
   async fetchEntries({ dispatch }) {
     dg('[#fetchEntries]')
     await this.$duty.retrieveRecent()
-    dispatch('syncDB')
   },
   async fetchAllEntries({ state, rootState, dispatch }) {
     const at = rootState.pocket.auth.login.accessToken
@@ -234,7 +231,6 @@ export const actions = {
       offset = offset + resultCount
     }
     dispatch('restoreAllEntries')
-    dispatch('syncDB')
   },
   async moreEntries({ state, rootState, dispatch }) {
     const at = rootState.pocket.auth.login.accessToken
@@ -249,7 +245,7 @@ export const actions = {
     const entries = ChaseUtil.makeEntries(json.list)
     await this.$cache.renewPocket(entries)
     dispatch('restoreAllEntries')
-    dispatch('syncDB')
+    dispatch('updateHatebuCnt')
   },
   async activate({ commit, dispatch }, entry) {
     const { eid } = entry
@@ -323,12 +319,10 @@ export const actions = {
     const hatebu = await Hatebu.getEntry(url)
     context.commit('addHatebu', { eid, hatebu })
   },
-  async syncDB({ dispatch, commit }) {
-    // await this.$cache.totalSyncDigTable()
+  async updateHatebuCnt({ commit }) {
     await this.$cache.prepareHatebuTable()
-    // dispatch('restoreRecentEntries')
-    // const hatebuCntSet = await this.$cache.getHatebuCntSet()
-    // commit('SET_HatebuCntSet', hatebuCntSet)
+    const hatebuCntSet = await this.$cache.getHatebuCntSet()
+    commit('SET_HatebuCntSet', hatebuCntSet)
     commit('SET_Ping')
   },
   async getWidByEid(_, eid) {
