@@ -46,6 +46,7 @@ export const actions = {
     const dig = await this.$cache.getDigByWid(wid)
     commit('SET_WIDDIG', { wid, dig })
     dispatch('prepareHatena', entry)
+    dispatch('hatena/bookmark/init', entry, { root: true })
   },
   async prepareHatena({ commit }, { eid, url }) {
     const hatebu = await this.$duty.getHatebu({ eid, url })

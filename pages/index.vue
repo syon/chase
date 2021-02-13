@@ -23,10 +23,10 @@
         <v-col cols="6">
           <v-container class="area-lobby">
             <v-row>
-              <v-col cols="6">
+              <v-col cols="5">
                 <interlude v-if="entry.eid" />
               </v-col>
-              <v-col cols="6">
+              <v-col cols="7">
                 <lounge />
                 <hatebu v-if="entry.eid" />
               </v-col>
