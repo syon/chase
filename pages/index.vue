@@ -27,6 +27,7 @@
                 <interlude v-if="entry.eid" />
               </v-col>
               <v-col cols="6">
+                <lounge />
                 <hatebu v-if="entry.eid" />
               </v-col>
             </v-row>
@@ -42,6 +43,7 @@ import { mapState, mapGetters } from 'vuex'
 import Appbar from '@/components/Appbar'
 import FilterToolbar from '@/components/FilterToolbar'
 import Interlude from '@/components/Interlude'
+import Lounge from '@/components/lobine/Lounge'
 import Hatebu from '@/components/Hatebu'
 import RackEntry from '@/components/RackEntry'
 import SlimEntry from '@/components/SlimEntry'
@@ -54,6 +56,7 @@ export default {
     SlimEntry,
     Interlude,
     Hatebu,
+    Lounge,
   },
   computed: {
     ...mapState('stream/filter', {

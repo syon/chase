@@ -14,6 +14,7 @@ const dg = debug('@:$:lobine/lounge')
 export const state = () => ({
   wid: null,
   dig: {},
+  hatebu: {},
 })
 
 export const getters = {
@@ -25,6 +26,7 @@ export const getters = {
       ...dig,
       hostLabel: host,
       loungeUrl: `/lounge/${state.wid}`,
+      hatebu: state.hatebu,
     }
   },
 }
@@ -34,12 +36,20 @@ export const mutations = {
     state.wid = wid
     state.dig = dig
   },
+  SET_Hatebu(state, hatebu) {
+    state.hatebu = hatebu
+  },
 }
 
 export const actions = {
-  async setup({ commit }, { wid }) {
+  async setup({ dispatch, commit }, { wid, entry }) {
     const dig = await this.$cache.getDigByWid(wid)
     commit('SET_WIDDIG', { wid, dig })
+    dispatch('prepareHatena', entry)
+  },
+  async prepareHatena({ commit }, { eid, url }) {
+    const hatebu = await this.$duty.getHatebu({ eid, url })
+    commit('SET_Hatebu', hatebu)
   },
   async emitDoubleshot({ state }) {
     dg('[#emitDoubleshot]')

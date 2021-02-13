@@ -1,7 +1,6 @@
 import Debug from 'debug'
 
 import ChaseUtil from '@/lib/ChaseUtil'
-import Hatebu from '@/lib/Hatebu'
 import LambdaShot from '@/lib/LambdaShot'
 import LambdaLibra from '@/lib/LambdaLibra'
 import LambdaPocket from '@/lib/LambdaPocket'
@@ -251,7 +250,7 @@ export const actions = {
     const { eid } = entry
     const wid = await this.$cache.getWidByEid(eid)
     commit('activate', { eid, wid })
-    await dispatch('fetchHatebu', entry)
+    await dispatch('lobine/lounge/setup', { wid, entry }, { root: true })
   },
   async archive({ commit, rootState }, eid) {
     const at = rootState.pocket.auth.login.accessToken
@@ -313,11 +312,6 @@ export const actions = {
     if (!eid) return
     context.commit('addShot', { eid })
     await LambdaShot.shot({ eid, url })
-  },
-  async fetchHatebu(context, payload) {
-    const { eid, url } = payload
-    const hatebu = await Hatebu.getEntry(url)
-    context.commit('addHatebu', { eid, hatebu })
   },
   async updateHatebuCnt({ commit }) {
     await this.$cache.prepareHatebuTable()
