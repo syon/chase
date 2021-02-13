@@ -23,6 +23,7 @@ export const actions = {
     const at = $cookie.get('pocket_access_token')
     const un = $cookie.get('pocket_username')
     commit('SET_Login', { access_token: at, username: un })
+    this.$duty.setAccessToken(at)
   },
   async getRequestToken(_, $cookie) {
     const json = await LambdaPocket.getRequestToken()

@@ -206,14 +206,9 @@ export const actions = {
     const catalog = await ChaseUtil.coordinateAllCatalog()
     commit('MERGE_Entries', catalog)
   },
-  async fetchEntries({ commit, rootState, dispatch }) {
+  async fetchEntries({ dispatch }) {
     dg('[#fetchEntries]')
-    const at = rootState.pocket.auth.login.accessToken
-    const options = { state: 'unread', count: 100, detailType: 'complete' }
-    const json = await LambdaPocket.get(at, options)
-    const pktDict = ChaseUtil.makeEntries(json.list)
-    await this.$cache.putPocketDict(pktDict)
-    await this.$cache.prepareDigTable()
+    await this.$duty.retrieveRecent()
     dispatch('syncDB')
   },
   async fetchAllEntries({ state, rootState, dispatch }) {
