@@ -164,7 +164,6 @@ export default {
   // position: fixed;
   width: inherit;
   height: 100vh;
-  padding: 0 15px;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
   overflow-scrolling: touch;
