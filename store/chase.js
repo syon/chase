@@ -248,6 +248,7 @@ export const actions = {
   },
   async activate({ commit, dispatch }, entry) {
     const { eid } = entry
+    dg('[#activate]', eid)
     const wid = await this.$cache.getWidByEid(eid)
     commit('activate', { eid, wid })
     await dispatch('lobine/lounge/setup', { wid, entry }, { root: true })

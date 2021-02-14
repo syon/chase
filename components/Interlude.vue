@@ -128,13 +128,6 @@ export default {
       },
     },
   },
-  watch: {
-    entry() {
-      const { wid } = this.info
-      const entry = this.entry
-      this.$store.dispatch('lobine/lounge/setup', { wid, entry })
-    },
-  },
   methods: {
     handleNewTag() {
       this.handleTagClick(this.newtag)

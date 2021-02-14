@@ -3,7 +3,7 @@ import axios from 'axios'
 import Hatebu from '@/lib/Hatebu'
 import EP from './endpoint'
 
-const dg = debug('~:store:bookmark')
+const dg = debug('@:$:hatena/bookmark')
 
 const HATENA_API_URL = EP.HATENA
 
