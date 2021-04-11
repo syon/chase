@@ -38,7 +38,7 @@
         <div v-if="isActive(b)" class="activePanel">
           <ul v-for="(url, i) in urlsInComment(b)" :key="i" class="bucome-urls">
             <li>
-              <a :href="url">{{ url }}</a>
+              <a :href="url" target="_blank">{{ url }}</a>
             </li>
           </ul>
           <div v-if="isHatenaLogin">
