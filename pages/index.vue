@@ -76,5 +76,12 @@ export default {
 .area-lounge {
   position: fixed;
   max-width: inherit;
+  height: 100%;
+
+  > .col {
+    height: 100%;
+    overflow: auto;
+    padding: 0;
+  }
 }
 </style>
