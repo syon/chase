@@ -91,6 +91,9 @@ export const getters = {
     tags = tags.filter((t) => !t.startsWith('chase:'))
     return [...new Set(tags)]
   },
+  gHatebuCntSet(state) {
+    return state.hatebuCntSet
+  },
 }
 
 export const mutations = {
