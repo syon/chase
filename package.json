@@ -10,6 +10,7 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.12.5",
     "@nuxtjs/pwa": "^3.3.4",
+    "bluebird": "^3.7.2",
     "core-js": "^3.8.2",
     "debug": "^4.1.1",
     "dexie": "^3.0.3",
