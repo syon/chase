@@ -15,7 +15,7 @@
                   <rack-entry :key="e.eid" :obj="e" />
                 </template>
                 <template v-else-if="showMode === 'slim'">
-                  <slim-entry :key="e.eid" :obj="e" :no="idx + 1" />
+                  <slim-entry :key="e.eid" :obj="e" />
                 </template>
               </template>
             </v-list>

@@ -7,10 +7,7 @@
   >
     <div class="pnl">
       <div class="pnl-body">
-        <div class="mr-4">
-          {{ no }}
-        </div>
-        <div class="link">
+        <div class="link ml-4">
           <a :href="obj.url" target="_blank">{{ linkTitle }}</a>
         </div>
         <template v-if="Object.keys(obj.tags).length > 0">
@@ -49,8 +46,7 @@ import { mapState, mapActions } from 'vuex'
 
 export default {
   props: {
-    obj: { type: Object, required: true },
-    no: { type: Number, required: true },
+    obj: { type: Object, required: true }
   },
   data() {
     return {
