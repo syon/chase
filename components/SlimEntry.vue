@@ -46,7 +46,7 @@ import { mapState, mapActions } from 'vuex'
 
 export default {
   props: {
-    obj: { type: Object, required: true }
+    obj: { type: Object, required: true },
   },
   data() {
     return {
