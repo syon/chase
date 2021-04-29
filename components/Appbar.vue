@@ -59,12 +59,6 @@ export default {
     }
   },
   methods: {
-    getAccessToken() {
-      this.$store.dispatch('chase/getAccessToken', this.$cookie)
-    },
-    showScenesEditor() {
-      this.sceneEditing = true
-    },
     logout() {
       this.$store.dispatch('chase/logout', this.$cookie)
       this.$router.push({ path: '/welcome' })
