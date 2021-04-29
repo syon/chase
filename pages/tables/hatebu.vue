@@ -16,6 +16,8 @@
               Hatebu entries
               <v-chip>{{ gHatebuRecords.length }}</v-chip>
             </v-toolbar-title>
+            <span class="mx-2">/</span>
+            <span>{{ gPocketRecords.length }}</span>
             <v-spacer />
             <v-text-field
               v-model="searchquery"
@@ -51,10 +53,12 @@ export default {
   computed: {
     ...mapGetters({
       gHatebuRecords: 'hatena/table/gHatebuRecords',
+      gPocketRecords: 'pocket/table/gPocketRecords',
     }),
   },
   async mounted() {
     await this.$store.dispatch('hatena/table/prepareRecords')
+    await this.$store.dispatch('pocket/table/prepareRecords')
   },
 }
 </script>
