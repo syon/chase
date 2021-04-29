@@ -26,3 +26,7 @@ hr {
   border: 0;
   border-top: 1px solid #f5f5f5;
 }
+
+.v-data-table ::v-deep td {
+  word-break: break-all;
+}
