@@ -10,7 +10,7 @@ export default {
   methods: {
     async getRequestToken() {
       const authUri = await this.$store.dispatch(
-        'chase/getRequestToken',
+        'pocket/auth/getRequestToken',
         this.$cookie
       )
       if (authUri) {

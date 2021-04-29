@@ -183,7 +183,7 @@ export const actions = {
       await dispatch('restoreRecentEntries')
       dispatch('backgroundProcess')
     } else if (ph === 'WAITING_ACCESSTOKEN') {
-      await dispatch('getAccessToken', $cookie)
+      await dispatch('pocket/auth/getAccessToken', $cookie, { root: true })
       await dispatch('actByPhase', $cookie)
     } else {
       dispatch('logout', $cookie)
