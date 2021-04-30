@@ -32,9 +32,11 @@
       </div>
       <div class="pnl-action">
         <div class="hatebu">
-          <div class="hatebu-cnt" :style="hatebuCntStyle">
-            {{ obj.hatebuCnt }}
-          </div>
+          <a :href="loungeUrl" target="_blank">
+            <div class="hatebu-cnt" :style="hatebuCntStyle">
+              {{ obj.hatebuCnt }}
+            </div>
+          </a>
         </div>
         <div class="favorite">
           <template v-if="obj.favorite">
@@ -86,6 +88,10 @@ export default {
     },
     isArchived() {
       return this.obj.status === '1' || this.nowArchived
+    },
+    loungeUrl() {
+      const { wid } = this.obj
+      return `https://lobine.app/lounge/${wid}`
     },
     hatebuCntStyle() {
       const cnt = this.obj.hatebuCnt
