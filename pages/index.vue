@@ -28,7 +28,6 @@
             </v-col>
             <v-col cols="7">
               <lounge />
-              <hatebu v-if="entry.eid" />
             </v-col>
           </v-row>
         </v-col>
@@ -44,7 +43,6 @@ import AppStats from '@/components/AppStats'
 import FilterToolbar from '@/components/FilterToolbar'
 import Interlude from '@/components/Interlude'
 import Lounge from '@/components/lobine/Lounge'
-import Hatebu from '@/components/Hatebu'
 import RackEntry from '@/components/RackEntry'
 import SlimEntry from '@/components/SlimEntry'
 
@@ -56,7 +54,6 @@ export default {
     RackEntry,
     SlimEntry,
     Interlude,
-    Hatebu,
     Lounge,
   },
   computed: {
