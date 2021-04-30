@@ -19,6 +19,9 @@
             <span class="mx-2">/</span>
             <span>{{ gPocketRecords.length }}</span>
             <v-spacer />
+            <v-btn @click="fetchPartly">partly</v-btn>
+            <span>{{ taskCnt }}</span>
+            <v-spacer />
             <v-text-field
               v-model="searchquery"
               append-icon="mdi-magnify"
@@ -49,6 +52,7 @@ export default {
       { text: 'update_at', value: 'update_at', width: 150 },
     ],
     searchquery: null,
+    taskCnt: null,
   }),
   computed: {
     ...mapGetters({
@@ -59,6 +63,19 @@ export default {
   async mounted() {
     await this.$store.dispatch('hatena/table/prepareRecords')
     await this.$store.dispatch('pocket/table/prepareRecords')
+  },
+  methods: {
+    async fetchPartly() {
+      this.taskCnt = await this.$duty.fetchHatebuCacheTasks()
+      this.loopCacheTasks() // No await
+    },
+    async loopCacheTasks() {
+      while (this.taskCnt > 0) {
+        await this.$duty.doHatebuCacheTaskPartly()
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        this.taskCnt = this.taskCnt - 3
+      }
+    },
   },
 }
 </script>
