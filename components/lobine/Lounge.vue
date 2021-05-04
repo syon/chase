@@ -1,32 +1,24 @@
 <template>
   <div>
-    <div>count: {{ count }}</div>
-    <div>bookmarks: {{ bookmarks.length }}</div>
-    <bookmark-list mode="POPULAR" />
+    <section class="area-audiencetoolbar">
+      <audience-toolbar mode="lounge" />
+    </section>
+
+    <section class="area-audience">
+      <!-- <audience-tabs /> -->
+      <bookmark-list mode="POPULAR" />
+    </section>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import AudienceToolbar from '@/components/hatena/AudienceToolbar'
 import BookmarkList from '@/components/hatena/BookmarkList'
 
 export default {
   components: {
+    AudienceToolbar,
     BookmarkList,
-  },
-  computed: {
-    ...mapGetters({
-      gLounge: 'lobine/lounge/gLounge',
-    }),
-    hatebu() {
-      return this.gLounge.hatebu || {}
-    },
-    count() {
-      return this.hatebu.count
-    },
-    bookmarks() {
-      return this.hatebu.bookmarks || []
-    },
   },
 }
 </script>
