@@ -145,9 +145,10 @@ export const actions = {
       dg('[#refresh] !ERROR!', e)
     })
     commit('setEntry', hatebu)
-    if (getters.gBookmarkCount >= 15 && getters.gCommentCount > 0) {
-      commit('setFilterNoComment', true)
-    }
+    const bkmCnt = getters.gBookmarkCount
+    const cmtCnt = getters.gCommentCount
+    dg(`[#refresh] Bookmark: ${bkmCnt} Comment: ${cmtCnt}`)
+    commit('setFilterNoComment', bkmCnt >= 15 && cmtCnt > 0)
     commit('busyFetching', false)
     const popularCnt = getters.gBookmarksPopularCount
     if (popularCnt > 0 && getters.gCommentCount > 10) {
