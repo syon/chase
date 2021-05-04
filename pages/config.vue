@@ -1,7 +1,6 @@
 <template>
   <div class="screen page-container">
     <nav class="page-nav">
-      <v-btn @click="more">more</v-btn>
       <v-btn @click="deleteDB">deleteDB</v-btn>
     </nav>
     <article class="page-content">
@@ -61,9 +60,6 @@ export default {
     }),
   },
   methods: {
-    more() {
-      this.$store.dispatch('chase/moreEntries')
-    },
     deleteDB() {
       this.$store.dispatch('chase/deleteDB')
     },

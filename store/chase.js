@@ -218,21 +218,6 @@ export const actions = {
     await PocketDuty.fetchAllUnreadItems({ at, entryCount, isPremium })
     dispatch('restoreAllEntries')
   },
-  async moreEntries({ state, rootState, dispatch }) {
-    const at = rootState.pocket.auth.login.accessToken
-    const offset = Object.keys(state.entries).length
-    const options = {
-      state: 'unread',
-      count: 1000,
-      detailType: 'complete',
-      offset,
-    }
-    const json = await LambdaPocket.get(at, options)
-    const entries = ChaseUtil.makeEntries(json.list)
-    await this.$cache.renewPocket(entries)
-    dispatch('restoreAllEntries')
-    dispatch('updateHatebuCnt')
-  },
   async activate({ commit, dispatch }, entry) {
     const { eid } = entry
     dg('[#activate]', eid)
