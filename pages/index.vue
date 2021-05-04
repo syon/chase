@@ -65,6 +65,15 @@ export default {
       entry: 'chase/activeEntry',
     }),
   },
+  watch: {
+    gShowingCatalog(arr) {
+      if (!this.entry.eid) {
+        if (arr.length > 0) {
+          this.$store.dispatch('chase/activate', arr[0])
+        }
+      }
+    },
+  },
 }
 </script>
 
