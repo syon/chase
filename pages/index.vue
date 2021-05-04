@@ -2,7 +2,7 @@
   <div class="area-page">
     <v-container fluid>
       <v-row>
-        <v-col cols="6">
+        <v-col cols="5">
           <header>
             <appbar />
             <filter-toolbar />
@@ -21,12 +21,12 @@
             </v-list>
           </v-card>
         </v-col>
-        <v-col cols="6">
+        <v-col cols="7">
           <v-row class="area-lounge">
-            <v-col cols="5">
+            <v-col cols="6">
               <interlude v-if="entry.eid" />
             </v-col>
-            <v-col cols="7">
+            <v-col cols="6">
               <lounge />
             </v-col>
           </v-row>
@@ -91,7 +91,8 @@ export default {
   > .col {
     height: 100%;
     overflow: auto;
-    padding: 0;
+    padding-top: 0;
+    padding-bottom: 0;
   }
 }
 </style>

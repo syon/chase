@@ -190,6 +190,7 @@ export default {
   }
 
   .link {
+    font-size: 15px;
     margin: 0 0 0.25em;
     line-height: 1.3;
     word-break: break-word;
