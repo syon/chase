@@ -81,7 +81,6 @@ export default {
   components: { HatenaStars },
   props: {
     mode: { type: String, required: true },
-    isFilterNoComment: { type: Boolean, default: false },
   },
   data() {
     return {
@@ -93,6 +92,7 @@ export default {
   computed: {
     ...mapState('hatena/bookmark', {
       entry: (state) => state.entry,
+      isFilterNoComment: (state) => state.isFilterNoComment,
     }),
     ...mapState('hatena/hatena', {
       user: (state) => state.user,

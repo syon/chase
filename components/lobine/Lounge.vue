@@ -5,20 +5,19 @@
     </section>
 
     <section class="area-audience">
-      <!-- <audience-tabs /> -->
-      <bookmark-list mode="POPULAR" />
+      <audience-tabs />
     </section>
   </div>
 </template>
 
 <script>
 import AudienceToolbar from '@/components/hatena/AudienceToolbar'
-import BookmarkList from '@/components/hatena/BookmarkList'
+import AudienceTabs from '@/components/hatena/AudienceTabs'
 
 export default {
   components: {
     AudienceToolbar,
-    BookmarkList,
+    AudienceTabs,
   },
 }
 </script>

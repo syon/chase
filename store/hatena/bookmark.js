@@ -10,7 +10,7 @@ const HATENA_API_URL = EP.HATENA
 export const state = () => ({
   pageUrl: null,
   entry: {},
-  isFetching: true,
+  isFetching: false,
   isFilterNoComment: false,
   isBucomeEditor: false,
   commentText: null,
@@ -162,6 +162,7 @@ export const actions = {
       const b = getters.getMyBookmark(rootState.hatena.user.profile.id)
       commit('setCommentText', b ? b.comment : '')
     }
+    dg('[#refresh] <<')
   },
   adjustTabsHeight() {
     // adjustTabsHeight({ commit, rootState }) {

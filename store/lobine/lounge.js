@@ -25,7 +25,7 @@ export const getters = {
     return {
       ...dig,
       hostLabel: host,
-      loungeUrl: `/lounge/${state.wid}`,
+      loungeUrl: `https://lobine.app/lounge/${state.wid}`,
       hatebu: state.hatebu,
     }
   },
