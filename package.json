@@ -16,7 +16,8 @@
     "debug": "^4.1.1",
     "dexie": "^3.0.3",
     "nuxt": "^2.14.12",
-    "vue-cookie": "^1.1.4"
+    "vue-cookie": "^1.1.4",
+    "vue-peity": "^0.5.0"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^5.0.0",
