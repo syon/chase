@@ -4,6 +4,7 @@ import ChaseUtil from '@/lib/ChaseUtil'
 import LambdaShot from '@/lib/LambdaShot'
 import LambdaLibra from '@/lib/LambdaLibra'
 import LambdaPocket from '@/lib/LambdaPocket'
+import PocketDuty from '@/lib/PocketDuty'
 
 const dg = Debug('@:$:chase')
 
@@ -212,26 +213,9 @@ export const actions = {
   },
   async fetchAllEntries({ state, rootState, dispatch }) {
     const at = rootState.pocket.auth.login.accessToken
-    let offset = Object.keys(state.entries).length
-    while (true) {
-      const options = {
-        state: 'unread',
-        count: 1000,
-        detailType: 'complete',
-        offset,
-      }
-      const json = await LambdaPocket.get(at, options)
-      const resultCount = Object.keys(json.list).length
-      const entries = ChaseUtil.makeEntries(json.list)
-      await this.$cache.renewPocket(entries)
-      if (resultCount < 1000) {
-        break
-      }
-      if (!state.isPremium) {
-        break
-      }
-      offset = offset + resultCount
-    }
+    const entryCount = Object.keys(state.entries).length
+    const isPremium = state.isPremium
+    await PocketDuty.fetchAllUnreadItems({ at, entryCount, isPremium })
     dispatch('restoreAllEntries')
   },
   async moreEntries({ state, rootState, dispatch }) {
