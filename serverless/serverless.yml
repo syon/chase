@@ -84,6 +84,13 @@ functions:
           path: pocket/send/tags/add
           method: get
           cors: true
+  pocketsendtagsclear:
+    handler: handler.pocketSendTagsClear
+    events:
+      - http:
+          path: pocket/send/tags/clear
+          method: get
+          cors: true
   userlogin:
     handler: handler.userlogin
     events:

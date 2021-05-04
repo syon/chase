@@ -5,73 +5,51 @@
     :class="compoClasses"
     @click="activate(obj)"
   >
-    <template v-if="obj.ready">
-      <div class="pnl">
-        <div class="pnl-thumb">
-          <fit-image
-            :src="imgSrc"
-            w="100"
-            h="80"
-            size="cover"
-            :onloaderror="handleLoadImageError"
-          ></fit-image>
+    <div class="pnl">
+      <div class="pnl-body">
+        <div class="link ml-4">
+          <a :href="obj.url" target="_blank">{{ linkTitle }}</a>
         </div>
-        <div class="pnl-body">
-          <div class="link">
-            <a :href="obj.url" target="_blank">{{ linkTitle }}</a>
+        <template v-if="Object.keys(obj.tags).length > 0">
+          <div class="tags">
+            <span v-for="tag in Object.keys(obj.tags)" :key="tag" class="tag">
+              {{ tag }}
+            </span>
           </div>
-          <div class="meta">
-            <span v-if="obj.site_name" class="site">{{ obj.site_name }}</span>
-            <span v-if="DEBUG">{{ obj.eid }}</span>
+        </template>
+      </div>
+      <div class="pnl-action">
+        <div class="hatebu">
+          <div class="hatebu-cnt" :style="hatebuCntStyle">
+            {{ obj.hatebuCnt }}
           </div>
-          <div class="excerpt">{{ obj.excerpt }}</div>
-          <template v-if="Object.keys(obj.tags).length > 0">
-            <div class="tags">
-              <span v-for="tag in Object.keys(obj.tags)" :key="tag" class="tag">
-                {{ tag }}
-              </span>
-            </div>
-          </template>
         </div>
-        <div class="pnl-action">
-          <div class="hatebu">
-            <div class="hatebu-cnt" :style="hatebuCntStyle">
-              {{ obj.hatebuCnt }}
-            </div>
-          </div>
-          <div class="archive">
-            <icon-button
-              class="c-archive"
-              icon="ion-ios-checkmark-empty"
-              :loading="ingArchive"
-              :disabled="obj.archived"
-              icon-disabled="ion-ios-checkmark"
-              @click.native="mArchive(obj.eid)"
-            ></icon-button>
-          </div>
+        <div class="archive">
+          <v-btn
+            icon
+            x-small
+            :loading="ingArchive"
+            :disabled="obj.archived"
+            class="c-archive"
+            @click="mArchive(obj.eid)"
+          >
+            <v-icon>mdi-check</v-icon>
+          </v-btn>
         </div>
       </div>
-    </template>
-    <template v-else>
-      <span class="loading"><i class="ion-load-d"></i></span>
-    </template>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import FitImage from '@/components/FitImage'
-import IconButton from '@/components/IconButton'
 
 export default {
-  components: {
-    FitImage,
-    IconButton,
+  props: {
+    obj: { type: Object, required: true },
   },
-  props: { obj: { type: Object, required: true } },
   data() {
     return {
-      DEBUG: process.env.NODE_ENV === 'development',
       imgSrc: this.obj.image_s3_url,
       ingArchive: false,
     }
@@ -117,7 +95,7 @@ export default {
     },
     async mArchive(eid) {
       this.ingArchive = true
-      await this.$store.dispatch('archive', eid)
+      await this.$store.dispatch('chase/archive', eid)
       this.ingArchive = false
     },
   },
@@ -127,39 +105,44 @@ export default {
 <style lang="scss" scoped>
 .pnl {
   display: flex;
+  width: 100%;
 
-  .pnl-thumb figure {
-    display: flex;
+  .pnl-thumb {
     margin: 0 15px 0 0;
-    width: 100px;
-    height: 80px;
-    overflow: hidden;
-    align-items: center;
-    justify-content: center;
+
+    figure {
+      display: flex;
+      width: 100px;
+      height: 80px;
+      overflow: hidden;
+      align-items: center;
+      justify-content: center;
+    }
   }
 
   .pnl-body {
     flex: 1;
     display: flex;
-    flex-direction: column;
+    align-items: center;
   }
 
   .pnl-action {
-    width: 60px;
+    width: 100px;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-  }
-
-  .pnl-action > div {
-    padding: 3px 0;
+    justify-content: flex-end;
+    > div {
+      margin: 0 0.5em;
+      padding: 3px 0;
+    }
   }
 }
 
 .v-entry {
-  min-height: 111px;
-  padding: 15px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
   color: #757575;
   border-bottom: 1px solid #f5f5f5;
   &.active {
@@ -180,13 +163,11 @@ export default {
   }
 
   .link {
-    margin: 0 0 0.25em;
-    line-height: 1.3;
-    word-break: break-word;
+    line-height: 1;
+    word-break: break-all;
   }
 
   .link a {
-    font-weight: bold;
     text-decoration: none;
     color: #24292e;
   }

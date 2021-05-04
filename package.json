@@ -3,16 +3,21 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "nuxt",
+    "dev": "DEBUG='@:*' nuxt",
     "build": "nuxt build",
     "generate": "nuxt generate"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.12.5",
     "@nuxtjs/pwa": "^3.3.4",
+    "bluebird": "^3.7.2",
     "core-js": "^3.8.2",
+    "dayjs": "^1.10.4",
+    "debug": "^4.1.1",
+    "dexie": "^3.0.3",
     "nuxt": "^2.14.12",
-    "vue-cookie": "^1.1.4"
+    "vue-cookie": "^1.1.4",
+    "vue-peity": "^0.5.0"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^5.0.0",

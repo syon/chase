@@ -1,92 +1,98 @@
 <template>
-  <div class="screen page-container">
-    <nav class="page-nav">
-      <sidebar></sidebar>
-    </nav>
-    <article class="page-content">
-      <header>
-        <h2>{{ mode }}</h2>
-        <input v-model="filterTxt" type="search" placeholder="Filter" />
-      </header>
-      <div class="entries">
-        <div v-for="e in catalog" :key="e.eid" :data-eid="e.eid" class="entry">
-          <entry :obj="e"></entry>
-        </div>
-      </div>
-    </article>
-    <section class="page-interlude">
-      <interlude v-if="entry.eid"></interlude>
-    </section>
-    <section class="page-hatebu">
-      <hatebu v-if="entry.eid"></hatebu>
-    </section>
+  <div class="area-page">
+    <v-container fluid>
+      <v-row>
+        <v-col cols="5">
+          <header>
+            <appbar />
+            <filter-toolbar />
+            <app-stats />
+          </header>
+          <v-card>
+            <v-list>
+              <template v-for="e in gShowingCatalog" :data-eid="e.eid">
+                <template v-if="showMode === 'rack'">
+                  <rack-entry :key="e.eid" :obj="e" />
+                </template>
+                <template v-else-if="showMode === 'slim'">
+                  <slim-entry :key="e.eid" :obj="e" />
+                </template>
+              </template>
+            </v-list>
+          </v-card>
+        </v-col>
+        <v-col cols="7">
+          <v-row class="area-lounge">
+            <v-col cols="6">
+              <interlude v-if="entry.eid" />
+            </v-col>
+            <v-col cols="6">
+              <lounge />
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import Sidebar from '@/components/Sidebar'
+import { mapState, mapGetters } from 'vuex'
+import Appbar from '@/components/Appbar'
+import AppStats from '@/components/AppStats'
+import FilterToolbar from '@/components/FilterToolbar'
 import Interlude from '@/components/Interlude'
-import Hatebu from '@/components/Hatebu'
-import Entry from '@/components/Entry'
+import Lounge from '@/components/lobine/Lounge'
+import RackEntry from '@/components/RackEntry'
+import SlimEntry from '@/components/SlimEntry'
 
 export default {
   components: {
-    Sidebar,
-    Entry,
+    Appbar,
+    AppStats,
+    FilterToolbar,
+    RackEntry,
+    SlimEntry,
     Interlude,
-    Hatebu,
-  },
-  data() {
-    return {
-      filterTxt: '',
-    }
+    Lounge,
   },
   computed: {
+    ...mapState('stream/filter', {
+      showMode: (state) => state.showMode,
+    }),
     ...mapGetters({
-      filteredCatalog: 'chase/filteredCatalog',
+      gShowingCatalog: 'chase/gShowingCatalog',
       entry: 'chase/activeEntry',
     }),
-    mode() {
-      let mode = this.$route.name
-      if (this.$route.name === 'Tag') {
-        mode = this.$cookie.get(this.$route.params.tag)
+  },
+  watch: {
+    gShowingCatalog(arr) {
+      if (!this.entry.eid) {
+        if (arr.length > 0) {
+          this.$store.dispatch('chase/activate', arr[0])
+        }
       }
-      return mode
-    },
-    catalog() {
-      const route = this.$route
-      return this.filteredCatalog(route.name, route.params.tag, this.filterTxt)
     },
   },
 }
 </script>
 
 <style lang="scss" scoped>
-.page-container {
-  width: 100%;
-  display: flex;
-
-  .page-nav {
-    width: 165px;
-  }
-  .page-content {
-    flex: 1;
-    padding: 0 15px;
-  }
-
-  .page-interlude {
-    width: 320px;
-  }
-
-  .page-hatebu {
-    width: 320px;
-  }
+.area-page {
+  background-color: #f9fafb;
 }
 
-.page-content header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.area-lounge {
+  position: fixed;
+  max-width: inherit;
+  width: 100%;
+  height: 100%;
+
+  > .col {
+    height: 100%;
+    overflow: auto;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
 }
 </style>

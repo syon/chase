@@ -1,124 +1,106 @@
 <template>
   <div class="interlude">
-    <template v-if="entry.ready">
-      <fit-image
-        class="thumbnail"
-        :src="entry.image_s3_url"
-        w="290"
-        h="193"
-        size="cover"
-      ></fit-image>
-      <section>
-        <div class="link">
-          <a :href="entry.url" target="_blank">{{ linkTitle }}</a>
-        </div>
-      </section>
-      <section>
-        <div class="meta">
-          <div>{{ entry.site_name }} ({{ entry.fqdn }})</div>
-        </div>
-        <div class="desc">{{ entry.description }}</div>
-        <hr />
-        <div class="action">
-          <icon-button
-            class="c-archive"
-            icon="ion-ios-checkmark-empty"
-            :loading="ingArchive"
-            :disabled="entry.archived"
-            icon-disabled="ion-ios-checkmark"
-            @click.native="mArchive(entry.eid)"
-          ></icon-button>
-          <div class="fav">
-            <icon-button
-              v-if="entry.favorite"
-              class="c-favorite"
-              icon="ion-ios-star"
-              :loading="ingFavorite"
-              style="color: orange"
-              @click.native="mUnfavorite(entry.eid)"
-            ></icon-button>
-            <icon-button
-              v-else
-              class="c-favorite"
-              icon="ion-ios-star-outline"
-              :loading="ingFavorite"
-              style="color: #ccc"
-              @click.native="mFavorite(entry.eid)"
-            ></icon-button>
-          </div>
-          <div class="c-added">{{ entry.added }}</div>
-        </div>
-        <hr />
-        <div class="addscenes">
-          <button
-            v-for="(sce, idx) in scenes"
-            :key="idx"
-            class="scene"
-            @click="addTag({ eid: entry.eid, tag: sce.tag })"
-          >
-            {{ sce.label }}
-          </button>
-        </div>
-        <hr />
-        <div class="tags">
-          <clickable
-            v-for="tag in recentTags"
-            :key="tag"
-            class="tag"
-            :class="{ applied: Object.keys(entry.tags).includes(tag) }"
-            @click.native="handleTagClick(tag)"
-            >{{ tag }}</clickable
-          >
-        </div>
-        <div class="newtag">
-          <input
-            v-model="newtag"
-            placeholder="New Tag"
-            @keyup.enter="handleNewTag"
-          />
-        </div>
-      </section>
-    </template>
-    <section class="mobile-screenshot">
-      <template v-if="entry.ready">
-        <fit-image
-          :src="shotMobileSrc"
-          w="214"
-          h="380"
-          size="cover"
-          :onloaderror="() =&gt; onShotError(entry)"
-        ></fit-image>
-      </template>
+    <fit-image
+      class="thumbnail"
+      :src="entry.image_s3_url"
+      w="290"
+      h="193"
+      size="cover"
+    />
+    <section>
+      <div class="link">
+        <a :href="entry.url" target="_blank">{{ linkTitle }}</a>
+      </div>
     </section>
+    <section>
+      <div class="meta">
+        <div>{{ entry.site_name }} ({{ entry.fqdn }})</div>
+      </div>
+      <div class="desc">{{ entry.description }}</div>
+      <hr />
+      <div class="action">
+        <div class="archive">
+          <v-btn v-if="entry.archived" icon color="primary">
+            <v-icon>mdi-check</v-icon>
+          </v-btn>
+          <v-btn
+            v-else
+            icon
+            color="grey"
+            :loading="ingArchive"
+            @click.native="mArchive(entry.eid)"
+          >
+            <v-icon>mdi-check</v-icon>
+          </v-btn>
+        </div>
+        <div class="fav">
+          <v-btn
+            v-if="entry.favorite"
+            icon
+            color="orange"
+            :loading="ingFavorite"
+            @click.native="mUnfavorite(entry.eid)"
+          >
+            <v-icon>mdi-star</v-icon>
+          </v-btn>
+          <v-btn
+            v-else
+            icon
+            color="grey"
+            :loading="ingFavorite"
+            @click.native="mFavorite(entry.eid)"
+          >
+            <v-icon>mdi-star-outline</v-icon>
+          </v-btn>
+        </div>
+        <div class="c-added">{{ entry.added }}</div>
+      </div>
+      <hr />
+      <div class="tags">
+        <v-autocomplete
+          v-model="appliedTags"
+          :items="recentTags"
+          outlined
+          dense
+          chips
+          small-chips
+          label="Tags"
+          multiple
+        />
+      </div>
+      <div class="newtag">
+        <input
+          v-model="newtag"
+          placeholder="New Tag"
+          @keyup.enter="handleNewTag"
+        />
+      </div>
+    </section>
+    <!-- <section class="area-screenshots">
+      <screenshots :wid="info.wid" />
+    </section> -->
   </div>
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
-import IconButton from '@/components/IconButton'
-import Clickable from '@/components/Clickable'
+import { mapGetters } from 'vuex'
 import FitImage from '@/components/FitImage'
+// import Screenshots from '@/components/lobine/Screenshots'
 
 export default {
   components: {
-    IconButton,
-    Clickable,
     FitImage,
+    // Screenshots,
   },
-  data() {
-    return {
-      newtag: '',
-      ingArchive: false,
-      ingFavorite: false,
-    }
-  },
+  data: () => ({
+    newtag: '',
+    ingArchive: false,
+    ingFavorite: false,
+  }),
   computed: {
-    ...mapState({
-      mytags: 'mytags',
-    }),
     ...mapGetters({
+      info: 'chase/activeInfo',
       entry: 'chase/activeEntry',
-      scenes: 'chase/myScenesTags',
       recentTags: 'chase/recentTags',
     }),
     linkTitle() {
@@ -129,18 +111,24 @@ export default {
       const { eid } = this.entry
       return `https://s3.amazonaws.com/syon-chase/shots/${eid}/mobile.png`
     },
+    appliedTags: {
+      get() {
+        return Object.keys(this.entry.tags)
+      },
+      async set(tags) {
+        const eid = this.entry.eid
+        const cnt = Object.keys(this.entry.tags).length
+        if (tags.length > cnt) {
+          const tag = tags.slice().pop()
+          await this.$store.dispatch('chase/addTag', { eid, tags: [tag] })
+        } else {
+          await this.$store.dispatch('chase/clearTags', { eid })
+          await this.$store.dispatch('chase/addTag', { eid, tags })
+        }
+      },
+    },
   },
   methods: {
-    ...mapActions(['addTag']),
-    handleTagClick(tag) {
-      if (Object.keys(this.entry.tags).includes(tag)) {
-        return
-      }
-      const eid = this.entry.eid
-      this.$store.dispatch('addTag', { eid, tag }).then(() => {
-        this.entry.tags[tag] = { item_id: eid, tag }
-      })
-    },
     handleNewTag() {
       this.handleTagClick(this.newtag)
     },
@@ -173,10 +161,9 @@ export default {
 
 <style lang="scss" scoped>
 .interlude {
-  position: fixed;
+  // position: fixed;
   width: inherit;
   height: 100vh;
-  padding: 0 15px;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
   overflow-scrolling: touch;
