@@ -1,11 +1,11 @@
 <template>
   <div class="interlude">
-    <fit-image
+    <v-img
       class="thumbnail"
+      max-height="300"
+      max-width="100%"
       :src="entry.image_s3_url"
-      w="290"
-      h="193"
-      size="cover"
+      lazy-src="/placeholder/blank.jpg"
     />
     <section>
       <div class="link">
@@ -84,12 +84,12 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import FitImage from '@/components/FitImage'
+// import FitImage from '@/components/FitImage'
 // import Screenshots from '@/components/lobine/Screenshots'
 
 export default {
   components: {
-    FitImage,
+    // FitImage,
     // Screenshots,
   },
   data: () => ({
