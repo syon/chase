@@ -50,7 +50,15 @@ export const getters = {
     }
     if (query.spell) {
       arr = arr.filter((d) => {
-        const tgt = `${d.title}${d.excerpt}${d.description}${d.site_name}${d.fqdn}`
+        const tags = Object.keys(d.tags).join('#')
+        const tgt = [
+          d.title,
+          d.excerpt,
+          d.description,
+          d.site_name,
+          d.fqdn,
+          tags,
+        ].join('#')
         return tgt.toUpperCase().includes(query.spell.toUpperCase())
       })
     }
