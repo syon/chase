@@ -182,6 +182,9 @@ export const mutations = {
   SET_SnackMessage(state, payload) {
     state.snackMessage = payload
   },
+  SET_IsSummaryMode(state, bool) {
+    state.isSummaryMode = bool
+  },
 }
 
 export const actions = {
@@ -242,6 +245,7 @@ export const actions = {
     dg('[#activate]', eid)
     const wid = await this.$cache.getWidByEid(eid)
     commit('activate', { eid, wid })
+    commit('SET_IsSummaryMode', false)
     await dispatch('lobine/lounge/setup', { wid, entry }, { root: true })
   },
   async archive({ commit, rootState }, eid) {

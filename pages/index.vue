@@ -22,7 +22,7 @@
           </v-card>
         </v-col>
         <v-col cols="7">
-          <template v-if="isSummaryMode">
+          <template v-if="isFiltering">
             <app-summary />
           </template>
           <template v-else>
@@ -69,6 +69,7 @@ export default {
   computed: {
     ...mapState('stream/filter', {
       showMode: (state) => state.showMode,
+      isFiltering: (state) => state.isFiltering,
     }),
     ...mapState('chase', {
       isSummaryMode: (state) => state.isSummaryMode,
@@ -77,15 +78,6 @@ export default {
       gShowingCatalog: 'chase/gShowingCatalog',
       entry: 'chase/activeEntry',
     }),
-  },
-  watch: {
-    // gShowingCatalog(arr) {
-    //   if (!this.entry.eid) {
-    //     if (arr.length > 0) {
-    //       this.$store.dispatch('chase/activate', arr[0])
-    //     }
-    //   }
-    // },
   },
 }
 </script>
