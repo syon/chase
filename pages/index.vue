@@ -25,7 +25,7 @@
           <template v-if="isFiltering">
             <app-summary />
           </template>
-          <template v-else>
+          <template v-if="entry.eid">
             <v-row class="area-lounge">
               <v-col cols="6">
                 <interlude v-if="entry.eid" />
@@ -78,6 +78,15 @@ export default {
       gShowingCatalog: 'chase/gShowingCatalog',
       entry: 'chase/activeEntry',
     }),
+  },
+  watch: {
+    gShowingCatalog(arr) {
+      if (!this.entry.eid) {
+        if (arr.length > 0) {
+          this.$store.dispatch('chase/activate', arr[0])
+        }
+      }
+    },
   },
 }
 </script>
