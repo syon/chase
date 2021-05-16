@@ -22,14 +22,19 @@
           </v-card>
         </v-col>
         <v-col cols="7">
-          <v-row class="area-lounge">
-            <v-col cols="6">
-              <interlude v-if="entry.eid" />
-            </v-col>
-            <v-col cols="6">
-              <lounge />
-            </v-col>
-          </v-row>
+          <template v-if="isSummaryMode">
+            <app-summary />
+          </template>
+          <template v-else>
+            <v-row class="area-lounge">
+              <v-col cols="6">
+                <interlude v-if="entry.eid" />
+              </v-col>
+              <v-col cols="6">
+                <lounge />
+              </v-col>
+            </v-row>
+          </template>
         </v-col>
       </v-row>
     </v-container>
@@ -41,6 +46,7 @@
 import { mapState, mapGetters } from 'vuex'
 import Appbar from '@/components/Appbar'
 import AppStats from '@/components/AppStats'
+import AppSummary from '@/components/AppSummary'
 import AppSnackbar from '@/components/AppSnackbar'
 import FilterToolbar from '@/components/FilterToolbar'
 import Interlude from '@/components/Interlude'
@@ -52,6 +58,7 @@ export default {
   components: {
     Appbar,
     AppStats,
+    AppSummary,
     AppSnackbar,
     FilterToolbar,
     RackEntry,
@@ -63,19 +70,22 @@ export default {
     ...mapState('stream/filter', {
       showMode: (state) => state.showMode,
     }),
+    ...mapState('chase', {
+      isSummaryMode: (state) => state.isSummaryMode,
+    }),
     ...mapGetters({
       gShowingCatalog: 'chase/gShowingCatalog',
       entry: 'chase/activeEntry',
     }),
   },
   watch: {
-    gShowingCatalog(arr) {
-      if (!this.entry.eid) {
-        if (arr.length > 0) {
-          this.$store.dispatch('chase/activate', arr[0])
-        }
-      }
-    },
+    // gShowingCatalog(arr) {
+    //   if (!this.entry.eid) {
+    //     if (arr.length > 0) {
+    //       this.$store.dispatch('chase/activate', arr[0])
+    //     }
+    //   }
+    // },
   },
 }
 </script>

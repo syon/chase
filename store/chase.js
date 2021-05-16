@@ -20,6 +20,7 @@ const initialState = {
   activeEid: '',
   activeWid: '',
   snackMessage: '',
+  isSummaryMode: true,
 }
 
 export const state = () => JSON.parse(JSON.stringify(initialState))
