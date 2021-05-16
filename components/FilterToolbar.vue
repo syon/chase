@@ -47,6 +47,7 @@ export default {
     }),
     ...mapGetters({
       recentTags: 'chase/recentTags',
+      gSpell: 'stream/filter/gSpell',
     }),
     filterIsFav: {
       get() {
@@ -63,6 +64,11 @@ export default {
       set(tags) {
         this.$store.commit('stream/filter/SET_Tags', tags)
       },
+    },
+  },
+  watch: {
+    gSpell(after) {
+      this.filterTxt = after
     },
   },
   methods: {

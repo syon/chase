@@ -22,17 +22,23 @@
           </v-card>
         </v-col>
         <v-col cols="7">
-          <v-row class="area-lounge">
-            <v-col cols="6">
-              <interlude v-if="entry.eid" />
-            </v-col>
-            <v-col cols="6">
-              <lounge />
-            </v-col>
-          </v-row>
+          <template v-if="isFiltering">
+            <app-summary />
+          </template>
+          <template v-if="entry.eid">
+            <v-row class="area-lounge">
+              <v-col cols="6">
+                <interlude v-if="entry.eid" />
+              </v-col>
+              <v-col cols="6">
+                <lounge />
+              </v-col>
+            </v-row>
+          </template>
         </v-col>
       </v-row>
     </v-container>
+    <app-snackbar />
   </div>
 </template>
 
@@ -40,6 +46,8 @@
 import { mapState, mapGetters } from 'vuex'
 import Appbar from '@/components/Appbar'
 import AppStats from '@/components/AppStats'
+import AppSummary from '@/components/AppSummary'
+import AppSnackbar from '@/components/AppSnackbar'
 import FilterToolbar from '@/components/FilterToolbar'
 import Interlude from '@/components/Interlude'
 import Lounge from '@/components/lobine/Lounge'
@@ -50,6 +58,8 @@ export default {
   components: {
     Appbar,
     AppStats,
+    AppSummary,
+    AppSnackbar,
     FilterToolbar,
     RackEntry,
     SlimEntry,
@@ -59,6 +69,10 @@ export default {
   computed: {
     ...mapState('stream/filter', {
       showMode: (state) => state.showMode,
+      isFiltering: (state) => state.isFiltering,
+    }),
+    ...mapState('chase', {
+      isSummaryMode: (state) => state.isSummaryMode,
     }),
     ...mapGetters({
       gShowingCatalog: 'chase/gShowingCatalog',

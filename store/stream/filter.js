@@ -6,7 +6,11 @@ export const state = () => ({
   isFiltering: false,
 })
 
-export const getters = {}
+export const getters = {
+  gSpell(state) {
+    return state.spell
+  },
+}
 
 export const mutations = {
   SET_Spell(state, spell) {
@@ -27,5 +31,8 @@ export const mutations = {
 }
 
 export const actions = {
-  async load({ commit }, payload) {},
+  applySpell({ commit }, spell) {
+    commit('SET_Spell', spell)
+    commit('SET_IsFiltering', true)
+  },
 }

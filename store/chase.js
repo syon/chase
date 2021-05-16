@@ -19,6 +19,8 @@ const initialState = {
   hatebuStarSet: {},
   activeEid: '',
   activeWid: '',
+  snackMessage: '',
+  isSummaryMode: true,
 }
 
 export const state = () => JSON.parse(JSON.stringify(initialState))
@@ -50,7 +52,15 @@ export const getters = {
     }
     if (query.spell) {
       arr = arr.filter((d) => {
-        const tgt = `${d.title}${d.excerpt}${d.description}${d.site_name}${d.fqdn}`
+        const tags = Object.keys(d.tags).join('#')
+        const tgt = [
+          d.title,
+          d.excerpt,
+          d.description,
+          d.site_name,
+          d.fqdn,
+          tags,
+        ].join('#')
         return tgt.toUpperCase().includes(query.spell.toUpperCase())
       })
     }
@@ -94,6 +104,9 @@ export const getters = {
   },
   gHatebuCntSet(state) {
     return state.hatebuCntSet
+  },
+  gSnackMessage(state) {
+    return state.snackMessage
   },
 }
 
@@ -166,6 +179,12 @@ export const mutations = {
     const entry = state.entries[eid]
     entry.tags = {}
   },
+  SET_SnackMessage(state, payload) {
+    state.snackMessage = payload
+  },
+  SET_IsSummaryMode(state, bool) {
+    state.isSummaryMode = bool
+  },
 }
 
 export const actions = {
@@ -195,12 +214,15 @@ export const actions = {
     const catalog = await ChaseUtil.coordinateRecentCatalog()
     commit('MERGE_Entries', catalog)
   },
-  backgroundProcess({ dispatch }) {
+  async backgroundProcess({ commit, dispatch }) {
     dg('[#backgroundProcess]')
-    dispatch('fetchEntries').then(() => {
-      dispatch('updateHatebuCnt')
-      dispatch('restoreAllEntries')
-    })
+    commit('SET_SnackMessage', '最新データ取得中...')
+    await dispatch('fetchEntries')
+    await Promise.all([
+      dispatch('updateHatebuCnt'),
+      dispatch('restoreAllEntries'),
+    ])
+    commit('SET_SnackMessage', '')
   },
   async restoreAllEntries({ commit }) {
     dg('[#restoreAllEntries]')
@@ -223,6 +245,7 @@ export const actions = {
     dg('[#activate]', eid)
     const wid = await this.$cache.getWidByEid(eid)
     commit('activate', { eid, wid })
+    commit('SET_IsSummaryMode', false)
     await dispatch('lobine/lounge/setup', { wid, entry }, { root: true })
   },
   async archive({ commit, rootState }, eid) {

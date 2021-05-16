@@ -1,11 +1,11 @@
 <template>
   <div class="interlude">
-    <fit-image
+    <v-img
       class="thumbnail"
+      max-height="300"
+      max-width="100%"
       :src="entry.image_s3_url"
-      w="290"
-      h="193"
-      size="cover"
+      lazy-src="/placeholder/blank.jpg"
     />
     <section>
       <div class="link">
@@ -57,23 +57,7 @@
       </div>
       <hr />
       <div class="tags">
-        <v-autocomplete
-          v-model="appliedTags"
-          :items="recentTags"
-          outlined
-          dense
-          chips
-          small-chips
-          label="Tags"
-          multiple
-        />
-      </div>
-      <div class="newtag">
-        <input
-          v-model="newtag"
-          placeholder="New Tag"
-          @keyup.enter="handleNewTag"
-        />
+        <tag-editor />
       </div>
     </section>
     <!-- <section class="area-screenshots">
@@ -84,16 +68,13 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import FitImage from '@/components/FitImage'
-// import Screenshots from '@/components/lobine/Screenshots'
+import TagEditor from '@/components/TagEditor'
 
 export default {
   components: {
-    FitImage,
-    // Screenshots,
+    TagEditor,
   },
   data: () => ({
-    newtag: '',
     ingArchive: false,
     ingFavorite: false,
   }),
@@ -101,7 +82,6 @@ export default {
     ...mapGetters({
       info: 'chase/activeInfo',
       entry: 'chase/activeEntry',
-      recentTags: 'chase/recentTags',
     }),
     linkTitle() {
       return this.entry.title ? this.entry.title : this.entry.url
@@ -111,34 +91,8 @@ export default {
       const { eid } = this.entry
       return `https://s3.amazonaws.com/syon-chase/shots/${eid}/mobile.png`
     },
-    appliedTags: {
-      get() {
-        return Object.keys(this.entry.tags)
-      },
-      async set(tags) {
-        const eid = this.entry.eid
-        const cnt = Object.keys(this.entry.tags).length
-        if (tags.length > cnt) {
-          const tag = tags.slice().pop()
-          await this.$store.dispatch('chase/addTag', { eid, tags: [tag] })
-        } else {
-          await this.$store.dispatch('chase/clearTags', { eid })
-          await this.$store.dispatch('chase/addTag', { eid, tags })
-        }
-      },
-    },
   },
   methods: {
-    handleNewTag() {
-      this.handleTagClick(this.newtag)
-    },
-    onShotSuccess() {
-      // console.log(entry.eid);
-    },
-    onShotError(entry) {
-      if (entry.shotOrdered) return
-      this.$store.dispatch('chase/fetchShot', entry)
-    },
     mArchive(eid) {
       this.ingArchive = true
       this.$store.dispatch('chase/archive', eid).then(() => {
