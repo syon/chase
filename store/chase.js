@@ -19,6 +19,7 @@ const initialState = {
   hatebuStarSet: {},
   activeEid: '',
   activeWid: '',
+  snackMessage: '',
 }
 
 export const state = () => JSON.parse(JSON.stringify(initialState))
@@ -103,6 +104,9 @@ export const getters = {
   gHatebuCntSet(state) {
     return state.hatebuCntSet
   },
+  gSnackMessage(state) {
+    return state.snackMessage
+  },
 }
 
 export const mutations = {
@@ -174,6 +178,9 @@ export const mutations = {
     const entry = state.entries[eid]
     entry.tags = {}
   },
+  SET_SnackMessage(state, payload) {
+    state.snackMessage = payload
+  },
 }
 
 export const actions = {
@@ -203,12 +210,15 @@ export const actions = {
     const catalog = await ChaseUtil.coordinateRecentCatalog()
     commit('MERGE_Entries', catalog)
   },
-  backgroundProcess({ dispatch }) {
+  async backgroundProcess({ commit, dispatch }) {
     dg('[#backgroundProcess]')
-    dispatch('fetchEntries').then(() => {
-      dispatch('updateHatebuCnt')
-      dispatch('restoreAllEntries')
-    })
+    commit('SET_SnackMessage', '最新データ取得中...')
+    await dispatch('fetchEntries')
+    await Promise.all([
+      dispatch('updateHatebuCnt'),
+      dispatch('restoreAllEntries'),
+    ])
+    commit('SET_SnackMessage', '')
   },
   async restoreAllEntries({ commit }) {
     dg('[#restoreAllEntries]')

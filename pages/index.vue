@@ -33,6 +33,7 @@
         </v-col>
       </v-row>
     </v-container>
+    <app-snackbar />
   </div>
 </template>
 
@@ -40,6 +41,7 @@
 import { mapState, mapGetters } from 'vuex'
 import Appbar from '@/components/Appbar'
 import AppStats from '@/components/AppStats'
+import AppSnackbar from '@/components/AppSnackbar'
 import FilterToolbar from '@/components/FilterToolbar'
 import Interlude from '@/components/Interlude'
 import Lounge from '@/components/lobine/Lounge'
@@ -50,6 +52,7 @@ export default {
   components: {
     Appbar,
     AppStats,
+    AppSnackbar,
     FilterToolbar,
     RackEntry,
     SlimEntry,
