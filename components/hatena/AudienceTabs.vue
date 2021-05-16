@@ -116,6 +116,13 @@ export default {
     }
   }
 
+  ::v-deep {
+    .theme--light.v-tabs > .v-tabs-bar,
+    .theme--light.v-tabs-items {
+      background-color: transparent;
+    }
+  }
+
   ::v-deep .ivu-tabs-bar {
     margin-bottom: 0;
   }
