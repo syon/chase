@@ -26,7 +26,7 @@
         </v-btn>
       </div>
       <div class="config">
-        <v-btn text small>
+        <v-btn text small @click="handleConfig">
           <v-icon small>mdi-cog</v-icon>
         </v-btn>
       </div>
@@ -68,6 +68,9 @@ export default {
     },
     handleCloudSync() {
       this.$store.dispatch('chase/fetchAllEntries')
+    },
+    handleConfig() {
+      this.$store.commit('chase/SET_IsSettingMode', true)
     },
   },
 }

@@ -21,6 +21,7 @@ const initialState = {
   activeWid: '',
   snackMessage: '',
   isSummaryMode: true,
+  isSettingMode: false,
 }
 
 export const state = () => JSON.parse(JSON.stringify(initialState))
@@ -184,6 +185,9 @@ export const mutations = {
   },
   SET_IsSummaryMode(state, bool) {
     state.isSummaryMode = bool
+  },
+  SET_IsSettingMode(state, bool) {
+    state.isSettingMode = bool
   },
 }
 

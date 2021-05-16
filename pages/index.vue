@@ -6,7 +6,6 @@
           <header>
             <appbar />
             <filter-toolbar />
-            <app-stats />
           </header>
           <v-card>
             <v-list>
@@ -45,7 +44,6 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import Appbar from '@/components/Appbar'
-import AppStats from '@/components/AppStats'
 import AppSummary from '@/components/AppSummary'
 import AppSnackbar from '@/components/AppSnackbar'
 import FilterToolbar from '@/components/FilterToolbar'
@@ -57,7 +55,6 @@ import SlimEntry from '@/components/SlimEntry'
 export default {
   components: {
     Appbar,
-    AppStats,
     AppSummary,
     AppSnackbar,
     FilterToolbar,
