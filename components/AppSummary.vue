@@ -5,7 +5,11 @@
     </v-card-title>
     <v-divider />
     <v-list dense>
-      <v-list-item v-for="(x, idx) of gDomainSummary" :key="idx">
+      <v-list-item
+        v-for="(x, idx) of gDomainSummary"
+        :key="idx"
+        @click="handleClick(x)"
+      >
         <v-list-item-content>{{ x.domain }}</v-list-item-content>
         <v-list-item-content class="align-end">
           {{ x.count }}
@@ -26,6 +30,12 @@ export default {
   },
   mounted() {
     this.$store.dispatch('summary/load')
+  },
+  methods: {
+    handleClick(item) {
+      const spell = item.domain
+      this.$store.dispatch('stream/filter/applySpell', spell)
+    },
   },
 }
 </script>
