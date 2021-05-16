@@ -44,7 +44,7 @@ export default {
 .bucome-stars {
   font-size: 1.5em;
   font-weight: bold;
-  letter-spacing: -0.08em;
+  letter-spacing: -0.16em;
 }
 .bucome-star-purple {
   /* color: #cd34e3; */
@@ -68,5 +68,6 @@ export default {
 }
 .xx-small-star {
   font-size: 0.75rem;
+  letter-spacing: -0.08em;
 }
 </style>

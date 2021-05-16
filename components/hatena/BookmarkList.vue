@@ -15,7 +15,7 @@
       </div>
       <div class="bucome-right" @click="handleClickBody(b)">
         <div class="bucome-right-top">
-          <p>
+          <div>
             <a :href="bookmarkUserPageURL(b.user)" class="bucome-user">{{
               b.user
             }}</a>
@@ -23,7 +23,7 @@
             <span v-for="(t, i) in b.tags" :key="i" class="bucome-tag"
               >#{{ t }}</span
             >
-          </p>
+          </div>
         </div>
         <div class="bucome-right-bottom">
           <a
@@ -58,14 +58,16 @@
         </div>
       </div>
     </div>
-    <div>
-      <Button
+    <div class="pa-2">
+      <v-btn
         v-if="hasManyBookmarks && !pleaseShowAll"
-        long
+        block
+        outlined
+        color="primary"
         @click="handlePleaseShowAll"
       >
         残り {{ moreCount }} 件を表示
-      </Button>
+      </v-btn>
       <div class="area-takeabreak">☕️</div>
     </div>
   </div>
