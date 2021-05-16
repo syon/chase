@@ -30,7 +30,7 @@ module.exports.login = (params) => {
 }
 
 function getPocketEntrySet(at) {
-  const params = { count: 5, detailType: 'simple' }
+  const params = { count: 5, detailType: 'complete' }
   return Pocket.get(at, params)
     .then((d) => {
       debug(`GET RESULT of ${at} IS:`, Object.keys(d.list).length)
