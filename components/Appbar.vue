@@ -20,11 +20,6 @@
           <v-icon small>mdi-refresh</v-icon>
         </v-btn>
       </div>
-      <div>
-        <v-btn text small @click="handleCloudSync">
-          <v-icon small>mdi-cloud-sync</v-icon>
-        </v-btn>
-      </div>
       <div class="config">
         <v-btn text small @click="handleConfig">
           <v-icon small>mdi-cog</v-icon>
@@ -65,9 +60,6 @@ export default {
     },
     handleRefresh() {
       this.$store.dispatch('chase/fetchEntries')
-    },
-    handleCloudSync() {
-      this.$store.dispatch('chase/fetchAllEntries')
     },
     handleConfig() {
       this.$store.commit('chase/SET_IsSettingMode', true)
