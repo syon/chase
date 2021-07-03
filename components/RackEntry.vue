@@ -87,7 +87,18 @@ export default {
       return this.obj.title ? this.obj.title : this.obj.url
     },
     isArchived() {
-      return this.obj.status === '1' || this.nowArchived
+      const { archived, status } = this.obj
+      if (archived) {
+        return true
+      } else if (status === '0') {
+        if (this.nowArchived) {
+          return true
+        }
+        return false
+      } else if (status === '1') {
+        return true
+      }
+      return false
     },
     loungeUrl() {
       const { wid } = this.obj

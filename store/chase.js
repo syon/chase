@@ -257,6 +257,7 @@ export const actions = {
     await LambdaPocket.archive(at, eid)
     commit('archive', { eid })
     await this.$cache.archive(eid)
+    commit('SET_Ping')
   },
   async addTag({ commit, rootState }, { eid, tags }) {
     const at = rootState.pocket.auth.login.accessToken
