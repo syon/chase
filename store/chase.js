@@ -12,6 +12,7 @@ const initialState = {
   isPremium: false,
   ping: 0,
   entries: {},
+  cachedCount: null,
   libraInfo: {},
   hatebuCntSet: {},
   shotSet: {},
@@ -82,6 +83,9 @@ export const getters = {
   catalogCount(state, getters) {
     return getters.catalog.length
   },
+  gCachedCount(state) {
+    return state.cachedCount
+  },
   activeInfo(state) {
     const { activeEid, activeWid } = state
     return { eid: activeEid, wid: activeWid }
@@ -122,6 +126,9 @@ export const mutations = {
   MERGE_Entries(state, newEntries) {
     state.entries = { ...state.entries, ...newEntries }
     state.ping = new Date().getTime()
+  },
+  SET_CachedCount(state, payload) {
+    state.cachedCount = payload
   },
   logout(state) {
     Object.keys(initialState).forEach((key) => {
@@ -231,7 +238,9 @@ export const actions = {
   async restoreAllEntries({ commit }) {
     dg('[#restoreAllEntries]')
     const catalog = await ChaseUtil.coordinateAllCatalog()
+    const cachedCount = await ChaseUtil.calcCachedCount()
     commit('MERGE_Entries', catalog)
+    commit('SET_CachedCount', cachedCount)
   },
   async fetchEntries({ dispatch }) {
     dg('[#fetchEntries]')

@@ -1,33 +1,36 @@
 <template>
-  <div v-if="isFiltering" class="d-flex px-8 py-4">
-    <v-checkbox v-model="filterIsFav" hide-details class="mt-0 mr-6">
-      <template #label>
-        <v-icon color="orange">mdi-star</v-icon>
-      </template>
-    </v-checkbox>
-    <v-text-field
-      v-model="filterTxt"
-      label="Search Text"
-      dense
-      outlined
-      clearable
-      prepend-icon="mdi-text-box-search-outline"
-      hide-details
-      class="mx-6"
-      @keyup.enter="handleTextSubmit"
-      @blur="handleTextSubmit"
-    />
-    <v-select
-      v-model="pickedTags"
-      :items="recentTags"
-      chips
-      clearable
-      label="Tags"
-      multiple
-      outlined
-      dense
-      hide-details
-    />
+  <div v-if="isFiltering" class="px-8 py-4">
+    <div class="d-flex">
+      <v-checkbox v-model="filterIsFav" hide-details class="mt-0 mr-6">
+        <template #label>
+          <v-icon color="orange">mdi-star</v-icon>
+        </template>
+      </v-checkbox>
+      <v-text-field
+        v-model="filterTxt"
+        label="Search Text"
+        dense
+        outlined
+        clearable
+        prepend-icon="mdi-text-box-search-outline"
+        hide-details
+        class="mx-6"
+        @keyup.enter="handleTextSubmit"
+        @blur="handleTextSubmit"
+      />
+      <v-select
+        v-model="pickedTags"
+        :items="recentTags"
+        chips
+        clearable
+        label="Tags"
+        multiple
+        outlined
+        dense
+        hide-details
+      />
+    </div>
+    <div>Max Count: 100</div>
   </div>
 </template>
 
