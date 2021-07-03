@@ -8,16 +8,16 @@
             <filter-toolbar />
           </header>
           <v-card>
-            <v-list>
-              <template v-for="e in gShowingCatalog" :data-eid="e.eid">
-                <template v-if="showMode === 'rack'">
-                  <rack-entry :key="e.eid" :obj="e" />
-                </template>
-                <template v-else-if="showMode === 'slim'">
-                  <slim-entry :key="e.eid" :obj="e" />
-                </template>
+            <v-virtual-scroll
+              :bench="5"
+              :items="gShowingCatalog"
+              height="calc(100vh - 80px)"
+              item-height="120"
+            >
+              <template #default="{ item }">
+                <rack-entry :key="item.eid" :obj="item" />
               </template>
-            </v-list>
+            </v-virtual-scroll>
           </v-card>
         </v-col>
         <v-col cols="7">
@@ -50,7 +50,6 @@ import FilterToolbar from '@/components/FilterToolbar'
 import Interlude from '@/components/Interlude'
 import Lounge from '@/components/lobine/Lounge'
 import RackEntry from '@/components/RackEntry'
-import SlimEntry from '@/components/SlimEntry'
 
 export default {
   components: {
@@ -59,7 +58,6 @@ export default {
     AppSnackbar,
     FilterToolbar,
     RackEntry,
-    SlimEntry,
     Interlude,
     Lounge,
   },

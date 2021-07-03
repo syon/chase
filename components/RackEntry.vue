@@ -13,13 +13,13 @@
           height="80"
           @error="handleLoadImageError"
         />
+        <!-- <div class="meta">
+          <span v-if="obj.site_name" class="site">{{ obj.site_name }}</span>
+        </div> -->
       </div>
       <div class="pnl-body">
         <div class="link">
           <a :href="obj.url" target="_blank">{{ linkTitle }}</a>
-        </div>
-        <div class="meta">
-          <span v-if="obj.site_name" class="site">{{ obj.site_name }}</span>
         </div>
         <div class="description">{{ obj.description }}</div>
         <template v-if="Object.keys(obj.tags).length > 0">
@@ -134,9 +134,12 @@ export default {
 <style lang="scss" scoped>
 .pnl {
   display: flex;
+  height: 100%;
 
   .pnl-thumb {
-    margin: 0 15px 0 0;
+    width: 100px;
+    margin: 10px 10px 0;
+    line-height: 1.3;
 
     figure {
       display: flex;
@@ -152,10 +155,14 @@ export default {
     flex: 1;
     display: flex;
     flex-direction: column;
+    height: 100%;
+    margin: 10px 0 0;
+    overflow: hidden;
   }
 
   .pnl-action {
     width: 60px;
+    margin: 10px 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -168,8 +175,10 @@ export default {
 }
 
 .v-entry {
-  min-height: 111px;
-  padding: 15px 0;
+  height: 120px;
+  overflow: hidden;
+  // min-height: 111px;
+  // padding: 10px 0;
   color: #757575;
   border-bottom: 1px solid #f5f5f5;
   &.active {
@@ -207,7 +216,6 @@ export default {
   }
 
   .meta {
-    margin: 0 0 0.5em;
     font-size: 0.67em;
   }
 
@@ -218,7 +226,7 @@ export default {
   .excerpt,
   .description {
     font-size: 0.67em;
-    -webkit-line-clamp: 2;
+    // -webkit-line-clamp: 2;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     overflow: hidden;

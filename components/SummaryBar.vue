@@ -7,14 +7,6 @@
     <v-btn icon class="mr-4" @click="handleFiltering">
       <v-icon :color="isFiltering ? 'primary' : null">mdi-filter</v-icon>
     </v-btn>
-    <v-btn-toggle v-model="pickedShowMode" mandatory>
-      <v-btn value="rack" small>
-        <v-icon small>mdi-format-list-bulleted-square</v-icon>
-      </v-btn>
-      <v-btn value="slim" small>
-        <v-icon small>mdi-format-align-justify</v-icon>
-      </v-btn>
-    </v-btn-toggle>
   </div>
 </template>
 
@@ -24,7 +16,6 @@ import { mapState, mapGetters } from 'vuex'
 export default {
   computed: {
     ...mapState('stream/filter', {
-      showMode: (state) => state.showMode,
       isFiltering: (state) => state.isFiltering,
     }),
     ...mapGetters({
@@ -38,14 +29,6 @@ export default {
         return fl
       }
       return `${fl} / ${cl}`
-    },
-    pickedShowMode: {
-      get() {
-        return this.showMode
-      },
-      set(v) {
-        this.$store.commit('stream/filter/SET_ShowMode', v)
-      },
     },
   },
   methods: {
