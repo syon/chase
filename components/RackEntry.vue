@@ -2,6 +2,7 @@
   <div
     class="v-entry"
     :data-eid="obj.eid"
+    :data-wid="obj.wid"
     :class="compoClasses"
     @click="activate(obj)"
   >
@@ -74,7 +75,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('chase', {
+    ...mapState('stream/filter', {
       activeEid: (state) => state.activeEid,
     }),
     compoClasses() {
@@ -125,7 +126,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      activate: 'chase/activate',
+      activate: 'stream/filter/activate',
     }),
     async handleLoadImageError() {
       const etag = await this.$store.dispatch('chase/fetchLibraThumb', this.obj)
@@ -134,7 +135,7 @@ export default {
     },
     async mArchive(eid) {
       this.ingArchive = true
-      await this.$store.dispatch('chase/archive', eid)
+      await this.$store.dispatch('stream/filter/archive', eid)
       this.nowArchived = true
       this.ingArchive = false
     },

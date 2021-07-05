@@ -27,8 +27,8 @@ export default {
   }),
   computed: {
     ...mapGetters({
-      entry: 'chase/activeEntry',
-      recentTags: 'chase/recentTags',
+      entry: 'stream/filter/activeEntry',
+      recentTags: 'stream/filter/recentTags',
     }),
     appliedTags: {
       get() {
@@ -40,10 +40,13 @@ export default {
         const cnt = Object.keys(this.entry.tags).length
         if (tags.length > cnt) {
           const tag = tags.slice().pop()
-          await this.$store.dispatch('chase/addTag', { eid, tags: [tag] })
+          await this.$store.dispatch('stream/filter/addTag', {
+            eid,
+            tags: [tag],
+          })
         } else {
-          await this.$store.dispatch('chase/clearTags', { eid })
-          await this.$store.dispatch('chase/addTag', { eid, tags })
+          await this.$store.dispatch('stream/filter/clearTags', { eid })
+          await this.$store.dispatch('stream/filter/addTag', { eid, tags })
         }
         this.busy = false
       },
@@ -54,7 +57,7 @@ export default {
       this.busy = true
       const eid = this.entry.eid
       const tags = [this.query]
-      await this.$store.dispatch('chase/addTag', { eid, tags })
+      await this.$store.dispatch('stream/filter/addTag', { eid, tags })
       this.query = ''
       this.busy = false
     },

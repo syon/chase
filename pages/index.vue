@@ -66,19 +66,16 @@ export default {
       showMode: (state) => state.showMode,
       isFiltering: (state) => state.isFiltering,
     }),
-    ...mapState('chase', {
-      isSummaryMode: (state) => state.isSummaryMode,
-    }),
     ...mapGetters({
-      gShowingCatalog: 'chase/gShowingCatalog',
-      entry: 'chase/activeEntry',
+      gShowingCatalog: 'stream/filter/gShowingCatalog',
+      entry: 'stream/filter/activeEntry',
     }),
   },
   watch: {
     gShowingCatalog(arr) {
       if (!this.entry.eid) {
         if (arr.length > 0) {
-          this.$store.dispatch('chase/activate', arr[0])
+          this.$store.dispatch('stream/filter/activate', arr[0])
         }
       }
     },

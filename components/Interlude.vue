@@ -60,9 +60,6 @@
         <tag-editor />
       </div>
     </section>
-    <!-- <section class="area-screenshots">
-      <screenshots :wid="info.wid" />
-    </section> -->
   </div>
 </template>
 
@@ -80,8 +77,7 @@ export default {
   }),
   computed: {
     ...mapGetters({
-      info: 'chase/activeInfo',
-      entry: 'chase/activeEntry',
+      entry: 'stream/filter/activeEntry',
     }),
     linkTitle() {
       return this.entry.title ? this.entry.title : this.entry.url
@@ -95,18 +91,18 @@ export default {
   methods: {
     mArchive(eid) {
       this.ingArchive = true
-      this.$store.dispatch('chase/archive', eid).then(() => {
+      this.$store.dispatch('stream/filter/archive', eid).then(() => {
         this.ingArchive = false
       })
     },
     async mFavorite(eid) {
       this.ingFavorite = true
-      await this.$store.dispatch('chase/favorite', eid)
+      await this.$store.dispatch('stream/filter/favorite', eid)
       this.ingFavorite = false
     },
     async mUnfavorite(eid) {
       this.ingFavorite = true
-      await this.$store.dispatch('chase/unfavorite', eid)
+      await this.$store.dispatch('stream/filter/unfavorite', eid)
       this.ingFavorite = false
     },
   },

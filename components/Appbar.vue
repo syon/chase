@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import SummaryBar from '@/components/SummaryBar'
 
 export default {
@@ -40,9 +40,6 @@ export default {
   computed: {
     ...mapState('pocket/auth', {
       login: 'login',
-    }),
-    ...mapGetters({
-      gPreparedCatalog: 'chase/gPreparedCatalog',
     }),
   },
   mounted() {

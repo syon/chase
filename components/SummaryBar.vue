@@ -19,7 +19,7 @@ export default {
       isFiltering: (state) => state.isFiltering,
     }),
     ...mapGetters({
-      gCachedCount: 'chase/gCachedCount',
+      gCachedCount: 'stream/filter/gCachedCount',
     }),
   },
   methods: {

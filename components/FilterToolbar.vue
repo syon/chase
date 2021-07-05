@@ -49,7 +49,7 @@ export default {
       isFiltering: (state) => state.isFiltering,
     }),
     ...mapGetters({
-      recentTags: 'chase/recentTags',
+      recentTags: 'stream/filter/recentTags',
       gSpell: 'stream/filter/gSpell',
     }),
     filterIsFav: {
@@ -75,8 +75,9 @@ export default {
     },
   },
   methods: {
-    handleTextSubmit() {
+    async handleTextSubmit() {
       this.$store.commit('stream/filter/SET_Spell', this.filterTxt)
+      await this.$store.dispatch('stream/filter/refreshEntries')
     },
   },
 }

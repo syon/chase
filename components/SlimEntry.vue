@@ -86,7 +86,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      activate: 'chase/activate',
+      activate: 'stream/filter/activate',
     }),
     async handleLoadImageError() {
       const etag = await this.$store.dispatch('chase/fetchLibraThumb', this.obj)
@@ -95,7 +95,7 @@ export default {
     },
     async mArchive(eid) {
       this.ingArchive = true
-      await this.$store.dispatch('chase/archive', eid)
+      await this.$store.dispatch('stream/filter/archive', eid)
       this.ingArchive = false
     },
   },
