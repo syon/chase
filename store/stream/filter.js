@@ -33,6 +33,7 @@ export const getters = {
     tags = tags.filter((t) => !t.startsWith('chase:'))
     return [...new Set(tags)]
   },
+  /** これはもはや使わない。Dexieでやる。 */
   filteredCatalog(state, getters) {
     let arr = getters.catalog
     const query = {
@@ -154,6 +155,10 @@ export const actions = {
   async startup({ dispatch }) {
     await Promise.all([dispatch('refreshEntries'), dispatch('updateHatebuCnt')])
   },
+  async bgProcess({ commit }) {
+    const cachedCount = await ChaseUtil.calcCachedCount()
+    commit('SET_CachedCount', cachedCount)
+  },
   applySpell({ commit }, spell) {
     commit('SET_Spell', spell)
     commit('SET_IsFiltering', true)
@@ -163,8 +168,6 @@ export const actions = {
     const arg = { keyword, limit: 100 }
     const catalog = await ChaseUtil.getFilteredCatalog(arg)
     commit('SET_Entries', catalog)
-    const cachedCount = await ChaseUtil.calcCachedCount()
-    commit('SET_CachedCount', cachedCount)
   },
   async updateHatebuCnt({ commit }) {
     // FIXME: all select -> on-demand

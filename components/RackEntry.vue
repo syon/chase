@@ -22,7 +22,7 @@
         <div class="link">
           <a :href="obj.url" target="_blank">{{ linkTitle }}</a>
         </div>
-        <div class="description">{{ obj.description }}</div>
+        <div class="description">{{ obj.description || obj.excerpt }}</div>
         <template v-if="Object.keys(obj.tags).length > 0">
           <div class="tags">
             <span v-for="tag in Object.keys(obj.tags)" :key="tag" class="tag">

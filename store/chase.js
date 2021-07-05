@@ -72,6 +72,7 @@ export const actions = {
     dg('[#backgroundProcess]')
     commit('SET_SnackMessage', '最新データ取得中...')
     await dispatch('fetchEntries')
+    await dispatch('stream/filter/bgProcess', null, { root: true })
     commit('SET_SnackMessage', '')
   },
   async fetchEntries({ dispatch }) {
