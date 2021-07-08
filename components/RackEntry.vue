@@ -14,6 +14,9 @@
           height="80"
           @error="handleLoadImageError"
         />
+        <div class="text-caption grey--text font-weight-light">
+          {{ obj.updated }}
+        </div>
         <!-- <div class="meta">
           <span v-if="obj.site_name" class="site">{{ obj.site_name }}</span>
         </div> -->
