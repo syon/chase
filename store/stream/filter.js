@@ -153,17 +153,13 @@ export const mutations = {
 
 export const actions = {
   async startup({ dispatch }) {
-    await Promise.all([dispatch('refreshEntries'), dispatch('updateHatebuCnt')])
+    await Promise.all([
+      dispatch('refresh'),
+      dispatch('updateHatebuCnt'),
+      dispatch('bgProcess'),
+    ])
   },
-  async bgProcess({ commit }) {
-    const cachedCount = await ChaseUtil.calcCachedCount()
-    commit('SET_CachedCount', cachedCount)
-  },
-  applySpell({ commit }, spell) {
-    commit('SET_Spell', spell)
-    commit('SET_IsFiltering', true)
-  },
-  async refreshEntries({ state, commit }) {
+  async refresh({ state, commit }) {
     const keyword = state.spell
     const arg = { keyword, limit: 100 }
     const catalog = await ChaseUtil.getFilteredCatalog(arg)
@@ -175,6 +171,14 @@ export const actions = {
     const hatebuCntSet = await this.$cache.getHatebuCntSet()
     commit('SET_HatebuCntSet', hatebuCntSet)
     commit('SET_Ping')
+  },
+  async bgProcess({ commit }) {
+    const cachedCount = await ChaseUtil.calcCachedCount()
+    commit('SET_CachedCount', cachedCount)
+  },
+  applySpell({ commit }, spell) {
+    commit('SET_Spell', spell)
+    commit('SET_IsFiltering', true)
   },
   async activate({ commit, dispatch }, entry) {
     const { eid } = entry

@@ -77,7 +77,7 @@ export default {
   methods: {
     async handleTextSubmit() {
       this.$store.commit('stream/filter/SET_Spell', this.filterTxt)
-      await this.$store.dispatch('stream/filter/refreshEntries')
+      await this.$store.dispatch('stream/filter/refresh')
     },
   },
 }

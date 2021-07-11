@@ -56,7 +56,7 @@ export default {
       this.$router.push({ path: '/welcome' })
     },
     handleRefresh() {
-      this.$store.dispatch('chase/fetchEntries')
+      this.$store.dispatch('chase/backgroundProcess')
     },
     handleConfig() {
       this.$store.commit('chase/SET_IsSettingMode', true)
