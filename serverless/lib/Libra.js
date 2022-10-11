@@ -50,7 +50,7 @@ module.exports = class Libra {
           site_name: '',
           title: '',
           description: '',
-          image: ''
+          image: '',
         }
         return info
       })
@@ -62,7 +62,7 @@ module.exports = class Libra {
     return new Promise((rv) => {
       const obj = {
         Bucket: process.env.BUCKET,
-        Key: this.s3Path
+        Key: this.s3Path,
       }
       debug(obj)
       s3.headObject(obj, (err, data) => {
@@ -84,7 +84,7 @@ module.exports = class Libra {
         const obj = {
           Bucket: process.env.BUCKET,
           Key: key,
-          Body: JSON.stringify(info, null, 2)
+          Body: JSON.stringify(info, null, 2),
         }
         s3.putObject(obj, (err, data) => {
           if (err) {
@@ -103,7 +103,7 @@ module.exports = class Libra {
       if (key) {
         const obj = {
           Bucket: process.env.BUCKET,
-          Key: key
+          Key: key,
         }
         s3.getObject(obj, (err, data) => {
           if (err) {
@@ -129,7 +129,7 @@ module.exports = class Libra {
       site_name: siteName,
       title,
       description,
-      image
+      image,
     }
   }
 

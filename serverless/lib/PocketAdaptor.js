@@ -39,7 +39,7 @@ module.exports.pocketProgress = (params) => {
   const funcA = Pocket.get(params.access_token, { state: 'archive' })
   return Promise.all([
     funcU.then((r) => Object.keys(r.list).length),
-    funcA.then((r) => Object.keys(r.list).length)
+    funcA.then((r) => Object.keys(r.list).length),
   ]).then(([unread, archive]) => {
     debug({ unread, archive })
     return { unread, archive }

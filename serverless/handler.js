@@ -17,9 +17,9 @@ function success(bodyObj) {
   return {
     statusCode: 200,
     headers: {
-      'Access-Control-Allow-Origin': '*'
+      'Access-Control-Allow-Origin': '*',
     },
-    body: JSON.stringify(bodyObj)
+    body: JSON.stringify(bodyObj),
   }
 }
 
@@ -39,11 +39,11 @@ function failure(error) {
     headers: {
       'Access-Control-Allow-Origin': '*',
       'x-error-code': res.headers['x-error-code'],
-      'x-error': res.headers['x-error']
+      'x-error': res.headers['x-error'],
     },
     body: JSON.stringify({
-      message: res.statusText
-    })
+      message: res.statusText,
+    }),
   }
   return response
 }

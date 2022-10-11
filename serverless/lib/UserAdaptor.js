@@ -20,7 +20,7 @@ module.exports.login = (params) => {
     const obj = {
       Bucket: process.env.BUCKET,
       Key: `logs/${filename}`,
-      Body: JSON.stringify(params, null, 2)
+      Body: JSON.stringify(params, null, 2),
     }
     s3.putObject(obj, (err, data) => {
       if (err) rj(err)

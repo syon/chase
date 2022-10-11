@@ -70,7 +70,7 @@ module.exports = class Film {
     return new Promise((rv) => {
       const obj = {
         Bucket: process.env.BUCKET,
-        Key: s3path
+        Key: s3path,
       }
       debug(obj)
       s3.headObject(obj, (err, data) => {
@@ -121,7 +121,7 @@ module.exports = class Film {
     debug('[fetchImageBuffer]')
     return new Promise((rv, rj) => {
       axios(imageUrl, {
-        responseType: 'arraybuffer'
+        responseType: 'arraybuffer',
       })
         .then((res) => res.data)
         .then((buffer) => {
@@ -162,7 +162,7 @@ module.exports = class Film {
       {
         Bucket: process.env.BUCKET,
         Key: s3path,
-        Body: buffer
+        Body: buffer,
       },
       (err, data) => {
         if (err) {

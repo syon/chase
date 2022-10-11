@@ -7,8 +7,8 @@ const LAMBDA_ENDPOINT =
 const HTTP_POST_CONFIG = {
   headers: {
     'Content-Type': 'application/json; charset=UTF-8',
-    'X-Accept': 'application/json'
-  }
+    'X-Accept': 'application/json',
+  },
 }
 
 module.exports.main = (arg) => {
