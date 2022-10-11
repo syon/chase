@@ -1,22 +1,10 @@
-require('dotenv').config()
-const PocketAdaptor = require('../../lib/PocketAdaptor')
+const axios = require('axios')
 
-test('PocketAdaptor.pocketOauthRequest', async () => {
-  const params = { redirect_uri: 'http://localhost' }
-  const r = await PocketAdaptor.pocketOauthRequest(params)
-  console.log(r)
-  expect(r.request_token).toMatch(/[\w-]{30}/)
-  expect(r.auth_uri).toMatch(/^https:\/\/getpocket.com/)
-})
+// const EP = 'https://ua5uhzf79d.execute-api.us-east-1.amazonaws.com/dev'
+const EP = 'http://localhost:3000/dev'
 
-/** このタイミングで auth_uri にアクセスして認可“待ち”の状態にする */
-/** 手動でリクエストトークンを変数にコピペして実行 */
-
-test('PocketAdaptor.pocketOauthAuthorize', async () => {
-  const code = '1111aaaa-a1a1-b2b2-223d-2bda52'
-  const params = { code: code }
-  const r = await PocketAdaptor.pocketOauthAuthorize(params)
-  console.log(r)
-  expect(r.access_token).toMatch(/[\w-]{30}/)
-  expect(r.username).toBeTruthy()
+test('/pocket/oauth/request', async () => {
+  const data = { redirect_uri: 'http://localhost' }
+  const res = await axios.post(`${EP}/pocket/oauth/request`, data)
+  expect(res.status).toBe(200)
 })

@@ -1,22 +1,24 @@
 service: chaseweb
 
+useDotenv: true
+
 plugins:
-  - serverless-dotenv-plugin
+  - serverless-offline
 
 custom:
   bucket: syon-chase
 
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: nodejs16.x
   region: us-east-1
   iamRoleStatements:
     - Effect: Allow
       Action:
         - s3:*
       Resource:
-        - "arn:aws:s3:::${self:custom.bucket}"
-        - "arn:aws:s3:::${self:custom.bucket}/*"
+        - 'arn:aws:s3:::${self:custom.bucket}'
+        - 'arn:aws:s3:::${self:custom.bucket}/*'
   environment:
     BUCKET: ${self:custom.bucket}
     DEBUG: chase:*
