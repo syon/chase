@@ -1,7 +1,7 @@
 export default {
-  WID: `https://api.lobine.app/wid`,
-  NAIL: `https://api.lobine.app/nail`,
-  SHOT: `https://api.lobine.app/shot`,
+  WID: `https://lobine-core-syon.vercel.app/api/wid`,
+  // NAIL: `https://lobine-core-syon.vercel.app/nail`,
+  // SHOT: `https://lobine-core-syon.vercel.app/shot`,
   S3: 'https://s3.amazonaws.com/lobine',
   HATENA: 'https://hatena.lobine.app',
 }
